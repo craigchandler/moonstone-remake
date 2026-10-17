@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"trogg_spear"
+maximum_health = 15
+movement_per_tick = 1
+allowed_moves = PackedStringArray("spear_thrust")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-16, -51, 48, 56)
+ai_move = "spear_thrust"
+ai_style = &"spearman"
+ai_preferred_range = 130
+ai_keep_distance = 120
+ai_depth = 5
+attack_cooldown_ticks = 54
+entry_attack_delay_ticks = 35
+stagger_ticks = 12
+walk_pose_ticks = 6
+reaction_clips = {"swing": "hurt_b", "heavy": "hurt_a", "upward": "hurt_a", "dagger": "hurt_a", "lunge": "hurt_c", "reverse": "hurt_c"}
+defeat_clips = {"swing": "defeat_split", "lunge": "defeat_guts", "reverse": "defeat_guts"}
+defeat_ticks = 48
+defeat_durations = {"defeat_split": 60, "defeat_guts": 144}

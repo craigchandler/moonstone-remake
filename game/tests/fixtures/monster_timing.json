@@ -1,0 +1,257 @@
+{
+  "source_sha1": "bb38bc0b39f146b30bac959bea717202cf13b965",
+  "tick_rate": 50,
+  "clock_basis": "Six ticks per recovered unit hold; source-informed native choice, not a universal measured wall clock",
+  "moves": {
+    "troll_sweep": {
+      "kind": "giant_troll",
+      "retail_root": 24710,
+      "source_holds": [
+        1,
+        1,
+        2
+      ],
+      "phase_ticks": [
+        6,
+        18,
+        0
+      ],
+      "total_ticks": 24,
+      "pose_ids": [
+        5,
+        6,
+        7
+      ],
+      "pose_ticks": [
+        6,
+        6,
+        12
+      ],
+      "advance_pixels": 32
+    },
+    "troll_smash": {
+      "kind": "giant_troll",
+      "retail_root": 24792,
+      "source_holds": [
+        1,
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "phase_ticks": [
+        30,
+        6,
+        12
+      ],
+      "total_ticks": 48,
+      "pose_ids": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "pose_ticks": [
+        6,
+        12,
+        6,
+        6,
+        6,
+        12
+      ],
+      "advance_pixels": 0
+    },
+    "balok_swipe": {
+      "kind": "balok",
+      "retail_root": 20218,
+      "source_holds": [
+        1,
+        1,
+        1,
+        3,
+        3
+      ],
+      "phase_ticks": [
+        6,
+        12,
+        36
+      ],
+      "total_ticks": 54,
+      "pose_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "pose_ticks": [
+        6,
+        6,
+        6,
+        18,
+        18
+      ],
+      "advance_pixels": 12
+    },
+    "balok_maul": {
+      "kind": "balok",
+      "retail_root": 20354,
+      "source_holds": [
+        3,
+        2,
+        3,
+        3
+      ],
+      "phase_ticks": [
+        18,
+        30,
+        18
+      ],
+      "total_ticks": 66,
+      "pose_ids": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "pose_ticks": [
+        18,
+        12,
+        18,
+        18
+      ],
+      "advance_pixels": 0
+    },
+    "mud_reach": {
+      "kind": "mudman",
+      "retail_root": 23264,
+      "source_holds": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "phase_ticks": [
+        12,
+        18,
+        12
+      ],
+      "total_ticks": 42,
+      "pose_ids": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "pose_ticks": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "advance_pixels": 0
+    },
+    "rat_bite": {
+      "kind": "ratman",
+      "retail_root": 15090,
+      "source_holds": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "phase_ticks": [
+        6,
+        18,
+        0
+      ],
+      "total_ticks": 24,
+      "pose_ids": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "pose_ticks": [
+        6,
+        6,
+        6,
+        6
+      ],
+      "advance_pixels": 0
+    },
+    "dragon_bite": {
+      "kind": "dragon",
+      "retail_root": 19222,
+      "source_holds": [
+        1,
+        1,
+        1,
+        4
+      ],
+      "phase_ticks": [
+        0,
+        42,
+        0
+      ],
+      "total_ticks": 42,
+      "pose_ids": [
+        19,
+        20,
+        21,
+        22
+      ],
+      "pose_ticks": [
+        6,
+        6,
+        6,
+        24
+      ],
+      "advance_pixels": 0
+    },
+    "guardian_lunge": {
+      "kind": "guardian",
+      "retail_root": 25906,
+      "source_holds": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "phase_ticks": [
+        6,
+        18,
+        6
+      ],
+      "total_ticks": 30,
+      "pose_ids": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "pose_ticks": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "advance_pixels": 28
+    }
+  }
+}

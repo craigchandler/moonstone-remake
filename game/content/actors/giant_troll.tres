@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"giant_troll"
+maximum_health = 40
+movement_per_tick = 1
+allowed_moves = PackedStringArray("troll_sweep", "troll_smash")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-23, -96, 64, 96)
+ai_move = "troll_sweep"
+ai_secondary_move = "troll_smash"
+ai_style = &"stalker"
+ai_preferred_range = 149
+ai_close_range = 100
+ai_keep_distance = 90
+ai_depth = 5
+attack_cooldown_ticks = 80
+entry_attack_delay_ticks = 50
+stagger_ticks = 12
+reaction_ticks = 24
+walk_pose_ticks = 8
+reaction_clips = {"swing": "hurt_a", "heavy": "hurt_a", "upward": "hurt_a", "dagger": "hurt_a", "lunge": "hurt_a", "reverse": "hurt_a"}
+defeat_clips = {}
+defeat_ticks = 90

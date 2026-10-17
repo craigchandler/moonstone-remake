@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"mudman"
+display_name = "Mudman"
+maximum_health = 30
+movement_per_tick = 1
+allowed_moves = PackedStringArray("mud_reach", "mud_grab")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-26,-60,65,65)
+stagger_ticks = 12
+reaction_ticks = 20
+defeat_ticks = 48
+ai_move = "mud_reach"
+ai_secondary_move = "mud_grab"
+ai_style = &"snatcher"
+ai_preferred_range = 100
+ai_keep_distance = 40
+ai_close_range = 60
+ai_depth = 5
+attack_cooldown_ticks = 90
+entry_attack_delay_ticks = 50
+defeat_clips = {}
+defeat_durations = {}

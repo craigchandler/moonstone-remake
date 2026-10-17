@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="MoonstoneWorldDefinition" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/content/world_definition.gd" id="1"]
+[ext_resource type="Resource" path="res://content/generated/classic_map_travel.tres" id="2"]
+[resource]
+script = ExtResource("1")
+content_id = &"journey.v8"
+travel_rules = ExtResource("2")
+start_position = Vector2i(18,11)
+confirm_entry = true
+rival_turns = true
+lairs = [
+{"id": "lair_05", "source_index": 1, "name": "Great Forest lair 1", "encounter": "rat_lair", "region": "Great Forest", "region_code": 4, "count": 10, "position": Vector2i(24,112)},
+{"id": "lair_06", "source_index": 2, "name": "Great Forest lair 2", "encounter": "axe_lair", "region": "Great Forest", "region_code": 4, "count": 10, "position": Vector2i(104,120)},
+{"id": "lair_07", "source_index": 3, "name": "Great Forest lair 3", "encounter": "axe_lair", "region": "Great Forest", "region_code": 4, "count": 14, "position": Vector2i(120,144)},
+{"id": "lair_08", "source_index": 4, "name": "Great Forest lair 4", "encounter": "rat_lair", "region": "Great Forest", "region_code": 4, "count": 14, "position": Vector2i(80,184)},
+{"id": "lair_09", "source_index": 5, "name": "Great Forest lair 5", "encounter": "rat_lair", "region": "Great Forest", "region_code": 4, "count": 14, "position": Vector2i(24,160)},
+{"id": "lair_10", "source_index": 6, "name": "Great Forest lair 6", "encounter": "axe_lair", "region": "Great Forest", "region_code": 4, "count": 13, "position": Vector2i(48,136)},
+{"id": "lair_11", "source_index": 7, "name": "Northern Wastes lair 1", "encounter": "balok_lair", "region": "Northern Wastes", "region_code": 12, "count": 4, "position": Vector2i(296,32)},
+{"id": "lair_12", "source_index": 8, "name": "Northern Wastes lair 2", "encounter": "balok_lair", "region": "Northern Wastes", "region_code": 12, "count": 3, "position": Vector2i(232,16)},
+{"id": "lair_13", "source_index": 9, "name": "Northern Wastes lair 3", "encounter": "balok_lair", "region": "Northern Wastes", "region_code": 12, "count": 5, "position": Vector2i(176,48)},
+{"id": "lair_14", "source_index": 10, "name": "Northern Wastes lair 4", "encounter": "hammer_lair", "region": "Northern Wastes", "region_code": 12, "count": 10, "position": Vector2i(240,48)},
+{"id": "lair_15", "source_index": 11, "name": "Northern Wastes lair 5", "encounter": "hammer_lair", "region": "Northern Wastes", "region_code": 12, "count": 10, "position": Vector2i(216,72)},
+{"id": "lair_16", "source_index": 12, "name": "Northern Wastes lair 6", "encounter": "hammer_lair", "region": "Northern Wastes", "region_code": 12, "count": 10, "position": Vector2i(272,80)},
+{"id": "lair_17", "source_index": 13, "name": "Wetlands lair 1", "encounter": "mud_lair", "region": "Wetlands", "region_code": 8, "count": 5, "position": Vector2i(208,104)},
+{"id": "lair_18", "source_index": 14, "name": "Wetlands lair 2", "encounter": "mud_lair", "region": "Wetlands", "region_code": 8, "count": 5, "position": Vector2i(248,120)},
+{"id": "lair_19", "source_index": 15, "name": "Wetlands lair 3", "encounter": "mud_lair", "region": "Wetlands", "region_code": 8, "count": 5, "position": Vector2i(168,136)},
+{"id": "lair_20", "source_index": 16, "name": "Wetlands lair 4", "encounter": "troll_lair", "region": "Wetlands", "region_code": 8, "count": 7, "position": Vector2i(152,176)},
+{"id": "lair_21", "source_index": 17, "name": "Wetlands lair 5", "encounter": "mud_lair", "region": "Wetlands", "region_code": 8, "count": 6, "position": Vector2i(232,176)},
+{"id": "lair_22", "source_index": 18, "name": "Wetlands lair 6", "encounter": "troll_lair", "region": "Wetlands", "region_code": 8, "count": 6, "position": Vector2i(288,176)},
+{"id": "lair_23", "source_index": 19, "name": "Misty Moors lair 1", "encounter": "spear_lair", "region": "Misty Moors", "region_code": 0, "count": 4, "position": Vector2i(24,24)},
+{"id": "lair_24", "source_index": 20, "name": "Misty Moors lair 2", "encounter": "spear_lair", "region": "Misty Moors", "region_code": 0, "count": 5, "position": Vector2i(96,16)},
+{"id": "grassland_west", "source_index": 21, "name": "Misty Moors lair 3", "encounter": "spear_lair", "region": "Misty Moors", "region_code": 0, "count": 6, "position": Vector2i(136,40)},
+{"id": "grassland_east", "source_index": 22, "name": "Misty Moors lair 4", "encounter": "beast_lair", "region": "Misty Moors", "region_code": 0, "count": 9, "position": Vector2i(32,64)},
+{"id": "grassland_north", "source_index": 23, "name": "Misty Moors lair 5", "encounter": "axe_lair", "region": "Misty Moors", "region_code": 0, "count": 13, "position": Vector2i(80,64)},
+{"id": "grassland_south", "source_index": 24, "name": "Misty Moors lair 6", "encounter": "beast_lair", "region": "Misty Moors", "region_code": 0, "count": 8, "position": Vector2i(96,88)},
+]

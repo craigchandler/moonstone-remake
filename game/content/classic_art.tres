@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="MoonstoneArtPack" load_steps=49 format=3]
+
+[ext_resource type="Script" path="res://scripts/content/art_pack.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/test/04/image.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/KN1.ob/frames/000.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/TROLL1.CEL/frames/000.png" id="4"]
+[ext_resource type="Resource" path="res://assets/classic/knight/animations.tres" id="5"]
+[ext_resource type="Resource" path="res://assets/classic/trogg_spear/animations.tres" id="6"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/TROGGSpear1.CEL/frames/000.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/test/07/image.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/KN4.ob/frames/010.png" id="9"]
+
+[ext_resource type="Resource" path="res://assets/classic/trogg_axe/animations.tres" id="10"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/TROGGAxe1.CEL/frames/000.png" id="11"]
+
+[ext_resource type="Resource" path="res://assets/classic/giant_troll/animations.tres" id="12"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/B/test/05/image.png" id="13"]
+
+[ext_resource type="Resource" path="res://assets/classic/balok/animations.tres" id="14"]
+[ext_resource type="Texture2D" path="res://assets/classic/recovered/C/Balok1.CEL/frames/000.png" id="15"]
+
+[ext_resource type="Resource" path="res://assets/classic/trogg_hammer/animations.tres" id="16"]
+[ext_resource type="Resource" path="res://assets/classic/war_beast/animations.tres" id="17"]
+[ext_resource type="Resource" path="res://assets/classic/ratman/animations.tres" id="18"]
+[ext_resource type="Resource" path="res://assets/classic/mudman/animations.tres" id="19"]
+[ext_resource type="Resource" path="res://assets/classic/dragon/animations.tres" id="20"]
+[ext_resource type="Resource" path="res://assets/classic/guardian/animations.tres" id="21"]
+
+[ext_resource type="Resource" path="res://assets/classic/dragon_victim/animations.tres" id="22"]
+
+[ext_resource type="Texture2D" path="res://assets/classic/dragon/arena.png" id="23"]
+
+[ext_resource type="Resource" path="res://assets/classic/spear_finishes/animations.tres" id="24"]
+[ext_resource type="Resource" path="res://assets/classic/balok_finishes/animations.tres" id="25"]
+[ext_resource type="Resource" path="res://assets/classic/knight_finishes/animations.tres" id="26"]
+[ext_resource type="Resource" path="res://assets/classic/mud_finishes/animations.tres" id="27"]
+[ext_resource type="Resource" path="res://assets/classic/hammer_finishes/animations.tres" id="28"]
+[ext_resource type="Resource" path="res://assets/classic/guardian_finishes/animations.tres" id="29"]
+
+[ext_resource type="Resource" path="res://assets/classic/death_trogg_spear/animations.tres" id="30"]
+[ext_resource type="Resource" path="res://assets/classic/death_trogg_axe/animations.tres" id="31"]
+[ext_resource type="Resource" path="res://assets/classic/death_trogg_hammer/animations.tres" id="32"]
+[ext_resource type="Resource" path="res://assets/classic/death_balok/animations.tres" id="33"]
+[ext_resource type="Resource" path="res://assets/classic/death_giant_troll/animations.tres" id="34"]
+[ext_resource type="Resource" path="res://assets/classic/death_ratman/animations.tres" id="35"]
+[ext_resource type="Resource" path="res://assets/classic/death_mudman/animations.tres" id="36"]
+[ext_resource type="Resource" path="res://assets/classic/death_dragon/animations.tres" id="37"]
+[ext_resource type="Resource" path="res://assets/classic/death_guardian/animations.tres" id="38"]
+[ext_resource type="Resource" path="res://assets/classic/death_knight/animations.tres" id="39"]
+[ext_resource type="Resource" path="res://assets/classic/death_rat_victim/animations.tres" id="40"]
+[ext_resource type="Resource" path="res://assets/classic/complete_spear_finishes/animations.tres" id="41"]
+[ext_resource type="Resource" path="res://assets/classic/complete_balok_finishes/animations.tres" id="42"]
+[ext_resource type="Resource" path="res://assets/classic/complete_mud_finishes/animations.tres" id="43"]
+[ext_resource type="Resource" path="res://assets/classic/complete_guardian_finishes/animations.tres" id="44"]
+[ext_resource type="Resource" path="res://assets/classic/complete_dragon/animations.tres" id="45"]
+[ext_resource type="Resource" path="res://assets/classic/complete_burn/animations.tres" id="46"]
+[ext_resource type="Resource" path="res://assets/classic/complete_ratman/animations.tres" id="47"]
+[ext_resource type="Resource" path="res://assets/classic/hit_effects/animations.tres" id="48"]
+
+[resource]
+script = ExtResource("1")
+attack_returns = {"knight":{"clip":"idle","phase":""},"black_knight":{"clip":"idle","phase":""},"trogg_spear":{"clip":"idle","phase":""},"trogg_axe":{"clip":"attack_return","phase":""}}
+pack_id = &"classic.creatures.v9"
+display_name = "Original recovered creature combat poses"
+background = ExtResource("2")
+textures = {"knight": ExtResource("3"), "troll": ExtResource("4"), "trogg_spear": ExtResource("7"), "trogg_axe": ExtResource("11"), "giant_troll": ExtResource("4"), "balok": ExtResource("15")}
+logical_sizes = {"knight": Vector2(23, 61), "troll": Vector2(33, 52), "trogg_spear": Vector2(48, 60), "trogg_axe": Vector2(60, 66), "giant_troll": Vector2(64, 96), "balok": Vector2(80, 74), "trogg_hammer": Vector2(60,66), "war_beast": Vector2(80,46), "ratman": Vector2(40,46), "mudman": Vector2(70,70), "dragon": Vector2(160,100), "guardian": Vector2(75,110), "black_knight": Vector2(23,61)}
+animations = {"death_trogg_spear": ExtResource("30"), "death_trogg_axe": ExtResource("31"), "death_trogg_hammer": ExtResource("32"), "death_balok": ExtResource("33"), "death_giant_troll": ExtResource("34"), "death_ratman": ExtResource("35"), "death_mudman": ExtResource("36"), "death_dragon": ExtResource("37"), "death_guardian": ExtResource("38"), "death_knight": ExtResource("39"), "death_rat_victim": ExtResource("40"), "complete_spear_finishes": ExtResource("41"), "complete_balok_finishes": ExtResource("42"), "complete_mud_finishes": ExtResource("43"), "complete_guardian_finishes": ExtResource("44"), "complete_dragon": ExtResource("45"), "complete_burn": ExtResource("46"), "complete_ratman": ExtResource("47"), "spear_finishes": ExtResource("24"), "balok_finishes": ExtResource("25"), "knight_finishes": ExtResource("26"), "mud_finishes": ExtResource("27"), "hammer_finishes": ExtResource("28"), "guardian_finishes": ExtResource("29"), "dragon_victim": ExtResource("22"), "knight": ExtResource("5"), "trogg_spear": ExtResource("6"), "trogg_axe": ExtResource("10"), "giant_troll": ExtResource("12"), "balok": ExtResource("14"), "trogg_hammer": ExtResource("16"), "war_beast": ExtResource("17"), "ratman": ExtResource("18"), "mudman": ExtResource("19"), "dragon": ExtResource("20"), "guardian": ExtResource("21"), "black_knight": ExtResource("5")}
+encounter_backgrounds = {"spear_lair": ExtResource("8"), "axe_lair": ExtResource("8"), "troll_lair": ExtResource("13"), "balok_lair": ExtResource("13"), "hammer_lair": ExtResource("13"), "beast_lair": ExtResource("8"), "rat_lair": ExtResource("2"), "mud_lair": ExtResource("2"), "dragon_fight": ExtResource("23"), "guardian_fight": ExtResource("13"), "black_knight_fight": ExtResource("8")}
+projectiles = {"dagger": ExtResource("9")}
+effects = {"blood_burst": ExtResource("48")}

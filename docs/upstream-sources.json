@@ -1,0 +1,32 @@
+[
+  {
+    "name": "moonstone-2026",
+    "url": "https://github.com/Undine1/Moonstone-A-Hard-Days-Knight-2026",
+    "commit": "74f7fde041501d2619b273233135629d857ffdd7",
+    "scope": "reference/import tools only; not bundled in game runtime"
+  },
+  {
+    "name": "moonstone-ace",
+    "url": "https://github.com/Jarskih/moonstone-ace-public",
+    "commit": "f0d699a2b92d42d5380429ea9f2d94f7534324ef",
+    "scope": "reference/import tools only; not bundled in game runtime"
+  },
+  {
+    "name": "capsimg",
+    "url": "https://github.com/FrodeSolheim/capsimg",
+    "commit": "ed4cb0912fb1a2a0d5203111c6f6abd50d411b56",
+    "scope": "reference/import tools only; not bundled in game runtime"
+  },
+  {
+    "name": "disk-utilities",
+    "url": "https://github.com/keirf/disk-utilities",
+    "commit": "5e690f3aa248c4d66d2b233ba3e6f7147fbd0311",
+    "scope": "reference/import tools only; not bundled in game runtime"
+  },
+  {
+    "name": "Godot",
+    "version": "4.6.1.stable.official.14d19694e",
+    "url": "https://github.com/godotengine/godot-builds/releases/download/4.6.1-stable/Godot_v4.6.1-stable_linux.x86_64.zip",
+    "download_sha256": "cecd0cb6b55e931318a9d7237dc4197d69ea914966787a454808523626e2789f"
+  }
+]

@@ -1,0 +1,92 @@
+# Local working material, private notes and machine configuration
+.codex/
+.vscode/
+.idea/
+STATUS.md
+work/*
+!work/.gitkeep
+outputs/*
+!outputs/.gitkeep
+
+# Original images, extracted data, reference media and local manifests
+reference/*
+!reference/.gdignore
+
+# Keep every artwork family local until explicitly licensed for publication.
+game/assets/*
+!game/assets/classic/
+!game/assets/modern/
+game/assets/classic/*
+!game/assets/classic/.gitkeep
+game/assets/modern/*
+!game/assets/modern/.gitkeep
+game/content/generated/
+
+# Publish current documentation; preserve research/history locally.
+docs/*
+!docs/architecture.md
+!docs/art-packs.md
+!docs/asset-policy.md
+!docs/development.md
+!docs/importing.md
+!docs/player-guide.md
+!docs/roadmap.md
+!docs/upstream-sources.json
+
+# Publish current build/import tools; keep historical review tools locally.
+tools/*
+!tools/build-config.json
+!tools/build.py
+!tools/build.sh
+!tools/build_support.py
+!tools/check_public_tree.py
+!tools/godot_notices.gd
+!tools/import_assets.sh
+!tools/import_*.py
+!tools/bake_*.cpp
+!tools/launch_moonstone.sh
+!tools/launch_moonstone.cmd
+!tools/package_builds.py
+!tools/verify_build.py
+!tools/tests/
+
+# Godot caches and temporary files
+.godot/
+game/.godot/
+*.tmp
+*.bak
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+
+# Credentials and local environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Media/disk images/build archives must not enter the source repository.
+*.ipf
+*.adf
+*.hdf
+*.mp4
+*.mkv
+*.webm
+*.mov
+*.avi
+*.wav
+*.mp3
+*.ogg
+*.zip
+*.7z
+*.tar
+*.gz
+*.exe
+*.dll
+*.so
+*.x86_64

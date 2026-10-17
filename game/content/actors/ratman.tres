@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"ratman"
+display_name = "Ratman"
+maximum_health = 5
+movement_per_tick = 2
+allowed_moves = PackedStringArray("rat_strike", "rat_bite", "rat_leap")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-14,-40,32,40)
+stagger_ticks = 12
+reaction_ticks = 20
+defeat_ticks = 80
+ai_move = "rat_strike"
+ai_secondary_move = "rat_leap"
+ai_style = &"ratman"
+ai_preferred_range = 160
+ai_keep_distance = 0
+ai_close_range = 40
+ai_depth = 5
+attack_cooldown_ticks = 90
+reaction_clips = {"swing":"hurt_b", "heavy":"hurt_heavy"}
+entry_attack_delay_ticks = 50
+defeat_clips = {"swing":"defeat_swing", "heavy":"defeat_heavy"}
+defeat_durations = {"defeat_counter": 36, "defeat_air": 30}
+hold_behavior_ids = {"ride":"classic:ratman.back_ride"}

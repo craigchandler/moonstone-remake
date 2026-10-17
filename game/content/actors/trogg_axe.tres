@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"trogg_axe"
+maximum_health = 20
+movement_per_tick = 1
+allowed_moves = PackedStringArray("axe_swing", "axe_chop")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-19, -66, 60, 66)
+ai_move = "axe_swing"
+ai_secondary_move = "axe_chop"
+ai_style = &"axeman"
+ai_preferred_range = 118
+ai_close_range = 95
+ai_keep_distance = 58
+ai_depth = 10
+attack_cooldown_ticks = 50
+entry_attack_delay_ticks = 35
+stagger_ticks = 12
+walk_pose_ticks = 6
+reaction_clips = {"swing": "hurt_b", "heavy": "hurt_a", "upward": "hurt_a", "dagger": "hurt_a", "lunge": "hurt_c", "reverse": "hurt_c"}
+defeat_clips = {"swing": "defeat_split", "lunge": "defeat_guts", "reverse": "defeat_guts"}
+defeat_ticks = 48
+defeat_durations = {"defeat_split": 60, "defeat_guts": 144}
+execution_moves = PackedStringArray("axe_swing", "axe_chop")
+execution_clip = "defeat_gory"
+execution_ai_move = "axe_swing"
+execution_ai_range = 75

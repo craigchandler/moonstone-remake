@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"war_beast"
+display_name = "War beast"
+maximum_health = 10
+movement_per_tick = 3
+allowed_moves = PackedStringArray("beast_charge")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-36,-38,79,38)
+stagger_ticks = 12
+reaction_ticks = 20
+defeat_ticks = 80
+ai_move = "beast_charge"
+ai_secondary_move = ""
+ai_style = &"charger"
+ai_preferred_range = 320
+ai_keep_distance = 0
+ai_close_range = 0
+ai_depth = 5
+attack_cooldown_ticks = 30
+entry_attack_delay_ticks = 50
+defeat_clips = {"heavy":"defeat_a", "upward":"defeat_a"}
+defeat_durations = {"defeat_a":90,"defeat_b":96,"defeat":96}
+reaction_clips = {"heavy":"hurt_a", "upward":"hurt_a", "swing":"hurt_b", "lunge":"hurt_b", "reverse":"hurt_b", "dagger":"hurt_b"}

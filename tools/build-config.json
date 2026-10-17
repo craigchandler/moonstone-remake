@@ -1,0 +1,10 @@
+{
+  "artifact_id": "troll-hits",
+  "stem": "Moonstone-Troll-Hits",
+  "engine_version": "4.6.1",
+  "guide": "docs/player-guide.md",
+  "platforms": {
+    "Linux": {"preset": "Linux", "suffix": "linux.x86_64", "launcher": "Moonstone.sh"},
+    "Windows": {"preset": "Windows", "suffix": "windows.exe", "launcher": "Moonstone.cmd"}
+  }
+}

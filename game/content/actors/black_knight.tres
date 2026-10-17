@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"black_knight"
+display_name = "Black Knight"
+maximum_health = 20
+movement_per_tick = 2
+allowed_moves = PackedStringArray("swing", "heavy", "lunge", "reverse", "upward", "dagger")
+can_block = true
+can_cancel_attacks = true
+maximum_daggers = 5
+hurt_box = Rect2(-13,-61,33,61)
+stagger_ticks = 12
+reaction_ticks = 20
+defeat_ticks = 80
+ai_move = "swing"
+ai_secondary_move = "heavy"
+ai_style = &"rival"
+ai_preferred_range = 65
+ai_keep_distance = 25
+ai_close_range = 40
+ai_depth = 5
+attack_cooldown_ticks = 55
+entry_attack_delay_ticks = 50
+defeat_clips = {}
+defeat_durations = {}
+execution_vulnerable = true
+execution_moves = PackedStringArray("swing", "heavy", "lunge", "reverse", "upward")
+execution_clip = "defeat_gory"
+execution_ai_move = "swing"
+execution_ai_range = 38

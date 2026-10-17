@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"guardian"
+display_name = "Guardian"
+maximum_health = 140
+movement_per_tick = 2
+allowed_moves = PackedStringArray("guardian_lunge", "guardian_strike", "guardian_grab")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-23,-103,58,103)
+stagger_ticks = 4
+reaction_ticks = 20
+defeat_ticks = 78
+ai_move = "guardian_lunge"
+ai_secondary_move = "guardian_grab"
+ai_style = &"guardian"
+ai_preferred_range = 140
+ai_keep_distance = 50
+ai_close_range = 100
+ai_depth = 5
+attack_cooldown_ticks = 80
+entry_attack_delay_ticks = 50
+defeat_clips = {}
+defeat_durations = {}

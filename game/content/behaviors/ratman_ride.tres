@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/ratman_ride.gd" id="1"]
+[resource]
+script = ExtResource("1")
+behavior_id = &"classic:ratman.back_ride"
+api_version = 1
+content_version = 1
+throw_damage = 5
+escape_clip = "rat_escape"
+escape_ticks = 30
+flight_ticks = 102
+lethal_clip = "rat_throw_finish"
+lethal_ticks = 96

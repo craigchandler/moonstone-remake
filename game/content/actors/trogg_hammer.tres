@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"trogg_hammer"
+display_name = "Hammer Trogg"
+maximum_health = 20
+movement_per_tick = 1
+allowed_moves = PackedStringArray("hammer_swing", "hammer_chop")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-24,-65,55,65)
+stagger_ticks = 12
+reaction_ticks = 20
+defeat_ticks = 80
+ai_move = "hammer_swing"
+ai_secondary_move = "hammer_chop"
+ai_style = &"axeman"
+ai_preferred_range = 118
+ai_keep_distance = 45
+ai_close_range = 80
+ai_depth = 5
+attack_cooldown_ticks = 75
+entry_attack_delay_ticks = 50
+reaction_clips = {"swing":"hurt_b", "heavy":"hurt_a", "upward":"hurt_a", "dagger":"hurt_a", "lunge":"hurt_c", "reverse":"hurt_c"}
+defeat_clips = {"swing":"defeat_b", "lunge":"defeat_guts", "reverse":"defeat_guts", "dagger":"defeat_a", "heavy":"defeat_a", "upward":"defeat_a"}
+defeat_durations = {"defeat_a":30,"defeat_b":84}

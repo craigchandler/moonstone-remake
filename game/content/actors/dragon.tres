@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"dragon"
+display_name = "Dragon"
+maximum_health = 120
+movement_per_tick = 5
+allowed_moves = PackedStringArray("dragon_claw", "dragon_bite", "dragon_breath", "dragon_flight", "dragon_lower", "dragon_foot")
+can_block = false
+can_cancel_attacks = false
+maximum_daggers = 0
+hurt_box = Rect2(-50,-75,135,85)
+stagger_ticks = 4
+reaction_ticks = 20
+defeat_ticks = 114
+ai_move = "dragon_claw"
+ai_secondary_move = "dragon_breath"
+ai_style = &"dragon"
+ai_preferred_range = 150
+ai_keep_distance = 70
+ai_close_range = 100
+ai_depth = 5
+attack_cooldown_ticks = 24
+entry_attack_delay_ticks = 50
+defeat_clips = {}
+defeat_durations = {}

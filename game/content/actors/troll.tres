@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoonstoneActorDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/actor_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+actor_id = &"troll"
+can_cancel_attacks = false
+maximum_health = 40
+allowed_moves = PackedStringArray("swing")
+hurt_box = Rect2(-16, -52, 33, 52)
+maximum_daggers = 0
+defeat_clips = {}

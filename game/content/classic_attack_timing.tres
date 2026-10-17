@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/attack_timing.gd" id="1"]
+[resource]
+script = ExtResource("1")
+content_version = 2
+moves = {
+"axe_swing":{"kinds":["trogg_axe"],"cancel_windup":false,"recovery_lock":5,"contact_hold":5,"contact_return":5},
+"axe_chop":{"kinds":["trogg_axe"],"cancel_windup":false,"recovery_lock":10,"contact_hold":5,"contact_return":5},
+"swing":{"kinds":["knight","black_knight"],"cancel_windup":true,"recovery_lock":5,"contact_hold":5,"contact_return":5},
+"heavy":{"kinds":["knight","black_knight"],"cancel_windup":false,"recovery_lock":10,"contact_hold":5,"contact_return":5},
+"reverse":{"kinds":["knight","black_knight"],"cancel_windup":true,"recovery_lock":5,"contact_hold":5,"contact_return":5},
+"lunge":{"kinds":["knight","black_knight"],"cancel_windup":false,"recovery_lock":10,"contact_hold":5,"contact_return":5},
+"dagger":{"kinds":["knight","black_knight"],"cancel_windup":true,"recovery_lock":4,"contact_hold":0,"contact_return":0},
+"spear_thrust":{"kinds":["trogg_spear"],"cancel_windup":false,"recovery_lock":5,"contact_hold":5,"contact_return":1}
+}
+reactions = {"dagger":{"kinds":["knight","black_knight"],"clip":"hurt_b","ticks":30}}

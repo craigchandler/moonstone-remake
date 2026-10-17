@@ -1,0 +1,16 @@
+{
+  "source": "Linux release controller acceptance before cleanup, 17 October 2026; numeric native-state hashes only",
+  "engine": "4.6.1",
+  "combat_schema": 22,
+  "content": "encounters.v27",
+  "session_traces": {
+    "block": 1523476077,
+    "dagger": 3894305935,
+    "heavy": 4217553655,
+    "lunge": 3322308414,
+    "move": 4089940165,
+    "reverse": 3514011727,
+    "swing": 1723435047,
+    "upward": 2181162961
+  }
+}

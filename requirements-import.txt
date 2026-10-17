@@ -1,0 +1,3 @@
+# Offline asset import only; not required by exported players or build/package tools.
+Pillow==12.3.0
+numpy==2.5.4
