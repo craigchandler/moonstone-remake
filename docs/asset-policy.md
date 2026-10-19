@@ -14,12 +14,23 @@ code, documentation and numeric regression fixtures. It deliberately excludes:
 media/binary files, common credential signatures and machine-specific paths.
 It is a publication aid, not a legal review or a general secret scanner.
 
+## Documentation screenshots
+
+The selected images listed explicitly by `tools/check_public_tree.py` under
+`docs/screenshots/` are documentation captures of the classic remake. This
+exception covers those screenshots only. Runtime asset packs, sprite sheets,
+fonts, original data, audio, footage and build packages remain excluded.
+
+Screenshots contain original Moonstone artwork, which retains its respective
+rights and is not covered by the source code's MIT licence. See the
+[screenshot gallery](screenshots.md) and [attribution](../THIRD_PARTY.md).
+
 ## Source versus game content
 
 The MIT licence applies to new source code. It does not relicense the original
 Moonstone game or any separately owned or separately licensed material. The
 original title, graphics, fonts, sounds, music, data and credits retain their
-respective rights. No original game content is supplied by this repository.
+respective rights. Original runtime assets are not supplied by this repository.
 
 A classic source checkout needs a compatible local native asset set or an
 original-data import before it runs. Importing data does not transfer ownership

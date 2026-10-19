@@ -7,11 +7,32 @@ The project recreates the original game’s combat and campaign while preparing
 for replaceable graphics and gameplay content. It is a work in progress, not a
 finished or fully accurate reproduction.
 
-**This is a source-only repository. Original game data, recovered artwork,
-music, sounds, reference footage and playable packages are not included.**
+**This repository contains source code and documentation screenshots. Original
+game data, runtime artwork/audio packs, reference footage and playable packages
+are not included.**
 Running the classic version requires a separately provisioned local asset set
 or a one-time import from your own compatible original data. Disk images are
 not needed during play.
+
+## Screenshots
+
+| Intro | Main menu |
+| --- | --- |
+| [![Druids in the opening sequence](docs/screenshots/intro.png)](docs/screenshots/intro.png) | [![Classic main menu](docs/screenshots/main-menu.png)](docs/screenshots/main-menu.png) |
+
+| Practice menu | World map |
+| --- | --- |
+| [![Practice opponent selection with layered knight and Balok previews](docs/screenshots/practice-menu.png)](docs/screenshots/practice-menu.png) | [![Campaign world map](docs/screenshots/world-map.png)](docs/screenshots/world-map.png) |
+
+| Battle | Highwood |
+| --- | --- |
+| [![Blue knight striking a Balok](docs/screenshots/battle.png)](docs/screenshots/battle.png) | [![Highwood town and services](docs/screenshots/town-highwood.png)](docs/screenshots/town-highwood.png) |
+
+| Waterdeep | Tavern |
+| --- | --- |
+| [![Waterdeep town and services](docs/screenshots/town-waterdeep.png)](docs/screenshots/town-waterdeep.png) | [![Tavern dice table](docs/screenshots/town-tavern.png)](docs/screenshots/town-tavern.png) |
+
+[Capture details and artwork attribution](docs/screenshots.md).
 
 ## Current game
 
@@ -59,6 +80,7 @@ python3 tools/check_public_tree.py --ref HEAD
 - [Architecture and deterministic gameplay](docs/architecture.md)
 - [Artwork and renderer boundaries](docs/art-packs.md)
 - [Build, test and export workflow](docs/development.md)
+- [Screenshot gallery](docs/screenshots.md)
 - [Original-data import](docs/importing.md)
 - [Asset and distribution policy](docs/asset-policy.md)
 - [Roadmap](docs/roadmap.md)

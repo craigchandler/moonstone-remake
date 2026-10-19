@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Check staged/committed source objects without reading private working files."""
+"""Check approved source/documentation objects without reading private working files."""
 from pathlib import Path, PurePosixPath
 import argparse
 import re
 import subprocess
+import struct
+import zlib
 
-PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md upstream-sources.json'.split())
+PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md screenshots.md upstream-sources.json'.split())
 PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py network_fingerprint.py verify_network.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py verify_build.py'.split())
+PUBLIC_SCREENSHOTS = frozenset('docs/screenshots/' + name + '.png' for name in
+    'intro main-menu practice-menu world-map battle town-highwood town-waterdeep town-tavern'.split())
 PUBLIC_ROOT = frozenset('.gitattributes .gitignore AGENTS.md CONTRIBUTING.md LICENSE README.md THIRD_PARTY.md requirements-import.txt'.split())
 BLOCKED_SUFFIXES = frozenset('.ipf .adf .hdf .mp4 .mkv .webm .mov .avi .wav .mp3 .ogg .zip .7z .tar .gz .exe .dll .so .x86_64 .png .jpg .jpeg .gif .webp .blend .fbx .glb .gltf .pem .key .pfx .p12'.split())
 MAX_BYTES = 2 * 1024 * 1024
@@ -32,6 +36,8 @@ def allowed_path(name):
         return False
     if path.name.startswith('.env') and path.name != '.env.example':
         return False
+    if name in PUBLIC_SCREENSHOTS:
+        return True
     if path.suffix.lower() in BLOCKED_SUFFIXES or name == 'STATUS.md':
         return False
     if path.parts[0] in {'work', 'outputs'}:
@@ -51,6 +57,31 @@ def allowed_path(name):
             (path.name.startswith('import_') and path.suffix == '.py') or
             (path.name.startswith('bake_') and path.suffix == '.cpp'))
     return path.parts[0] == 'game' or (len(path.parts) == 1 and name in PUBLIC_ROOT)
+
+
+def valid_screenshot(content):
+    """Only complete 640x400 PNG captures qualify for the exact-name exception."""
+    if not content.startswith(b'\x89PNG\r\n\x1a\n'):
+        return False
+    offset, chunks = 8, []
+    while offset + 12 <= len(content):
+        size = int.from_bytes(content[offset:offset+4], 'big')
+        kind = content[offset+4:offset+8]
+        end = offset + 12 + size
+        if end > len(content):
+            return False
+        payload = content[offset+8:offset+8+size]
+        crc = int.from_bytes(content[end-4:end], 'big')
+        if zlib.crc32(kind + payload) != crc:
+            return False
+        if not chunks and (kind != b'IHDR' or size != 13 or
+                           struct.unpack('>II', payload[:8]) != (640, 400)):
+            return False
+        chunks.append(kind)
+        if kind == b'IEND':
+            return size == 0 and end == len(content) and b'IDAT' in chunks
+        offset = end
+    return False
 
 
 def entries(root, ref=None):
@@ -92,7 +123,10 @@ def check_tree(root, ref=None):
             issues.append(name + ': local-only or non-source path')
         if size > MAX_BYTES:
             issues.append(name + ': exceeds source-file size limit')
-        if b'\0' in content:
+        if name in PUBLIC_SCREENSHOTS:
+            if not valid_screenshot(content):
+                issues.append(name + ': expected a complete 640x400 PNG screenshot')
+        elif b'\0' in content:
             issues.append(name + ': binary content')
         for pattern, label in SIGNATURES:
             if pattern.search(content):
@@ -125,7 +159,7 @@ def main():
     if issues:
         print('\n'.join('FAIL: ' + issue for issue in issues))
         raise SystemExit(1)
-    print(f'PASS: {count} source objects across {trees} tree(s); local assets, notes, binary media and detected credentials excluded')
+    print(f'PASS: {count} source/documentation objects across {trees} tree(s); local asset packs, notes, unapproved binary media and detected credentials excluded')
 
 
 if __name__ == '__main__':

@@ -32,6 +32,19 @@ docs/*
 !docs/player-guide.md
 !docs/roadmap.md
 !docs/upstream-sources.json
+!docs/screenshots.md
+
+# Selected documentation captures only; full game artwork stays local.
+!docs/screenshots/
+docs/screenshots/*
+!docs/screenshots/intro.png
+!docs/screenshots/main-menu.png
+!docs/screenshots/practice-menu.png
+!docs/screenshots/world-map.png
+!docs/screenshots/battle.png
+!docs/screenshots/town-highwood.png
+!docs/screenshots/town-waterdeep.png
+!docs/screenshots/town-tavern.png
 
 # Publish current build/import tools; keep historical review tools locally.
 tools/*

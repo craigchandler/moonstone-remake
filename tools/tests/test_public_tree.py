@@ -4,9 +4,11 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import struct
+import zlib
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from check_public_tree import audit
+from check_public_tree import audit, PUBLIC_SCREENSHOTS
 
 
 class PublicTreeTests(unittest.TestCase):
@@ -41,6 +43,36 @@ class PublicTreeTests(unittest.TestCase):
             self.stage(name)
         issues, _, _ = audit(self.root)
         self.assertEqual(len(issues), 8)
+
+    @staticmethod
+    def screenshot(width=640, height=400):
+        def chunk(kind, payload):
+            return struct.pack('>I', len(payload)) + kind + payload + struct.pack('>I', zlib.crc32(kind + payload))
+        pixels = (b'\0' + b'\x40\x60\x80' * width) * height
+        return (b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', width, height, 8, 2, 0, 0, 0)) +
+                chunk(b'IDAT', zlib.compress(pixels)) + chunk(b'IEND', b''))
+
+    def test_only_named_documentation_screenshots_are_allowed(self):
+        self.stage('docs/screenshots.md')
+        for name in PUBLIC_SCREENSHOTS:
+            self.stage(name, self.screenshot())
+        self.assertEqual(audit(self.root)[0], [])
+        self.stage('docs/screenshots/sprite-atlas.png', self.screenshot())
+        issues, _, _ = audit(self.root)
+        self.assertTrue(any('sprite-atlas.png' in issue for issue in issues))
+
+    def test_screenshot_exception_rejects_wrong_format_size_and_truncation(self):
+        for content in [b'not an image', self.screenshot(320, 200), self.screenshot()[:-1]]:
+            self.stage('docs/screenshots/intro.png', content)
+            self.assertTrue(any('PNG screenshot' in issue for issue in audit(self.root)[0]))
+
+    def test_screenshot_exception_preserves_staged_content_and_credential_checks(self):
+        name = 'docs/screenshots/intro.png'
+        self.stage(name, b'not a PNG')
+        (self.root / name).write_bytes(self.screenshot())
+        self.assertTrue(any('PNG screenshot' in issue for issue in audit(self.root)[0]))
+        self.stage('docs/screenshots/notes.txt', ('ghp_' + 'a' * 36).encode())
+        self.assertTrue(any('credential' in issue for issue in audit(self.root)[0]))
 
     def test_unstaged_cleanup_cannot_hide_a_staged_credential(self):
         name = 'game/config.txt'
