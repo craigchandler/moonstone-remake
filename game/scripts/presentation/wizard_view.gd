@@ -45,7 +45,7 @@ func draw_track(key: String,tick: int) -> void:
         if remaining<int(pose.ticks):
             for layer in pose.layers:
                 var texture: Texture2D=KnightArt.coloured(Scenes.frames["wizard_"+str(layer.frame)],journey.identity.kind)
-                draw_texture_rect(texture,Rect2(Vector2(layer.x,layer.y)*2,texture.get_size()*2),false)
+                draw_texture_rect(texture,Rect2(Vector2(layer.x,layer.y)*2,Images.size(texture)*2),false)
             return
         remaining-=int(pose.ticks)
 func _draw() -> void:

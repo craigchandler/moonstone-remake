@@ -1,16 +1,16 @@
 {
-  "source": "Linux release controller acceptance before cleanup, 17 October 2026; numeric native-state hashes only",
+  "source": "Knight rhythm correction: shared complete knight hurt recovery; controller and direct-command histories independently agree",
   "engine": "4.6.1",
-  "combat_schema": 22,
-  "content": "encounters.v27",
+  "combat_schema": 25,
+  "content": "encounters.v31",
   "session_traces": {
-    "block": 1523476077,
-    "dagger": 3894305935,
-    "heavy": 4217553655,
-    "lunge": 3322308414,
-    "move": 4089940165,
-    "reverse": 3514011727,
-    "swing": 1723435047,
-    "upward": 2181162961
+    "block": 3855052780,
+    "dagger": 906169271,
+    "heavy": 3296749026,
+    "lunge": 1927076248,
+    "move": 2384748753,
+    "reverse": 576270466,
+    "swing": 1317975554,
+    "upward": 4099500220
   }
 }

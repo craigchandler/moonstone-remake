@@ -30,11 +30,9 @@ func advance(host: Node) -> void:
     if t==100:key(host,KEY_ENTER);selected=host.journey.checkpoint()
     if t==120:
         var j: RefCounted=host.journey
-        if context=="map":j.world.position=j.Locations.home(kind).position.clamp(host.definition.bounds.position,host.definition.bounds.end-Vector2i.ONE)
-        elif context=="sheet":host.show_inventory()
+        if context=="sheet":host.show_inventory()
         elif context=="home":
-            j.world.position=j.Locations.home(kind).position.clamp(host.definition.bounds.position,host.definition.bounds.end-Vector2i.ONE)
-            host.enter_location("home")
+            key(host,KEY_ENTER) # Enter the real selected start, without teleporting.
         elif context=="combat":
             j.world.position=host.definition.lairs[-2].position;host.enter_location(host.definition.lairs[-2].id)
         elif context in ["wizard","gift"]:j.world.position=j.Locations.place("wizard").position;host.enter_location("wizard")
@@ -65,6 +63,9 @@ func finish(host: Node) -> void:
     else:
         valid=j.identity=={"kind":kind,"name":Identity.DEFAULT_NAMES[kind]} and selected.identity==j.identity
         valid=valid and host.menu_view==null and host.selection_view==null
+        var home_start: Vector2i=j.Locations.home(kind).position.clamp(host.definition.bounds.position,host.definition.bounds.end-Vector2i.ONE)
+        valid=valid and selected.world.position=={"x":home_start.x,"y":home_start.y}
+        if context=="home":valid=valid and j.town_id=="home" and host.inventory_view!=null and j.message==j.HOME_VISIT_MESSAGE
         if context=="ending":valid=valid and j.quest.ending.knight_kind==kind
     if not valid:push_error("Knight selection fixture failed: "+context);host.get_tree().quit(1);return
     result.initial=initial;result.selected=selected;result.final=j.checkpoint()

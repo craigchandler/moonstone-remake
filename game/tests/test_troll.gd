@@ -114,7 +114,7 @@ func run_checks() -> void:
         second.advance(direction, action)
         check(session.simulation.snapshot() == second.simulation.snapshot(), "troll attack memory/stride/co-op replay deterministically")
     var copied: Dictionary = session.simulation.snapshot()
-    check(copied.schema == 22 and copied.content == "encounters.v27", "new authoritative attack memory versions snapshot/content")
+    check(copied.schema == 25 and copied.content == "encounters.v31", "new authoritative attack memory versions snapshot/content")
     copied.actors[10].last_attack = "corrupt"
     check(session.simulation.actors[10].last_attack != "corrupt", "snapshot cannot mutate troll attack memory")
     for mode in [&"competitive", &"cooperative"]:

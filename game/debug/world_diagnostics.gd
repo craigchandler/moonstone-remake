@@ -7,6 +7,22 @@ func _init(view: Node) -> void:
     host = view
 
 func start(arguments: PackedStringArray) -> void:
+    for argument in arguments:
+        if argument.begins_with("--network-role="):
+            host.set_physics_process(false);host.set_process_input(false);host.set_process_unhandled_key_input(false);host.set_process_unhandled_input(false)
+            host.debug_mode_review=preload("res://debug/fixtures/network_duel_review.gd").new()
+            host.debug_mode_review.report.call_deferred(host)
+            return
+    if "--practice-probe" in arguments:
+        host.set_physics_process(false);host.set_process_input(false);host.set_process_unhandled_key_input(false);host.set_process_unhandled_input(false)
+        host.debug_mode_review=preload("res://debug/fixtures/practice_review.gd").new()
+        host.debug_mode_review.report.call_deferred(host)
+        return
+    if "--layered-graphics-probe" in arguments:
+        host.set_physics_process(false);host.set_process_input(false);host.set_process_unhandled_key_input(false);host.set_process_unhandled_input(false)
+        host.debug_mode_review=load("res://debug/fixtures/layered_graphics_review.gd").new()
+        host.debug_mode_review.report.call_deferred(host)
+        return
     if "--local-players-probe" in arguments:
         host.set_physics_process(false);host.set_process_input(false);host.set_process_unhandled_key_input(false);host.set_process_unhandled_input(false)
         host.debug_mode_review=load("res://debug/fixtures/local_players_review.gd").new()
@@ -45,6 +61,18 @@ func start(arguments: PackedStringArray) -> void:
             host.enemy_scaling_review=preload("res://debug/fixtures/enemy_scaling_review.gd").new()
             host.enemy_scaling_review.report.call_deferred(host,argument.trim_prefix("--enemy-scaling-probe="))
             return
+    if "--knight-rhythm-batch" in arguments:
+        host.set_physics_process(false);host.set_process_unhandled_key_input(false)
+        preload("res://debug/fixtures/knight_rhythm_fixture.gd").batch.call_deferred(host)
+        return
+    if "--ratman-ground-batch" in arguments:
+        host.set_physics_process(false);host.set_process_unhandled_key_input(false)
+        preload("res://debug/fixtures/ratman_ground_fixture.gd").batch.call_deferred(host)
+        return
+    if "--recovery-roster" in arguments:
+        host.set_physics_process(false);host.set_process_unhandled_key_input(false)
+        preload("res://debug/fixtures/combat_recovery_review.gd").batch.call_deferred(host)
+        return
     if "--pacing-batch" in arguments:
         host.set_physics_process(false);host.set_process_unhandled_key_input(false)
         preload("res://debug/fixtures/combat_pacing_fixture.gd").batch.call_deferred(host)

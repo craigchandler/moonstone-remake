@@ -205,8 +205,10 @@ func run_checks(parent: Node) -> Dictionary:
     # Real loot input: confirm takes treasure; it must not act like Enter/exit.
     var site: String=world.definition.lairs[0].id
     world.journey.lair_loot[site].gold=17 # Explicit, nonrandom treasure input fixture.
+    world.journey.world.position=world.journey.world.lair(site).position
     button(JOY_BUTTON_A)
-    world.journey.world.active_lair=site;world.journey.start_site_combat();world.show_lair();world.arena.set_physics_process(false)
+    check(world.arena!=null and world.journey.world.active_lair==site,"location confirm enters the staged lair through normal input")
+    world.arena.set_physics_process(false)
     await parent.get_tree().process_frame
     check(controls.combat_action()=="idle","held location-confirm cannot become an attack when a fight opens")
     button(JOY_BUTTON_A,false)

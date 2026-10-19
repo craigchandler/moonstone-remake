@@ -1,4 +1,6 @@
 extends RefCounted
+
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
 const KnightArt=preload("res://assets/classic/knight_selection/art.tres")
 const Places=preload("res://scripts/domain/town_locations.gd")
 const Scenes=preload("res://assets/classic/town_locations/art.tres")
@@ -103,7 +105,7 @@ func input(event: InputEvent,host: Node) -> void:
     host.queue_redraw()
 func sprite(host: Node,index: int,point: Vector2) -> void:
     var texture: Texture2D=art.service_sprites[kind+"_"+str(index)]
-    host.draw_texture_rect(texture,Rect2(point*2,texture.get_size()*2),false)
+    host.draw_texture_rect(texture,Rect2(point*2,Images.size(texture)*2),false)
 func draw_track(host: Node,key: String,tick: int) -> void:
     var poses: Array=Scenes.data[key];var total: int=0
     for pose in poses:total+=int(pose.ticks)
@@ -112,7 +114,7 @@ func draw_track(host: Node,key: String,tick: int) -> void:
         if remaining<int(pose.ticks):
             for layer in pose.layers:
                 var texture: Texture2D=KnightArt.coloured(Scenes.frames["dice_"+str(layer.frame)],journey.identity.kind)
-                host.draw_texture_rect(texture,Rect2(Vector2(layer.x,layer.y)*2,texture.get_size()*2),false)
+                host.draw_texture_rect(texture,Rect2(Vector2(layer.x,layer.y)*2,Images.size(texture)*2),false)
             return
         remaining-=int(pose.ticks)
 func draw(host: Node) -> void:
@@ -139,7 +141,7 @@ func draw(host: Node) -> void:
         var dice: Array=v.dice if v.dice.size()==3 else [1,3,5]
         for i in range(3):
             var texture: Texture2D=art.service_sprites["dice_"+str(dice[i])]
-            host.draw_texture_rect(texture,Rect2([Vector2(230,30),Vector2(98,76),Vector2(150,176)][i],texture.get_size()*2),false)
+            host.draw_texture_rect(texture,Rect2([Vector2(230,30),Vector2(98,76),Vector2(150,176)][i],Images.size(texture)*2),false)
         var lines: Array=[("You won %d gold pieces."%v.payout) if v.payout>0 else ("You lost %d gold pieces."%v.bet),"You now have %d gold pieces."%journey.inventory.gold,"Press fire to continue"]
         for i in range(lines.size()):host.pixel_text(lines[i],Vector2(348,252+i*28),false,Color("553322"))
     host.draw_help("ARROWS OR + / -: CHANGE OFFER\nSPACE / ENTER: CONTINUE OR ACCEPT\nCANCEL KEEPS UNCONFIRMED GOLD\nAN ACCEPTED DONATION IS SPENT\nTAVERN: CHOOSE A 1 TO 5 GOLD WAGER\nESC / I: RETURN TO TOWN")

@@ -101,11 +101,7 @@ func advance(direction: Vector2i, action: String,additional: Dictionary={}) -> v
                 command(id, 0, Vector2i.ZERO, "beast_charge", actor.facing)
                 continue
             if definition.ai_style == &"ratman":
-                if actor.held_target != 0 or actor.special_remaining > 0 or nearest.grab_remaining > 0 or nearest.hidden_by != 0:
-                    command(id, 0, Vector2i.ZERO, "idle")
-                    continue
-                var separation: int = abs(int(nearest.x) - int(actor.x))
-                var attack: String = "rat_leap" if separation > 50 or dy != 0 else ("rat_strike" if separation <= 40 else "rat_bite")
+                var attack: String = simulation.Ratman.choose(simulation,actor,nearest)
                 command(id, 0, Vector2i.ZERO, attack, dx if dx else actor.facing)
                 continue
             if definition.ai_style == &"snatcher":
@@ -146,25 +142,15 @@ func advance(direction: Vector2i, action: String,additional: Dictionary={}) -> v
                 command(id, 0, movement, attack, dx if dx else actor.facing)
                 continue
             if definition.ai_style == &"rival":
-                var separation: int = abs(int(nearest.x) - int(actor.x))
-                var attack: String = "idle"
-                var movement := Vector2i(0,dy)
-                if separation > 58: movement.x = dx
-                elif separation < 25: movement.x = -dx
-                if separation <= 65 and dy == 0:
-                    if nearest.remaining > 0 and simulation.tick % 3 != 0: attack = "block"
-                    else: attack = "heavy" if actor.last_attack != "heavy" and separation < 45 else "lunge"
-                command(id, 0, movement, attack, dx if dx else actor.facing)
+                var plan:Dictionary=simulation.Knight.choose(simulation,actor,nearest)
+                # Both source guard choices project onto the existing native
+                # guard control; separate guard artwork/rules are not introduced.
+                var chosen_action:String="block" if plan.action=="defend" else ("idle" if plan.action=="walk" else String(plan.action))
+                command(id,0,plan.direction,chosen_action,plan.facing)
                 continue
             if definition.ai_style == &"drake":
-                var separation: int = abs(int(nearest.x) - int(actor.x))
-                var depth: int = abs(int(nearest.y) - int(actor.y))
-                var attack: String = "balok_pounce"
-                if separation <= 120 and depth <= int(definition.ai_depth):
-                    if separation <= 70: attack = "balok_hop"
-                    elif separation <= 80 and actor.last_attack != "balok_swipe": attack = "balok_swipe"
-                    else: attack = "balok_maul"
-                command(id, 0, Vector2i.ZERO, attack, dx if dx else actor.facing)
+                var attack: String=simulation.Balok.choose(simulation.rules,actor,nearest)
+                command(id,0,Vector2i.ZERO,attack,dx if dx else actor.facing)
                 continue
             if definition.ai_style == &"stalker":
                 var separation: int = abs(int(nearest.x) - int(actor.x))
@@ -184,11 +170,11 @@ func advance(direction: Vector2i, action: String,additional: Dictionary={}) -> v
                 var attack: String = "idle"
                 if separation > int(definition.ai_preferred_range):
                     movement.x = dx
-                elif separation < int(definition.ai_keep_distance) and actor.x - dx > 22 and actor.x - dx < 298:
+                elif (separation < int(definition.ai_keep_distance) or (definition.ai_backoff_inclusive and separation == int(definition.ai_keep_distance))) and actor.x - dx > 22 and actor.x - dx < 298:
                     movement.x = -dx
                 elif dy == 0:
                     attack = definition.ai_secondary_move if definition.ai_style == &"axeman" and separation > int(definition.ai_close_range) else definition.ai_move
-                if attack != "idle" and actor.remaining == 0 and actor.stagger_remaining == 0 and actor.cooldown_remaining <= 1:
+                if attack != "idle" and actor.remaining == 0 and actor.stagger_remaining <= 1 and actor.cooldown_remaining <= 1:
                     if creature_reserved:
                         attack = "idle"
                     else:

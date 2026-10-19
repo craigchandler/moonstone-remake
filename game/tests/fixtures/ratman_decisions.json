@@ -1,0 +1,2885 @@
+{
+  "source": "Original casterMelee decision cases; clocks remain separately validated native approximations",
+  "cases": [
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 0,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 20,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 35,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 40,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 41,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 45,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 50,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": false,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 0,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 1,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 0,
+      "wait": 15,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 0,
+      "plan": "rat_strike"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 20,
+      "plan": "rat_strike"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 35,
+      "plan": "rat_strike"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 40,
+      "plan": "rat_strike"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 41,
+      "plan": "rat_bite"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 45,
+      "plan": "rat_bite"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 50,
+      "plan": "rat_bite"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 51,
+      "plan": "throw"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 60,
+      "plan": "throw"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 0,
+      "distance": 100,
+      "plan": "throw"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 0,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 20,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 35,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 40,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 41,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 45,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 50,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 51,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 60,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 1,
+      "distance": 100,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 0,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 20,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 35,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 40,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 41,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 45,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 50,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 51,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 60,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 0,
+      "hp": 20,
+      "wait": 15,
+      "distance": 100,
+      "plan": "wait"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 0,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 1,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 0,
+      "wait": 15,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 0,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 1,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 8,
+      "hp": 20,
+      "wait": 15,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 0,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 1,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 0,
+      "wait": 15,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 0,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 1,
+      "distance": 100,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 0,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 20,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 35,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 40,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 41,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 45,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 50,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 51,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 60,
+      "plan": "stand"
+    },
+    {
+      "depth_near": true,
+      "flags": 32,
+      "hp": 20,
+      "wait": 15,
+      "distance": 100,
+      "plan": "stand"
+    }
+  ]
+}

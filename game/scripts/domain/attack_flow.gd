@@ -11,6 +11,7 @@ static func policy(rules: Resource, actor: Dictionary) -> Dictionary:
     var p = resource.moves.get(actor.action,{})
     if not p is Dictionary or not p.get("kinds",[]) is Array or actor.kind not in p.get("kinds",[]): return {}
     if typeof(p.get("cancel_windup")) != TYPE_BOOL: return {}
+    if typeof(p.get("contact_impact",0)) != TYPE_INT or p.get("contact_impact",0)<0 or p.get("contact_impact",0)>600: return {}
     for field in ["recovery_lock","contact_hold","contact_return"]:
         if typeof(p.get(field)) != TYPE_INT or p[field]<0 or p[field]>600: return {}
     return p
@@ -46,7 +47,7 @@ static func contact(rules: Resource, actor: Dictionary, hit: Dictionary, tick: i
         begin(rules,actor,tick-(move.windup+move.active+move.recovery-actor.remaining))
     actor.attack_flow.branch = "contact"
     actor.attack_flow.impact_elapsed = move.active+move.recovery-actor.remaining
-    actor.remaining = p.contact_hold+p.contact_return
+    actor.remaining = int(p.get("contact_impact",0))+p.contact_hold+p.contact_return
 
 static func settle(rules: Resource, actors: Dictionary, hits: Array, tick: int) -> void:
     var lethal_sources: Dictionary = {}
@@ -62,3 +63,11 @@ static func reaction(rules: Resource, actor: Dictionary, move: String) -> void:
     if not p is Dictionary or actor.kind not in p.get("kinds",[]): return
     if typeof(p.get("ticks"))!=TYPE_INT or p.ticks<1 or p.ticks>600 or typeof(p.get("clip"))!=TYPE_STRING: return
     actor.reaction=p.clip;actor.reaction_remaining=p.ticks;actor.reaction_duration=p.ticks
+
+static func hurt_protected(rules: Resource,actor: Dictionary) -> bool:
+    # Native stagger is the gameplay hurt window. Visual reaction tails can
+    # finish early when an actor resumes its next action; they grant no armour.
+    var clips: Array=rules.attack_timing.untargetable_reactions.get(actor.kind,[])
+    # War Beast owns a dedicated hurt -> impact -> charge state rather than
+    # generic stagger. Only its hurt stages omit the original hurt-list draws.
+    return (actor.stagger_remaining>0 and actor.reaction in clips) or actor.get("beast",{}).get("stage","") in clips

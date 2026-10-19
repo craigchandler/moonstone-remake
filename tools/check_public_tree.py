@@ -6,7 +6,7 @@ import re
 import subprocess
 
 PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md upstream-sources.json'.split())
-PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py verify_build.py'.split())
+PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py network_fingerprint.py verify_network.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py verify_build.py'.split())
 PUBLIC_ROOT = frozenset('.gitattributes .gitignore AGENTS.md CONTRIBUTING.md LICENSE README.md THIRD_PARTY.md requirements-import.txt'.split())
 BLOCKED_SUFFIXES = frozenset('.ipf .adf .hdf .mp4 .mkv .webm .mov .avi .wav .mp3 .ogg .zip .7z .tar .gz .exe .dll .so .x86_64 .png .jpg .jpeg .gif .webp .blend .fbx .glb .gltf .pem .key .pfx .p12'.split())
 MAX_BYTES = 2 * 1024 * 1024

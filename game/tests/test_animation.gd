@@ -52,7 +52,7 @@ func _initialize() -> void:
             for event in model.events:
                 if event.type == "damage":
                     saw_damage = true
-                    check(action == "dagger" or (pose.clip == action and pose.phase == "active"),
+                    check(action == "dagger" or (pose.clip == action and (pose.phase == "active" or (action == "swing" and pose.get("silent_transition",false) and pose.phase=="follow_through"))),
                         "damage tick must display the corresponding strike pose")
                 if event.type == "dagger":
                     check(pose.clip == "dagger" and pose.phase == "active", "dagger release matches the throw pose")

@@ -1,5 +1,7 @@
 extends Node2D
 
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
+
 signal finished
 const ART=preload("res://assets/classic/intro_menu/art.tres")
 var tick: int=0
@@ -32,7 +34,8 @@ func _ready() -> void:
 func show_tick() -> void:
     var at: int=clampi(tick,0,ART.total_ticks-1)
     var frame: int=ART.pose_at(at).frame
-    region.region=Rect2((frame%ART.columns)*320,(frame/ART.columns)*200,320,200)
+    region.region=Images.source_rect(ART.atlas,Rect2((frame%ART.columns)*320,(frame/ART.columns)*200,320,200))
+    film.scale=Vector2(2,2)/Images.pixel_scale(ART.atlas)
     palette.set_shader_parameter("row",at)
 
 func advance() -> void:

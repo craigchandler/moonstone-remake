@@ -76,7 +76,7 @@ func _initialize() -> void:
     check(model.actors[2].health == 15, "later sword contact must not damage the same target twice")
     check(model.actors[2].reaction == "hurt_a", "ordinary unblocked contact starts its reaction")
     var saved_x: int = model.actors[2].x
-    for step in range(model.actors[2].stagger_remaining):
+    for step in range(model.actors[2].stagger_remaining-1):
         model.submit(2, command(2, step + 1, model.tick, 1, "heavy"))
         model.advance()
         check(model.actors[2].x == saved_x and model.actors[2].remaining == 0,

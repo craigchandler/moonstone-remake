@@ -23,6 +23,8 @@ extends Resource
 @export var ai_keep_distance: int = 0
 @export var ai_depth: int = 5
 @export var attack_cooldown_ticks: int = 0
+@export var reset_cooldown_on_hit: bool = false
+@export var ai_backoff_inclusive: bool = false
 @export var entry_attack_delay_ticks: int = 0
 @export var reaction_clips: Dictionary = {}
 @export var defeat_clips: Dictionary = {"heavy": "defeat_gory"}

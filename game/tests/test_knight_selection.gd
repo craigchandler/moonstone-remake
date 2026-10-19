@@ -23,9 +23,9 @@ func run() -> void:
     for kind in range(4):
         var j: RefCounted=fresh()
         check(j.restart(1234,false,{"kind":kind,"name":Identity.DEFAULT_NAMES[kind]}),"confirmed identity accepted")
-        check(j.world.position==Vector2i(15,100) and j.character.health==20 and j.character.experience==0,"original solo record position; equal starting stats")
+        check(j.world.position==j.Locations.home(kind).position.clamp(definition.bounds.position,definition.bounds.end-Vector2i.ONE) and j.character.health==20 and j.character.experience==0,"selected home position; equal starting stats")
         var state: Dictionary=j.checkpoint()
-        var normal: Dictionary=state.duplicate(true);normal.identity=Identity.initial()
+        var normal: Dictionary=state.duplicate(true);normal.identity=Identity.initial();normal.world.position={"x":0,"y":0}
         if first.is_empty():first=normal
         check(normal==first,"colour does not change chest, market, rival or quest RNG")
         var restored: RefCounted=fresh()
@@ -95,7 +95,7 @@ func run() -> void:
     for ch in "Green Knight":press(KEY_NONE,ch.unicode_at(0))
     click(Vector2(520,350))
     check(host.selection_view==null and host.menu_view==null and host.journey.identity=={"kind":2,"name":"Green Knight"},"confirmed name/colour starts one new campaign")
-    check(host.journey.character.experience==0 and host.journey.world.position==Vector2i(15,100),"new game commits once after confirmation")
+    check(host.journey.character.experience==0 and host.journey.world.position==Vector2i(12,187),"new game commits once at the selected green home")
     host.show_menu(host.journey.checkpoint());press(KEY_C)
     check(host.selection_view==null and host.menu_view==null and host.journey.identity.kind==2,"Continue bypasses picker and keeps colour")
     host.queue_free();await process_frame;ART.colour_cache.clear()

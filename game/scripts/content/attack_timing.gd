@@ -6,3 +6,7 @@ extends Resource
 @export var content_version: int = 1
 @export var moves: Dictionary = {}
 @export var reactions: Dictionary = {}
+
+# Original surviving-hurt paths without any hurt-list draws. Pure gameplay IDs;
+# renderers and sprite visibility never decide whether a hit is accepted.
+@export var untargetable_reactions: Dictionary = {}

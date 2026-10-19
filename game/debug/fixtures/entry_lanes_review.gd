@@ -68,8 +68,8 @@ func run_checks(path: String) -> Dictionary:
     a.start(&"competitive",&"beast_lair");b.start(&"competitive",&"beast_lair")
     for n in range(300):a.advance(Vector2i.ZERO,"idle");b.advance(Vector2i.ZERO,"idle")
     check(a.simulation.snapshot()==b.simulation.snapshot(),"fixed command replay includes entry cursor")
-    check(j.checkpoint().schema==16 and j.combat.simulation.snapshot().schema==22,"campaign unchanged; combat cursor versioned")
-    return {"checks":checks,"failures":failures,"reference_cases":data.cases.size(),"sites":sites,"combat_schema":22,"campaign_schema":16}
+    check(j.checkpoint().schema==16 and j.combat.simulation.snapshot().schema==25,"campaign unchanged; combat cursor versioned")
+    return {"checks":checks,"failures":failures,"reference_cases":data.cases.size(),"sites":sites,"combat_schema":24,"campaign_schema":16}
 
 func report(host: Node,path: String) -> void:
     var result: Dictionary=run_checks(path)

@@ -4,6 +4,7 @@ extends RefCounted
 const Scaling=preload("res://scripts/domain/encounter_scaling_host.gd")
 const Places=preload("res://scripts/domain/town_locations.gd")
 const Identity=preload("res://scripts/domain/knight_identity.gd")
+const HOME_VISIT_MESSAGE: String="Home village: lives recover up to three. Leave to rest for a turn."
 const LocalParty=preload("res://scripts/session/local_party.gd")
 var party: RefCounted
 var identity: Dictionary=Identity.initial()
@@ -151,7 +152,12 @@ func offer_region_key(site_id: String) -> void:
 
 func encounter_options(site: Dictionary) -> Dictionary:
     var phase: int=calendar().moon_phase
-    if not site.has("count"):return {"moon_phase":phase}
+    if not site.has("count"):
+        var options:Dictionary={"moon_phase":phase}
+        if site.encounter==&"black_knight_fight":
+            options["combat_seed"]=maxi(2,(reward_seed ^ (world.position.x<<8) ^ (world.position.y<<16) ^ day) & 0xffffffff)
+            options["knight_difficulty"]=mini(7,int(calendar().lunar_counter))
+        return options
     var base: Dictionary=rules.encounters[String(site.encounter)]
     var options: Dictionary=Scaling.options(rules,{"creature":String(base.creature),"base_count":int(site.count),
         "strength":int(character.stats.strength),"maximum_hp":character.maximum(inventory.items),
@@ -339,7 +345,9 @@ func restart(seed_value: int = -1, enable_revisit_battles: bool = false, chosen_
     identity.kind=int(identity.kind)
     if seed_value >= 0: reward_seed = maxi(2, seed_value & 0xffffffff)
     world.restart()
-    if not chosen_identity.is_empty():world.position=Identity.SOURCE_START.clamp(world.definition.bounds.position,world.definition.bounds.end-Vector2i.ONE)
+    # Confirmed solo selection starts at that knight's own village. Historical
+    # unnamed fixtures retain the definition start; Continue restores saved coordinates.
+    if not chosen_identity.is_empty():world.position=Locations.home(identity.kind).position.clamp(world.definition.bounds.position,world.definition.bounds.end-Vector2i.ONE)
     dragon_order=-1
     combat = null
     loot_open = false
@@ -706,7 +714,7 @@ func enter_town(id: String) -> bool:
     if id=="home":
         character.lives=mini(3,character.lives+1) if character.lives<3 else character.lives
         service="temple"
-        message="Home castle: one life restored up to three. Leaving spends the turn."
+        message=HOME_VISIT_MESSAGE
     elif id=="wizard":
         service="temple"
         Places.open(self,"wizard")

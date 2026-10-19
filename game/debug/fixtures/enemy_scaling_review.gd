@@ -90,7 +90,7 @@ func run_checks(path: String) -> Dictionary:
     check(j.checkpoint().schema==16 and j.checkpoint().content=="journey.campaign.v14","campaign format is unchanged")
     check(j.combat.simulation.snapshot().encounter_scaling_versions=={"classic:lair_scaling":{"api":1,"version":1}},"combat records scaling policy version")
     return {"checks":checks,"failures":failures,"profiles":profiles,"table_cases":data.cases.size(),"lair_cases":data.profiles.size()*24,
-        "combat_schema":22,"combat_content":String(rules.content_id),"campaign_schema":16,"campaign_content":"journey.campaign.v14"}
+        "combat_schema":24,"combat_content":String(rules.content_id),"campaign_schema":16,"campaign_content":"journey.campaign.v14"}
 
 func report(host: Node,path: String) -> void:
     var result: Dictionary=run_checks(path)

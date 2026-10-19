@@ -88,7 +88,7 @@ func _initialize()->void:
     m.advance();m.advance()
     check(m.actors[1].health==995 and m.actors[1].hidden_by==0 and m.actors[10].special_clip=="rat_air","nonlethal ride releases a living knight, without execution art")
     for n in range(102):m.advance()
-    check(m.actors[10].x>=260 and m.actors[10].cooldown_remaining>0,"Ratman retreats before attacking again")
+    check(m.actors[10].x>=260 and m.actors[10].special_remaining==0 and m.actors[10].cooldown_remaining==0 and m.ratman_wait_steps==0,"Ratman completes its full retreat without an unrelated ground-hit pause")
     m=fresh("rat_lair");m.actors[1].health=5
     m.start_rat_hold(m.actors[10],m.actors[1],"ride",2)
     m.advance();m.advance()

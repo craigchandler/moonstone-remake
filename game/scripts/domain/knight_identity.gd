@@ -4,7 +4,6 @@ extends RefCounted
 const NAME_MAX: int=13
 const COLOURS=["Blue","Yellow","Green","Red"]
 const DEFAULT_NAMES=["SIR_RICHARD","SIR_GODBER","SIR_JEFFREY","SIR_EDWARD"]
-const SOURCE_START=Vector2i(15,100) # Solo record0, resetGame; selection changes kind, not position.
 
 static func initial() -> Dictionary:return {"kind":0,"name":"SIR KNIGHT"}
 

@@ -1,5 +1,7 @@
 extends Node
 
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
+
 signal changed
 signal cursor_moved
 const Profile=preload("res://scripts/session/controller_profile.gd")
@@ -37,7 +39,7 @@ func _ready() -> void:
     cursor=Node2D.new();layer.add_child(cursor)
     cursor.draw.connect(func() -> void:
         var texture: Texture2D=preload("res://assets/classic/loot/art.tres").sword_cursor
-        cursor.draw_texture_rect(texture,Rect2(pointer.round(),texture.get_size()*2),false))
+        cursor.draw_texture_rect(texture,Rect2(pointer.round(),Images.size(texture)*2),false))
 
 func load_preferences() -> bool:
     if not FileAccess.file_exists(settings_path):return true
@@ -181,7 +183,7 @@ func open_pause(reason: String="Paused") -> void:
     if kind(surface)!="arena_view" or surface.demo or surface.accuracy_demo or surface.pack_showcase:return
     block_held()
     pause_view=load("res://scripts/presentation/controller_pause.gd").new()
-    pause_view.reason=reason
+    pause_view.reason="DUEL CONTINUES" if surface.network_duel!=null else reason
     get_tree().paused=true;get_tree().root.add_child(pause_view)
 
 func close_pause() -> void:
@@ -269,7 +271,7 @@ func _input(event: InputEvent) -> void:
         else:send_key(KEY_ESCAPE)
         return
     if context=="arena_view":
-        if local!=null and surface.duel_ready and down("accept") and not before.accept:send_key(KEY_ENTER)
+        if ((local!=null and surface.duel_ready) or (surface.practice_mode and surface.practice_finished())) and down("accept") and not before.accept:send_key(KEY_ENTER)
         elif down("retreat") and not before.retreat:send_key(KEY_ESCAPE)
     else:
         for action in Profile.MENUS:

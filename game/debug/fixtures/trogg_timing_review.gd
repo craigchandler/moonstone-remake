@@ -70,7 +70,7 @@ func run_checks() -> Dictionary:
     check(starts.size()>=5,"live Axe repeats are measurable")
     for n in range(1,starts.size()):check(starts[n]-starts[n-1]==80,"observed Axe contact repeat80ticks")
     check(rules.geometry.trogg_hammer.attacks.hammer_chop[1].points.is_empty() and rules.geometry.trogg_hammer.attacks.hammer_chop[2].points.is_empty(),"original Hammer non-contact gap")
-    check(rules.actor_definitions.trogg_hammer.attack_cooldown_ticks==75,"unmeasured Hammer pause retained")
+    check(rules.actor_definitions.trogg_hammer.attack_cooldown_ticks==50,"Hammer uses the shared ten-pass brawler pause at its five-tick cadence")
     return {"checks":checks,"failures":failures,"scenes":scenes,"cadences":repeats}
 func report(host: Node) -> void:
     var result: Dictionary=run_checks();print("TROGG_TIMING_STATE=",JSON.stringify(result))

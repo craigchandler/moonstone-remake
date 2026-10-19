@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/content/hit_recovery.gd" id="1"]
+[ext_resource type="Resource" path="res://content/generated/hit_recovery.tres" id="2"]
+[resource]
+script = ExtResource("1")
+base = ExtResource("2")
+clocks = {"knight":{"hurt_a":30,"hurt_b":30},"black_knight":{"hurt_a":30,"hurt_b":30},"trogg_spear":{"hurt_a":30,"hurt_b":25,"hurt_c":25},"trogg_axe":{"hurt_a":30,"hurt_b":20,"hurt_c":20},"trogg_hammer":{"hurt_a":30,"hurt_b":25,"hurt_c":25},"giant_troll":{"hurt_a":18,"hurt_b":18},"balok":{"hurt_a":12,"hurt_b":12},"mudman":{"hurt_a":18,"hurt_b":18},"guardian":{"hurt_a":18,"hurt_b":18},"dragon":{"hurt_a":12,"hurt_b":12}}

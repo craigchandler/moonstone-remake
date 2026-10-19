@@ -1,5 +1,7 @@
 extends Node2D
 
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
+
 const Runtime=preload("res://scripts/session/runtime_mode.gd")
 var debug_mode: bool=Runtime.debug_enabled()
 var diagnostics: RefCounted
@@ -80,6 +82,8 @@ var continued_correctly: bool = false
 var inventory_view: Node2D
 var inventory_attack_context: bool = false
 var practice_view: Node2D
+var practice: RefCounted
+var network_lobby: Node2D
 var equipment_demo: bool = false
 var loot_view: Node2D
 var font: Font = ThemeDB.fallback_font
@@ -208,6 +212,10 @@ func show_lair() -> void:
     if not rival.is_empty():
         for actor in journey.combat.simulation.actors.values():
             if actor.team==2:actor["display_label"]=journey.world.lair(rival.id).name
+    for actor in journey.combat.simulation.actors.values():
+        if actor.kind not in ["knight","black_knight"]:continue
+        if actor.team==1:arena.actor_equipment[actor.id]=equipment_appearance(journey.character,journey.inventory.items)
+        elif not rival.is_empty():arena.actor_equipment[actor.id]=equipment_appearance(journey.rivals.knight(rival),rival.inventory.items)
     var backdrop: String="res://assets/classic/lairs/"+journey.world.active_lair+".png"
     if ResourceLoader.exists(backdrop): arena.background_override=load(backdrop)
     if map_demo:
@@ -222,6 +230,9 @@ func show_lair() -> void:
     if no_gore: arena.gore_enabled = false
     if map_demo: arena.set_physics_process(false)
     queue_redraw()
+
+func equipment_appearance(character: RefCounted, items: Dictionary) -> Dictionary:
+    return {"weapon":character.effective_weapon(items),"armour":character.armour}
 
 func show_training(encounter: StringName) -> void:
     if not debug_mode:return
@@ -292,6 +303,7 @@ func battle_animations_finished() -> bool:
 
 func _physics_process(_delta: float) -> void:
     elapsed += 1
+    if practice != null: return
     if journey!=null and journey.party!=null and not journey.party.game_over and journey.character.lives<=0 and journey.combat==null and journey.rivals.active==0 and menu_view==null and arena==null:journey.party.end_turn(journey)
     if selection_view!=null:selection_view.advance()
     if inventory_view!=null and menu_view==null and intro_view==null and inventory_view.has_method("advance_visit"):
@@ -452,7 +464,7 @@ func map_point(position: Vector2i) -> Vector2:
     return map_rect.position + Vector2(position) * (map_rect.size / Vector2(320, 200))
 
 func icon_rect(position: Vector2i,texture: Texture2D) -> Rect2:
-    return Rect2(map_point(position),texture.get_size()*map_rect.size/Vector2(320,200))
+    return Rect2(map_point(position),Images.size(texture)*map_rect.size/Vector2(320,200))
 
 func outline_visible(id: String) -> bool:
     return elapsed%40<20 and journey.arrivals().any(func(row: Dictionary) -> bool:return row.id==id)
@@ -494,7 +506,7 @@ func draw_classic_map() -> void:
         var rect: Rect2=icon_rect(points[index],texture)
         var visible_rect: Rect2=rect.intersection(map_rect)
         var scale_factor: Vector2=map_rect.size/Vector2(320,200)
-        draw_texture_rect_region(texture,visible_rect,Rect2((visible_rect.position-rect.position)/scale_factor,visible_rect.size/scale_factor))
+        draw_texture_rect_region(texture,visible_rect,Images.source_rect(texture,Rect2((visible_rect.position-rect.position)/scale_factor,visible_rect.size/scale_factor)))
     var hero_icon: Texture2D=KnightArt.frogs[journey.identity.kind] if journey.places.frog_days>0 else KnightArt.tokens[journey.identity.kind]
     draw_texture_rect(hero_icon,icon_rect(journey.world.position,hero_icon),false)
     if journey.places.frog_days==0 and journey.rivals.active==0 and not journey.turn_pending and elapsed%40<20:draw_texture_rect(KnightArt.active_tokens[journey.identity.kind],icon_rect(journey.world.position,KnightArt.active_tokens[journey.identity.kind]),false)
@@ -541,12 +553,12 @@ func update_dragon_sprite() -> void:
     var flight: RefCounted = journey.world.dragon
     var frame: int = flight.frame()
     var texture: Texture2D = art.dragon_frames[frame]
-    var offset := Vector2(art.dragon_offsets[frame]) + texture.get_size()/2
+    var offset := Vector2(art.dragon_offsets[frame]) + Images.size(texture)/2
     dragon_sprite.flip_h = flight.facing == 3
     if dragon_sprite.flip_h: offset.x = -offset.x
     var scale_factor := map_rect.size/Vector2(320,200)
     dragon_sprite.texture = texture
-    dragon_sprite.scale = scale_factor
+    dragon_sprite.scale = scale_factor/Images.pixel_scale(texture)
     dragon_sprite.position = (Vector2(flight.position)+offset)*scale_factor
 
 func _draw() -> void:
@@ -713,6 +725,96 @@ func close_inventory() -> void:
             town_view.queue_redraw()
     queue_redraw()
 
+func open_practice() -> void:
+    if menu_view == null or intro_view != null or selection_view != null or practice_view != null or arena != null: return
+    practice = preload("res://scripts/session/practice_session.gd").new(rules)
+    menu_view.hide()
+    menu_view.set_process_unhandled_key_input(false); menu_view.set_process_unhandled_input(false)
+    practice_view = preload("res://scripts/presentation/practice_menu.gd").new()
+    practice_view.rules = rules
+    practice_view.chosen.connect(practice_choice)
+    practice_view.network_requested.connect(open_network_duel)
+    add_child(practice_view)
+    update_dragon_sprite()
+    get_node("/root/MoonstoneInput").block_held()
+
+func open_network_duel() -> void:
+    if practice==null or practice_view==null or network_lobby!=null or arena!=null:return
+    practice_view.hide();practice_view.set_process_unhandled_key_input(false);practice_view.set_process_unhandled_input(false)
+    network_lobby=preload("res://scripts/presentation/network_duel_menu.gd").new()
+    network_lobby.knight_kind=practice_view.knight_kind
+    network_lobby.finished.connect(close_network_duel)
+    network_lobby.connected.connect(show_network_duel)
+    add_child(network_lobby)
+    get_node("/root/MoonstoneInput").block_held()
+
+func show_network_duel() -> void:
+    if network_lobby==null or arena!=null:return
+    network_lobby.hide();network_lobby.set_process(false);network_lobby.set_process_unhandled_key_input(false);network_lobby.set_process_unhandled_input(false)
+    arena=Arena.instantiate();arena.practice_mode=true;arena.debug_mode=false;arena.encounter=&"duel"
+    arena.network_duel=network_lobby.connection;arena.session=network_lobby.connection.session
+    arena.return_to_map_requested.connect(close_network_duel)
+    var audio: Node=get_node_or_null("/root/MoonstoneAudio")
+    if audio!=null:audio.stop_music()
+    add_child(arena)
+    if no_gore:arena.gore_enabled=false
+    get_node("/root/MoonstoneInput").block_held()
+
+func close_network_duel() -> void:
+    if network_lobby==null:return
+    network_lobby.connection.close()
+    if arena!=null:
+        arena.set_physics_process(false);arena.set_process_unhandled_key_input(false)
+        remove_child(arena);arena.queue_free();arena=null
+    network_lobby.set_process(false);network_lobby.set_process_unhandled_key_input(false);network_lobby.set_process_unhandled_input(false)
+    remove_child(network_lobby);network_lobby.queue_free();network_lobby=null
+    practice_view.show();practice_view.set_process_unhandled_key_input(true);practice_view.set_process_unhandled_input(true)
+    get_node("/root/MoonstoneInput").block_held()
+    var audio: Node=get_node_or_null("/root/MoonstoneAudio")
+    if audio!=null:audio.menu_music()
+    queue_redraw()
+
+func practice_choice(choice: StringName) -> void:
+    if practice == null or practice_view == null or arena != null: return
+    if choice == &"": close_practice(); return
+    if not practice.start(choice): return
+    practice_view.hide()
+    practice_view.set_process_unhandled_key_input(false); practice_view.set_process_unhandled_input(false)
+    arena = Arena.instantiate()
+    arena.practice_mode = true
+    arena.debug_mode = false
+    arena.encounter = choice
+    arena.knight_kind = practice_view.knight_kind
+    arena.session = practice.fight
+    arena.restart_overrides = practice.settings()
+    arena.return_to_map_requested.connect(leave_practice_fight)
+    var audio: Node = get_node_or_null("/root/MoonstoneAudio")
+    if audio != null: audio.stop_music()
+    add_child(arena)
+    if no_gore: arena.gore_enabled = false
+    get_node("/root/MoonstoneInput").block_held()
+
+func leave_practice_fight() -> void:
+    if practice == null or arena == null: return
+    arena.set_physics_process(false); arena.set_process_unhandled_key_input(false)
+    remove_child(arena); arena.queue_free(); arena = null
+    practice_view.show()
+    practice_view.set_process_unhandled_key_input(true); practice_view.set_process_unhandled_input(true)
+    get_node("/root/MoonstoneInput").block_held()
+    var audio: Node = get_node_or_null("/root/MoonstoneAudio")
+    if audio != null: audio.menu_music()
+    queue_redraw()
+
+func close_practice() -> void:
+    if practice == null or practice_view == null or arena != null: return
+    practice_view.set_process_unhandled_key_input(false); practice_view.set_process_unhandled_input(false)
+    remove_child(practice_view); practice_view.queue_free(); practice_view = null; practice = null
+    menu_view.show()
+    menu_view.set_process_unhandled_key_input(true); menu_view.set_process_unhandled_input(true)
+    get_node("/root/MoonstoneInput").block_held()
+    update_dragon_sprite()
+    queue_redraw()
+
 func show_practice() -> void:
     if not debug_mode:return
     if quest_view!=null or henge_view!=null or arena!=null or inventory_view!=null or town_view!=null or menu_view!=null or not journey.pending_attack.is_empty(): return
@@ -740,6 +842,9 @@ func show_town() -> void:
         add_child(inventory_view);return
     if journey.town_id in ["home","wizard"]:
         show_inventory(0 if journey.service.is_empty() else 2)
+        # set_tab clears transient notices. Restore the home context after it,
+        # including Continue inside a village, without applying its reward again.
+        if journey.town_id=="home":journey.message=Journey.HOME_VISIT_MESSAGE
         return
     town_view = TownView.new()
     town_view.journey = journey
@@ -890,6 +995,7 @@ func menu_choice(action: String) -> void:
     if selection_view!=null:return
     if action=="intro":show_intro();return
     if action=="new":show_selection();return
+    if action=="practice":open_practice();return
     if action == "exit":
         get_tree().quit()
         return
@@ -921,6 +1027,7 @@ func menu_choice(action: String) -> void:
     queue_redraw()
 
 func quit_game() -> void:
+    if network_lobby!=null:network_lobby.connection.close()
     if menu_view == null and journey != null: journey.persist()
     get_tree().quit()
 

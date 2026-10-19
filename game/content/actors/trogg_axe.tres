@@ -29,3 +29,5 @@ execution_moves = PackedStringArray("axe_swing", "axe_chop")
 execution_clip = "defeat_gory"
 execution_ai_move = "axe_swing"
 execution_ai_range = 75
+
+reset_cooldown_on_hit = true

@@ -57,8 +57,12 @@ func _initialize() -> void:
                     if actor.attack_flow.get("branch","")=="contact" and actor.remaining>0:
                         if branch_at<0:branch_at=age;impact=animator.poses[source].index
                         var p: Dictionary=rules.attack_timing.moves[move]
-                        if actor.remaining>p.contact_return:
-                            check(animator.poses[source].index==impact,"contact holds actual impact drawing")
+                        if move=="swing":
+                            check(animator.poses[source].phase==("active" if actor.remaining>p.contact_hold+p.contact_return else "follow_through") and animator.poses[source].index>=impact,"successful slash continues without rewinding")
+                            for cue in cues.cues:
+                                if cue.actor==source:return_cues+=1
+                        elif actor.remaining>p.contact_return:
+                            check(animator.poses[source].index==impact,"retained contact drawing")
                         elif animator.poses[source].get("silent_transition",false):
                             for cue in cues.cues:
                                 if cue.actor==source:return_cues+=1
@@ -66,7 +70,7 @@ func _initialize() -> void:
                 check(damage_count==(0 if outcome=="block" else 1),"one damage transaction across outcome tail "+move)
                 if outcome=="contact":
                     var p: Dictionary=rules.attack_timing.moves[move]
-                    check(branch_at>=0 and completed-branch_at==p.contact_hold+p.contact_return,"contact continuation has its own finite clock")
+                    check(branch_at>=0 and completed-branch_at==int(p.get("contact_impact",0))+p.contact_hold+p.contact_return,"contact continuation has its own finite clock")
                     check(return_cues==0,"ready pose cannot replay skipped sword sounds")
                 else:
                     check(branch_at==-1,"blocked/lethal hits retain their existing full choreography")
@@ -114,6 +118,6 @@ func _initialize() -> void:
     custom.attack_timing.moves.heavy.contact_hold=-1
     m.start(&"competitive",2);m.actors[1].action="heavy"
     check(m.AttackFlow.policy(custom,m.actors[1]).is_empty(),"malformed policy is rejected before applying a tail")
-    check(m.snapshot().schema==22 and m.snapshot().attack_timing_versions=={"classic:combat_pacing":{"api":1,"version":2}},"explicit branch state versions combat independently of campaign")
+    check(m.snapshot().schema==25 and m.snapshot().attack_timing_versions=={"classic:combat_pacing":{"api":1,"version":5}},"explicit branch state versions combat independently of campaign")
     if failures==0:print("PASS: ",checks," pacing checks; full/contact/block/lethal clocks, mirrored poses, damage once, risk, dagger hit/guard, silent returns and bounded content")
     quit(1 if failures else 0)

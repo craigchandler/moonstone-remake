@@ -105,15 +105,17 @@ func _initialize() -> void:
     model.actors[2].remaining = rules.moves.swing.active + rules.moves.swing.recovery + 1
     model.advance()
     var x: int = model.actors[1].x
-    for step in range(rules.actor_definitions.knight.stagger_ticks):
+    for step in range(29):
         input_for(model,"idle",Vector2i.UP)
         model.advance()
-    check(model.actors[1].x == x and model.actors[1].y == 166, "brief stagger still locks the initial hit response")
-    check(model.actors[1].reaction_remaining > 0, "readable hurt animation outlasts the movement lock")
+    check(model.actors[1].x == x and model.actors[1].y == 166,
+        "complete source hurt sequence remains committed under repeated movement")
+    check(model.actors[1].reaction_remaining == 1,
+        "the last protected hurt drawing is still visible")
     input_for(model,"idle",Vector2i.UP)
     model.advance()
     check(model.actors[1].y == 164 and model.actors[1].reaction_remaining == 0,
-        "movement resumes before the full hurt animation and cancels it cleanly")
+        "movement resumes exactly when the full hurt sequence completes")
     if failures == 0:
-        print("PASS: repeated live dual-Trogg evasion, attack spacing, lane boundary, defensive cancels and short stagger")
+        print("PASS: repeated live dual-Trogg evasion, attack spacing, lane boundary, defensive cancels and full knight hurt recovery")
     quit(1 if failures else 0)

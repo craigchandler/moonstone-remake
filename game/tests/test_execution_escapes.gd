@@ -175,7 +175,7 @@ func _initialize() -> void:
     check(m.actors[1].health==20 and m.actors[1].hidden_by==0 and m.actors[10].held_target==0,"rejected command cannot change health or leave an orphan hold")
     m=Model.new(rules);m.start(&"competitive")
     var snap: Dictionary=m.snapshot()
-    check(snap.schema==22 and snap.content=="encounters.v27" and snap.behavior_versions=={"classic:ratman.back_ride":{"api":1,"version":1}},"combat records behaviour version independently of campaign saves")
+    check(snap.schema==25 and snap.content=="encounters.v31" and snap.behavior_versions=={"classic:ratman.back_ride":{"api":1,"version":1}},"combat records behaviour version independently of campaign saves")
     anim.update(m.actors,rules,art);check(snap==m.snapshot(),"presentation cannot change script state")
     var journey: RefCounted=preload("res://scripts/session/journey_session.gd").new(preload("res://content/first_journey.tres"),rules,0x4d4f4f4e)
     var rival: Dictionary=journey.rivals.records[0];journey.world.position=rival.position

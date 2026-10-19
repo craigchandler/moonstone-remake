@@ -1,5 +1,7 @@
 extends Node2D
 
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
+
 const ART=preload("res://assets/classic/ending_complete/art.tres")
 var film: Sprite2D
 var palette: ShaderMaterial
@@ -23,7 +25,8 @@ func show_tick(tick: int, winner_code: int) -> void:
     var pose: Dictionary=ART.pose_at(at)
     if shown_frame!=int(pose.frame):
         shown_frame=int(pose.frame)
-        region.region=Rect2((shown_frame%ART.columns)*320,(shown_frame/ART.columns)*200,320,200)
+        region.region=Images.source_rect(ART.atlas,Rect2((shown_frame%ART.columns)*320,(shown_frame/ART.columns)*200,320,200))
+        film.scale=Vector2(2,2)/Images.pixel_scale(ART.atlas)
     if code!=winner_code:
         code=winner_code
         palette.set_shader_parameter("palette",ART.palettes[winner_code])

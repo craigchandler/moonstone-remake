@@ -7,14 +7,24 @@ var knight_kind: int=0
 var knight_name: String="SIR KNIGHT"
 var local_players: Dictionary={}
 var actor_colours: Dictionary={}
+var actor_equipment: Dictionary={}
+var graphics_frame: RefCounted=preload("res://scripts/presentation/graphics/combat_frame.gd").new()
+# A backend can be supplied by a future art pack without changing the session.
+var renderer: RefCounted
 var duel_ready: bool=false
+var practice_mode: bool = false
+var network_duel: RefCounted
+var network_round: int = 0
+var network_tick: int = 0
+var practice_overlay: Node2D
+var restart_overrides: Dictionary = {}
 
 signal return_to_map_requested
 
 const Session = preload("res://scripts/session/local_session.gd")
 const Animator = preload("res://scripts/presentation/actor_animator.gd")
 var rule_set: Resource = preload("res://content/foundation_rules.tres")
-var art: Resource = preload("res://content/classic_art.tres")
+var art: Resource = preload("res://content/generated/classic_layered_art.tres")
 var session: RefCounted
 var mode: StringName = &"competitive"
 var font: Font = ThemeDB.fallback_font
@@ -74,11 +84,21 @@ func _ready() -> void:
     if session == null:
         session = Session.new(rule_set)
         restart()
-    elif not managed_by_world:
+    elif not managed_by_world and not practice_mode:
         restart()
     else:
         animator.reset()
         animator.update(session.simulation.actors, rule_set, art)
+    if practice_mode:
+        practice_overlay = (preload("res://scripts/presentation/practice_overlay.gd") if network_duel==null else preload("res://scripts/presentation/network_duel_overlay.gd")).new()
+        practice_overlay.arena = self
+        add_child(practice_overlay)
+        if network_duel!=null:
+            process_mode=Node.PROCESS_MODE_ALWAYS
+            network_round=network_duel.session.round_id
+            actor_colours={1:network_duel.colours[0],2:network_duel.colours[1]}
+            network_duel.frame_received.connect(network_frame)
+            network_duel.changed.connect(practice_overlay.queue_redraw)
 
 func _debug() -> RefCounted:
     if diagnostics == null:
@@ -91,7 +111,7 @@ func restart() -> void:
         audio.stop_scope(str(get_instance_id())+":",false)
     sound_cues.reset()
     hit_effects.reset()
-    session.start(mode, encounter)
+    session.start(mode, encounter, restart_overrides)
     animator.reset()
     demo_ticks = 0
     dodge_destination = 166
@@ -100,8 +120,26 @@ func restart() -> void:
     else:
         animator.update(session.simulation.actors, rule_set, art)
 
+func network_frame() -> void:
+    if network_round!=network_duel.session.round_id:
+        network_round=network_duel.session.round_id;network_tick=0
+        get_node("/root/MoonstoneInput").block_held()
+        animator.reset();hit_effects.reset();sound_cues.reset()
+        var audio: Node=get_node_or_null("/root/MoonstoneAudio")
+        if audio!=null:audio.stop_scope(str(get_instance_id())+":",false)
+    animator.update(session.simulation.actors,rule_set,art,maxi(1,session.simulation.tick-network_tick))
+    network_tick=session.simulation.tick
+    hit_effects.update(session.simulation,art);advance_sound()
+    queue_redraw();practice_overlay.queue_redraw()
+
 func _physics_process(_delta: float) -> void:
+    if network_duel!=null:
+        var input: Node=get_node("/root/MoonstoneInput")
+        var held: bool=practice_overlay.help_visible or get_tree().paused
+        network_duel.advance(Vector2i.ZERO if held else input.direction(),"idle" if held else input.combat_action())
+        return
     if duel_ready:return
+    if practice_mode and (practice_finished() or practice_overlay.help_visible): return
     var controls: Node=get_node("/root/MoonstoneInput")
     var direction: Vector2i=controls.direction()
     var action: String=controls.combat_action()
@@ -120,6 +158,7 @@ func _physics_process(_delta: float) -> void:
     animator.update(session.simulation.actors, rule_set, art)
     hit_effects.update(session.simulation, art)
     queue_redraw()
+    if practice_overlay != null: practice_overlay.queue_redraw()
     advance_sound()
     if accuracy_demo and sequence_path.is_empty() and demo_ticks>=demo_length():
         finish_accuracy_demo()
@@ -176,6 +215,22 @@ func _unhandled_key_input(event: InputEvent) -> void:
         return
     if not event is InputEventKey or not event.pressed or event.echo:
         return
+    if network_duel!=null:
+        get_viewport().set_input_as_handled()
+        if event.keycode==KEY_F1:practice_overlay.help_visible=not practice_overlay.help_visible
+        elif practice_overlay.help_visible:practice_overlay.help_visible=false
+        elif event.keycode==KEY_ESCAPE or (network_duel.state=="closed" and event.keycode in [KEY_ENTER,KEY_KP_ENTER,KEY_SPACE]):return_to_map_requested.emit();return
+        elif event.keycode in [KEY_ENTER,KEY_KP_ENTER,KEY_SPACE,KEY_R,KEY_Z] and network_duel.session.settled:network_duel.ready()
+        practice_overlay.queue_redraw()
+        if event.keycode!=KEY_G:return
+    if practice_mode and network_duel==null:
+        get_viewport().set_input_as_handled()
+        if event.keycode == KEY_F1: practice_overlay.help_visible = not practice_overlay.help_visible
+        elif practice_overlay.help_visible: practice_overlay.help_visible = false
+        elif event.keycode == KEY_ESCAPE: return_to_map_requested.emit(); return
+        elif event.keycode == KEY_R or (event.keycode in [KEY_ENTER,KEY_KP_ENTER,KEY_SPACE,KEY_Z] and practice_finished()): restart()
+        practice_overlay.queue_redraw()
+        if event.keycode != KEY_G: return
     if managed_by_world:
         get_viewport().set_input_as_handled()
     if not debug_mode and event.keycode in Runtime.ARENA_SHORTCUTS:return
@@ -207,70 +262,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _draw() -> void:
     if session == null:
         return
-    draw_texture_rect(background_override if background_override!=null else art.background_for(encounter), Rect2(0, 0, 640, 400), false)
-    var perch: Dictionary = session.simulation.rat_perch
-    if not perch.is_empty():
-        var tree: Resource = art.animation_for("ratman")
-        var leaf: Dictionary = tree.sample("tree_anchor",0)
-        var variant: String = "purple" if gore_enabled else "purple_clean"
-        draw_texture_rect_region(KnightArt.coloured(tree.atlas_for(variant),knight_kind),Rect2((Vector2(perch.x,perch.y+perch.height)+leaf.offset)*2,leaf.region.size*2),leaf.region)
-    var ordered: Array = session.simulation.actors.values()
-    ordered.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.y < b.y)
-    for actor in ordered:
-        if actor.kind == "dragon": draw_dragon_feet(actor)
-        if actor.kind == "guardian" and actor.health>0:
-            var body_art: Resource = art.animation_for("guardian_finishes")
-            var body_pose: Dictionary = body_art.sample("body",session.simulation.tick%24,24)
-            draw_set_transform(Vector2(actor.x,actor.y+actor.height)*2,0.0,Vector2(actor.facing,1))
-            draw_texture_rect_region(KnightArt.coloured(body_art.atlas_for("purple" if gore_enabled else "purple_clean"),knight_kind),Rect2(body_pose.offset*2,body_pose.region.size*2),body_pose.region)
-            draw_set_transform(Vector2.ZERO)
-    for actor in ordered:
-        if actor.get("hidden_by", 0) != 0 or actor.get("vanished",false): continue
-        var ground := Vector2(actor.x, actor.y) * 2.0
-        var point := ground + Vector2(0, actor.height * 2.0)
-        var size: Vector2 = art.size_for(actor.kind) * 2.0
-        var texture: Texture2D = art.texture_for(actor.kind)
-        draw_ellipse_shadow(ground, 38.0 if actor.kind == "balok" else 21.0)
-        var pose: Dictionary = animator.poses.get(actor.id, {})
-        if actor.health > 0 or not pose.is_empty():
-            draw_set_transform(point, 0.0, Vector2(float(actor.facing), 1.0))
-            var tint := Color(1.6, 1.2, 1.2) if actor.flash > 0 else Color.WHITE
-            var visual: String = actor.get("visual_kind", "")
-            var animations: Resource = art.animation_for(actor.kind if visual.is_empty() else visual)
-            if not pose.is_empty():
-                var variant: String = "blue" if actor.team == 1 or actor.id in actor_colours else "purple"
-                if not gore_enabled: variant += "_clean"
-                var atlas: Texture2D = KnightArt.coloured(animations.atlas_for(variant),actor_colours.get(actor.id,4 if actor.team==2 and visual=="death_knight" else knight_kind))
-                draw_texture_rect_region(atlas, Rect2(pose.offset * 2, pose.region.size * 2), pose.region, tint)
-            else:
-                draw_texture_rect(texture, Rect2(-size.x / 2, -size.y, size.x, size.y), false, tint)
-            if actor.guarding and pose.is_empty():
-                draw_arc(Vector2(15, -48), 28, -PI / 2, PI / 2, 16, Color(0.5, 0.8, 1.0), 2.0)
-            draw_set_transform(Vector2.ZERO)
-        else:
-            draw_line(point + Vector2(-20, 0), point + Vector2(20, 0), Color(0.7, 0.25, 0.2), 3)
-        var hold_hint: String=""
-        if actor.grab_remaining>0: hold_hint="HELD: guard + down"
-        if actor.get("held_target",0)!=0:
-            hold_hint="HELD: Space + Down to counter" if actor.kind in ["ratman","mudman"] else "CAUGHT"
-        if actor.health>0 and not hold_hint.is_empty():
-            var pad: Node=get_node("/root/MoonstoneInput")
-            if pad.using_controller and "HELD:" in hold_hint:hold_hint="HELD: "+pad.binding_name("block")+" + Down"
-            draw_string(font, point + Vector2(-20, 15), hold_hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.55, 0.78, 0.9) if actor.team == 1 else Color(0.9, 0.46, 0.38))
-    draw_hit_effects()
-    for projectile in session.simulation.projectiles:
-        if projectile.get("kind", "dagger")=="dragon_fire":
-            var animations: Resource = art.animation_for("dragon")
-            var pose: Dictionary = animations.sample("ground_fire", projectile.age, 144)
-            var atlas: Texture2D = KnightArt.coloured(animations.atlas_for("purple" if gore_enabled else "purple_clean"),knight_kind)
-            draw_texture_rect_region(atlas, Rect2((Vector2(projectile.x,projectile.y)+pose.offset)*2,pose.region.size*2),pose.region)
-            continue
-        var texture: Texture2D = art.projectiles.get("dagger")
-        if texture == null: continue
-        draw_set_transform(Vector2(projectile.x, projectile.y + projectile.height) * 2,
-            0.0, Vector2(float(projectile.facing), 1.0))
-        draw_texture_rect(texture, Rect2(-texture.get_size(), texture.get_size() * 2), false)
-        draw_set_transform(Vector2.ZERO)
+    graphics_frame.capture(session.simulation,animator,hit_effects,rule_set,encounter,gore_enabled,knight_kind,actor_colours,actor_equipment)
+    if renderer==null:renderer=preload("res://scripts/presentation/graphics/classic_combat_renderer.gd").new(art)
+    var input: Node=get_node("/root/MoonstoneInput")
+    renderer.render(self,graphics_frame,background_override,input.binding_name("block") if input.using_controller else "")
+    if practice_mode: return
+    var perch: Dictionary=graphics_frame.perch
+    var ordered: Array=session.simulation.actors.values()
     if perch.is_empty(): draw_rect(Rect2(0, 0, 640, 32), Color(0.035, 0.047, 0.067, 0.92))
     else:
         # Leave the source treetop visible at the top of the playfield.
@@ -306,6 +304,13 @@ func _draw() -> void:
     var navigation: String = navigation_hint()
     draw_string(font, Vector2(12, 394), navigation + ("ON" if gore_enabled else "OFF"), HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.57, 0.66, 0.71))
 
+func practice_finished() -> bool:
+    if network_duel!=null:return network_duel.session.settled or network_duel.state=="closed"
+    if session == null or session.simulation.outcome() == "ongoing": return false
+    for actor in session.simulation.actors.values():
+        if actor.health <= 0 and actor.down_remaining > 0: return false
+    return true
+
 func result_hint(outcome: String) -> String:
     return ("Enter: collect loot" if outcome=="victory" else "Enter: return to map")+("    R: retry this fight" if debug_mode else "")
 
@@ -315,30 +320,3 @@ func navigation_hint() -> String:
         return ("DEBUG / NOT SAVED  " if debug_mode else "")+"Start pause / controller setup  "+controls.binding_name("retreat")+" retreat  G gore: "
     if not debug_mode:return "Enter: result / loot  Esc retreat  G gore: " if managed_by_world else "Esc exit  G gore: "
     return "DEBUG / NOT SAVED  R retry  F3 map  Esc retreat  G gore: " if managed_by_world else "DEBUG  F1 duel  F2 spear  F4 axe  F5 troll  F6 Balok  F3 map  Tab co-op  R restart  G gore: "
-
-func draw_hit_effects() -> void:
-    if not gore_enabled: return
-    for effect in hit_effects.active:
-        var animation: Resource = art.effects.get(effect.kind)
-        if animation == null: continue
-        var pose: Dictionary = animation.sample("burst",session.simulation.tick-effect.born,effect.duration)
-        draw_set_transform(Vector2(effect.x,effect.y)*2,0.0,Vector2(effect.facing,1))
-        draw_texture_rect_region(animation.atlas_for("gore"),Rect2(pose.offset*2,pose.region.size*2),pose.region)
-        draw_set_transform(Vector2.ZERO)
-
-func draw_dragon_feet(actor: Dictionary) -> void:
-    var animations: Resource = art.animation_for("dragon")
-    var clip: String = "feet_down" if actor.health <= 0 else "feet_idle"
-    var pose: Dictionary = animations.sample(clip, 0)
-    if actor.action == "dragon_foot" and actor.remaining > 0:
-        var move: Dictionary = rule_set.moves.dragon_foot
-        var duration: int = move.windup+move.active+move.recovery
-        pose = animations.sample("dragon_foot", duration-actor.remaining, duration)
-    var atlas: Texture2D = KnightArt.coloured(animations.atlas_for("purple" if gore_enabled else "purple_clean"),knight_kind)
-    for depth in [-20,10]:
-        draw_texture_rect_region(atlas, Rect2((Vector2(5,actor.y+depth)+pose.offset)*2,pose.region.size*2),pose.region)
-
-func draw_ellipse_shadow(point: Vector2, radius: float = 21.0) -> void:
-    draw_set_transform(point, 0.0, Vector2(1.0, 0.28))
-    draw_circle(Vector2.ZERO, radius, Color(0.0, 0.0, 0.0, 0.35))
-    draw_set_transform(Vector2.ZERO)

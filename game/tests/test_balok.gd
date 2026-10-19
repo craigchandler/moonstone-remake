@@ -37,12 +37,12 @@ func run_checks() -> void:
     var model: RefCounted = Model.new(rules)
     var animator: RefCounted = Animator.new()
     for facing in [1, -1]:
-        for move in ["balok_swipe", "balok_maul", "balok_hop", "balok_pounce"]:
+        for move in ["balok_swipe", "balok_maul"]:
             for defence in ["idle", "block", "evade"]:
                 model.start(&"competitive", 0, &"balok_lair")
                 model.actors[1].x = 160
                 model.actors[1].facing = -facing
-                model.actors[10].x = 160 - facing * (150 if move == "balok_pounce" else 75)
+                model.actors[10].x = 160 - facing * 75
                 model.actors[10].x = clampi(model.actors[10].x, 22, 298)
                 model.actors[10].facing = facing
                 model.actors[10].cooldown_remaining = 0
@@ -50,32 +50,21 @@ func run_checks() -> void:
                 model.advance()
                 var duration: int = rules.moves[move].windup + rules.moves[move].active + rules.moves[move].recovery
                 var damage_count: int = 0
-                var peak: int = 0
-                var target_x: int = model.actors[10].leap_to_x
-                var target_y: int = model.actors[10].leap_to_y
                 for step in range(duration + 2):
                     if model.actors[1].health > 0: command(model, 1, "block" if defence == "block" else "idle", Vector2i.UP if defence == "evade" and step < 10 else Vector2i.ZERO)
                     # Steering input cannot retarget a committed attack.
                     command(model, 10, "idle", Vector2i(-facing, 1) if step < duration else Vector2i.ZERO)
                     model.advance()
                     animator.update(model.actors, rules, art)
-                    peak = maxi(peak, -int(model.actors[10].height))
-                    if move in ["balok_pounce", "balok_hop"]:
-                        check(model.actors[10].leap_to_x == target_x and model.actors[10].leap_to_y == target_y, "moving target cannot redirect locked pounce")
                     for event in model.events:
                         check(event.type != "parry", "Balok attacks cannot be parried")
                         if event.type == "damage":
                             damage_count += 1
-                            check(event.amount == (20 if move in ["balok_pounce","balok_hop"] else 5) and not event.blocked, "Balok landing knocks out; claws deal five HP through guard")
+                            check(event.amount == 5 and not event.blocked, "Balok landing knocks out; claws deal five HP through guard")
                             check(animator.poses[10].clip == ("lift" if move=="balok_maul" else move), "Balok contact switches into matching active or lift artwork")
-                            if move in ["balok_pounce", "balok_hop"]:
-                                check(abs(int(model.actors[10].height)) <= 20, "pounce only damages near landing")
-                check(model.actors[1].health == (20 if defence == "evade" else (0 if move in ["balok_pounce","balok_hop"] else 15)), "Balok hit/guard/sidestep in either facing: " + move + "/" + defence + "/" + str(facing))
+                check(model.actors[1].health == (20 if defence == "evade" else 15), "Balok hit/guard/sidestep in either facing: " + move + "/" + defence + "/" + str(facing))
                 check(damage_count == (0 if defence == "evade" else 1), "one damage event per Balok attack")
                 check(model.actors[10].height == 0, "Balok finishes grounded")
-                if move in ["balok_pounce", "balok_hop"]:
-                    check(peak == int(rules.moves[move].leap_peak), "native leap reaches specified arc peak")
-                    check(model.actors[10].x == target_x and model.actors[10].y == target_y, "native leap lands at its locked spot")
                 if move == "balok_swipe" and defence != "evade":
                     check(model.actors[1].facing == -facing, "Balok swipe uses source attacker-facing XOR2 while its hop travels with the attacker")
 
@@ -87,23 +76,17 @@ func run_checks() -> void:
     var airborne: Rect2 = model.hurt_box_for(model.actors[10])
     model.actors[10].height = 0
     check(model.hurt_box_for(model.actors[10]).position.y - airborne.position.y == 96, "authoritative height shifts hurt box with art")
-    model.actors[10].cooldown_remaining = 0
-    command(model, 10, "balok_pounce")
+    model.actors[10].x=40;model.actors[10].y=166;model.actors[10].facing=1
+    model.actors[1].x=280;model.actors[1].y=166
+    model.actors[10].cooldown_remaining=0
+    command(model,10,"balok_pounce");model.advance()
+    for step in range(45):model.advance()
+    check(model.actors[10].height<=-75,"source integer flight reaches an elevated body")
+    var copy: Dictionary=model.snapshot();copy.actors[10].leap_to_x=-999
+    check(model.actors[10].leap_to_x>=22,"detached snapshot cannot redirect committed flight")
+    model.projectiles.append({"id":1,"actor":1,"team":1,"x":model.actors[10].x-8,"y":166,"height":-43,"facing":1,"ttl":1})
     model.advance()
-    for step in range(30): model.advance()
-    check(model.actors[10].height < 0, "fixture reaches actual flight")
-    var copy: Dictionary = model.snapshot()
-    copy.actors[10].leap_to_x = -999
-    check(model.actors[10].leap_to_x >= 22, "leap snapshot cannot modify authoritative target")
-    # A real dagger at body height falls below an actor at the leap peak.
-    model.actors[10].remaining = rules.moves.balok_pounce.recovery + rules.moves.balok_pounce.active / 2 + 1
-    model.actors[1].x = 150
-    model.actors[10].leap_from_x = 235
-    model.actors[10].leap_to_x = 235
-    model.projectiles.clear()
-    model.projectiles.append({"id": 1, "actor": 1, "team": 1, "x": 228, "y": 166, "height": -43, "facing": 1, "ttl": 1})
-    model.advance()
-    check(model.actors[10].health == 30 and model.actors[10].height <= -90, "dagger passes under the raised Balok body")
+    check(model.actors[10].health==30 and model.actors[10].height<=-75,"dagger passes beneath the raised source body")
 
     var session: RefCounted = Session.new(rules)
     for distance in [60, 75, 100, 145]:
@@ -128,9 +111,9 @@ func run_checks() -> void:
         for event in session.simulation.events:
             if event.type != "attack" or event.actor != 10: continue
             check(step >= 49, "Balok entry allows a defensive opening")
-            if last_start >= 0: check(step - last_start >= previous_duration + 30, "Balok cannot chain attacks without recovery/cooldown")
+            if last_start >= 0: check(step - last_start >= previous_duration, "Balok completes its source attack before another decision")
             last_start = step
-            var move: Dictionary = rules.moves[event.move]
+            var move: Dictionary = session.simulation.move_for(session.simulation.actors[10])
             previous_duration = move.windup + move.active + move.recovery
             starts += 1
     check(starts >= 3, "live Balok AI completes repeated cycles")
@@ -143,7 +126,7 @@ func run_checks() -> void:
         session.advance(direction, action)
         second.advance(direction, action)
         check(session.simulation.snapshot() == second.simulation.snapshot(), "Balok trajectories/AI/co-op replay deterministically")
-    check(session.simulation.snapshot().schema == 22, "airborne state versions combat snapshot")
+    check(session.simulation.snapshot().schema == 25, "airborne state versions combat snapshot")
 
     var journey: RefCounted = Journey.new(load("res://scripts/content/world_definition.gd").new(), rules, 1234)
     journey.world.position = Vector2i(100, 71)

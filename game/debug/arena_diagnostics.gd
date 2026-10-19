@@ -84,6 +84,12 @@ func start() -> void:
             if host.finish_demo=="rat_tree":host.accuracy_fixture=preload("res://debug/fixtures/ratman_tree_fixture.gd").new()
             if host.finish_demo.begins_with("correct_"):host.accuracy_fixture=preload("res://debug/fixtures/execution_escape_fixture.gd").new()
             if host.finish_demo.begins_with("scaling_"):host.accuracy_fixture=preload("res://debug/fixtures/enemy_scaling_fixture.gd").new()
+            if host.finish_demo.begins_with("ratground_"):
+                host.accuracy_fixture=preload("res://debug/fixtures/ratman_ground_fixture.gd").new()
+            if host.finish_demo=="knight_rhythm":
+                host.accuracy_fixture=preload("res://debug/fixtures/knight_rhythm_fixture.gd").new()
+            if host.finish_demo.begins_with("rhythm_"):
+                host.accuracy_fixture=preload("res://debug/fixtures/combat_recovery_review.gd").new()
             if host.finish_demo.begins_with("pacing_"):
                 host.accuracy_fixture=preload("res://debug/fixtures/combat_pacing_fixture.gd").new()
                 var parts: PackedStringArray=host.finish_demo.split("-")
@@ -311,39 +317,40 @@ func advance_troll_demo() -> void:
     host.demo_ticks += 1
 
 func advance_balok_demo() -> void:
-    var pause: int=host.rule_set.actor_definitions.balok.attack_cooldown_ticks
+    # Scripted inputs exercise the corrected, distance-dependent trajectory.
+    # Flight/attack clocks and health still come entirely from gameplay rules.
+    var swipe_at: int=255
     var swipe: Dictionary=host.rule_set.moves.balok_swipe
     var maul: Dictionary=host.rule_set.moves.balok_maul
-    var maul_at: int=255+int(swipe.windup+swipe.active+swipe.recovery)+pause+1
-    var hop_at: int=maul_at+int(maul.windup+maul.active+maul.recovery)+pause+4
-    var direction := Vector2i.ZERO
-    var action: String = "idle"
-    if host.demo_ticks >= 55 and host.demo_ticks < 65: direction.y = -1
-    elif host.demo_ticks >= 185 and host.demo_ticks < 220: direction.x = -1
-    elif host.demo_ticks >= 225 and host.demo_ticks < 235: direction.y = 1
-    elif host.demo_ticks == 240: direction.x = 1
-    elif host.demo_ticks >= 255 and host.demo_ticks < 265: direction.y = -1
-    elif host.demo_ticks >= 310 and host.demo_ticks < 320: direction.y = 1
-    elif host.demo_ticks >= maul_at and host.demo_ticks < maul_at+10: direction.y = -1
-    elif host.demo_ticks >= 400 and host.demo_ticks < 410: direction.y = 1
-    elif host.demo_ticks >= hop_at and host.demo_ticks < hop_at+10: direction.y = -1
-    elif host.demo_ticks >= 505 and host.demo_ticks < 540: direction.x = -1
-    elif host.demo_ticks == 545: direction.x = 1
-    elif host.demo_ticks >= 550 and host.demo_ticks < 560: direction.y = 1
-    elif host.demo_ticks == 575: action = "dagger"
-    elif host.demo_ticks == 625: action = "heavy"
-    elif host.demo_ticks == 695: action = "swing"
-    if host.mirror_demo: direction.x = -direction.x
-    host.session.command(1, 1, direction, action)
-    var enemy_action: String = "idle"
-    if host.demo_ticks == 55: enemy_action = "balok_pounce"
-    elif host.demo_ticks == 255: enemy_action = "balok_swipe"
-    elif host.demo_ticks == maul_at: enemy_action = "balok_maul"
-    elif host.demo_ticks == hop_at: enemy_action = "balok_hop"
-    var facing: int = (1 if host.demo_ticks < 180 else -1) * (-1 if host.mirror_demo else 1)
-    host.session.command(10, 0, Vector2i.ZERO, enemy_action, facing)
+    var maul_at: int=swipe_at+int(swipe.windup+swipe.active+swipe.recovery)+30
+    var hop_at: int=maul_at+int(maul.windup+maul.active+maul.recovery)+30
+    var direction:=Vector2i.ZERO
+    var action: String="idle"
+    var t: int=host.demo_ticks
+    if t>=55 and t<65:direction.y=-1
+    elif t>=185 and t<188:direction.x=-1
+    elif t>=225 and t<235:direction.y=1
+    elif t>=swipe_at and t<swipe_at+10:direction.y=-1
+    elif t>=313 and t<323:direction.y=1
+    elif t>=maul_at and t<maul_at+10:direction.y=-1
+    elif t>=409 and t<419:direction.y=1
+    elif t>=hop_at and t<hop_at+10:direction.y=-1
+    elif t>=471 and t<481:direction.y=1
+    elif t>=505 and t<512:direction.x=-1
+    elif t==575:action="dagger"
+    elif t==625:action="heavy"
+    elif t>=665 and t<685:direction.x=-1
+    elif t==695:action="swing"
+    if host.mirror_demo:direction.x=-direction.x
+    host.session.command(1,1,direction,action)
+    var enemy_action: String="idle"
+    if t==55:enemy_action="balok_pounce"
+    elif t==swipe_at:enemy_action="balok_swipe"
+    elif t==maul_at:enemy_action="balok_maul"
+    elif t==hop_at:enemy_action="balok_hop"
+    host.session.command(10,0,Vector2i.ZERO,enemy_action,-1 if host.mirror_demo else 1)
     host.session.simulation.advance()
-    host.demo_ticks += 1
+    host.demo_ticks+=1
 
 func demo_length() -> int:
     if not host.finish_demo.is_empty(): return host.accuracy_fixture.length()
@@ -401,6 +408,9 @@ func finish_accuracy_demo() -> void:
         return
     print("PASS: corrected combat/execution fixture; encounter=",host.encounter,"; checks=",host.accuracy_fixture.checked)
     print("ACCURACY_STATE=",JSON.stringify(host.session.simulation.snapshot()))
+    if host.finish_demo=="knight_rhythm":print("KNIGHT_RHYTHM_FIGHT=",JSON.stringify(host.accuracy_fixture.report()))
+    if host.finish_demo.begins_with("ratground_"):print("RATMAN_GROUND_FIGHT=",JSON.stringify(host.accuracy_fixture.report()))
+    if host.finish_demo.begins_with("rhythm_"):print("RECOVERY_FIGHT_STATE=",JSON.stringify(host.accuracy_fixture.report()))
     if host.finish_demo.begins_with("pacing_"):print("PACING_STATE=",JSON.stringify(host.accuracy_fixture.report()))
     if host.finish_demo.begins_with("scaling_"):print("SCALING_FIGHT_STATE=",JSON.stringify(host.accuracy_fixture.report()))
     host.get_tree().quit()

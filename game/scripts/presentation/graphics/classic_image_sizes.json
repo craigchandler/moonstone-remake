@@ -1,0 +1,2342 @@
+{
+  "balok/clean.png": [
+    1792,
+    1568
+  ],
+  "balok/gore.png": [
+    1792,
+    1568
+  ],
+  "balok_finishes/clean.png": [
+    1792,
+    4602
+  ],
+  "balok_finishes/gore.png": [
+    1792,
+    4602
+  ],
+  "complete_balok_finishes/clean.png": [
+    1752,
+    4425
+  ],
+  "complete_balok_finishes/gore.png": [
+    1752,
+    4425
+  ],
+  "complete_burn/clean.png": [
+    624,
+    5610
+  ],
+  "complete_burn/gore.png": [
+    624,
+    5610
+  ],
+  "complete_dragon/clean.png": [
+    2192,
+    2544
+  ],
+  "complete_dragon/gore.png": [
+    2192,
+    2544
+  ],
+  "complete_guardian_finishes/clean.png": [
+    1960,
+    276
+  ],
+  "complete_guardian_finishes/gore.png": [
+    1960,
+    276
+  ],
+  "complete_mud_finishes/clean.png": [
+    1640,
+    369
+  ],
+  "complete_mud_finishes/gore.png": [
+    1640,
+    369
+  ],
+  "complete_ratman/clean.png": [
+    1184,
+    810
+  ],
+  "complete_ratman/gore.png": [
+    1184,
+    810
+  ],
+  "complete_spear_finishes/clean.png": [
+    1240,
+    11625
+  ],
+  "complete_spear_finishes/gore.png": [
+    1240,
+    11625
+  ],
+  "death_balok/clean.png": [
+    1696,
+    678
+  ],
+  "death_balok/gore.png": [
+    1696,
+    678
+  ],
+  "death_dragon/clean.png": [
+    2080,
+    655
+  ],
+  "death_dragon/gore.png": [
+    2080,
+    655
+  ],
+  "death_giant_troll/clean.png": [
+    1496,
+    230
+  ],
+  "death_giant_troll/gore.png": [
+    1496,
+    230
+  ],
+  "death_guardian/clean.png": [
+    1048,
+    408
+  ],
+  "death_guardian/gore.png": [
+    1048,
+    408
+  ],
+  "death_knight/clean.png": [
+    2568,
+    1026
+  ],
+  "death_knight/gore.png": [
+    2568,
+    1026
+  ],
+  "death_mudman/clean.png": [
+    1288,
+    152
+  ],
+  "death_mudman/gore.png": [
+    1288,
+    152
+  ],
+  "death_rat_victim/clean.png": [
+    1136,
+    415
+  ],
+  "death_rat_victim/gore.png": [
+    1136,
+    415
+  ],
+  "death_ratman/clean.png": [
+    960,
+    378
+  ],
+  "death_ratman/gore.png": [
+    960,
+    378
+  ],
+  "death_trogg_axe/clean.png": [
+    1512,
+    891
+  ],
+  "death_trogg_axe/gore.png": [
+    1512,
+    891
+  ],
+  "death_trogg_hammer/clean.png": [
+    1520,
+    1089
+  ],
+  "death_trogg_hammer/gore.png": [
+    1520,
+    1089
+  ],
+  "death_trogg_spear/clean.png": [
+    1832,
+    999
+  ],
+  "death_trogg_spear/gore.png": [
+    1832,
+    999
+  ],
+  "dragon/arena.png": [
+    320,
+    200
+  ],
+  "dragon/clean.png": [
+    3728,
+    3552
+  ],
+  "dragon/gore.png": [
+    3728,
+    3552
+  ],
+  "dragon_victim/clean.png": [
+    624,
+    4620
+  ],
+  "dragon_victim/gore.png": [
+    624,
+    4620
+  ],
+  "ending_complete/indices.png": [
+    5120,
+    3200
+  ],
+  "ending_complete/palette-137.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-138.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-140.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-145.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-146.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-148.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-161.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-162.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-164.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-193.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-194.png": [
+    32,
+    4062
+  ],
+  "ending_complete/palette-196.png": [
+    32,
+    4062
+  ],
+  "ending_complete/panorama.png": [
+    320,
+    1200
+  ],
+  "ending_opening/indices.png": [
+    2560,
+    800
+  ],
+  "ending_opening/palette-137.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-138.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-140.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-145.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-146.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-148.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-161.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-162.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-164.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-193.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-194.png": [
+    32,
+    940
+  ],
+  "ending_opening/palette-196.png": [
+    32,
+    940
+  ],
+  "giant_troll/clean.png": [
+    2048,
+    1440
+  ],
+  "giant_troll/gore.png": [
+    2048,
+    1440
+  ],
+  "guardian/clean.png": [
+    2016,
+    710
+  ],
+  "guardian/gore.png": [
+    2016,
+    710
+  ],
+  "guardian_finishes/clean.png": [
+    2016,
+    1176
+  ],
+  "guardian_finishes/gore.png": [
+    2016,
+    1176
+  ],
+  "hammer_finishes/clean.png": [
+    1384,
+    297
+  ],
+  "hammer_finishes/gore.png": [
+    1384,
+    297
+  ],
+  "hit_effects/blood.png": [
+    785,
+    79
+  ],
+  "intro_menu/arrow.png": [
+    38,
+    19
+  ],
+  "intro_menu/font.png": [
+    512,
+    128
+  ],
+  "intro_menu/indices.png": [
+    5120,
+    5400
+  ],
+  "intro_menu/menu.png": [
+    320,
+    200
+  ],
+  "intro_menu/palette.png": [
+    32,
+    5989
+  ],
+  "intro_menu/panorama.png": [
+    320,
+    1200
+  ],
+  "intro_menu/title.png": [
+    305,
+    54
+  ],
+  "knight/blue.png": [
+    2048,
+    1296
+  ],
+  "knight/blue_clean.png": [
+    2048,
+    1296
+  ],
+  "knight/purple.png": [
+    2048,
+    1296
+  ],
+  "knight/purple_clean.png": [
+    2048,
+    1296
+  ],
+  "knight_finishes/clean.png": [
+    2568,
+    456
+  ],
+  "knight_finishes/gore.png": [
+    2568,
+    456
+  ],
+  "knight_selection/active-0.png": [
+    8,
+    10
+  ],
+  "knight_selection/active-1.png": [
+    8,
+    10
+  ],
+  "knight_selection/active-2.png": [
+    8,
+    10
+  ],
+  "knight_selection/active-3.png": [
+    8,
+    10
+  ],
+  "knight_selection/font.png": [
+    512,
+    128
+  ],
+  "knight_selection/frog-0.png": [
+    10,
+    12
+  ],
+  "knight_selection/frog-1.png": [
+    10,
+    12
+  ],
+  "knight_selection/frog-2.png": [
+    10,
+    12
+  ],
+  "knight_selection/frog-3.png": [
+    10,
+    12
+  ],
+  "knight_selection/highlight.png": [
+    64,
+    76
+  ],
+  "knight_selection/life-0.png": [
+    13,
+    15
+  ],
+  "knight_selection/life-1.png": [
+    13,
+    15
+  ],
+  "knight_selection/life-2.png": [
+    13,
+    15
+  ],
+  "knight_selection/life-3.png": [
+    13,
+    15
+  ],
+  "knight_selection/portrait-0.png": [
+    64,
+    76
+  ],
+  "knight_selection/portrait-1.png": [
+    64,
+    76
+  ],
+  "knight_selection/portrait-2.png": [
+    64,
+    76
+  ],
+  "knight_selection/portrait-3.png": [
+    64,
+    76
+  ],
+  "knight_selection/token-0.png": [
+    8,
+    10
+  ],
+  "knight_selection/token-1.png": [
+    8,
+    10
+  ],
+  "knight_selection/token-2.png": [
+    8,
+    10
+  ],
+  "knight_selection/token-3.png": [
+    8,
+    10
+  ],
+  "knight_selection/variant-0-0.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-0-1.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-0-2.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-0-3.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-0-4.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-1-0.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-1-1.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-1-2.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-1-3.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-1-4.png": [
+    1792,
+    1568
+  ],
+  "knight_selection/variant-10-1.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-10-2.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-10-3.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-10-4.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-106-1.png": [
+    43,
+    31
+  ],
+  "knight_selection/variant-106-2.png": [
+    43,
+    31
+  ],
+  "knight_selection/variant-106-3.png": [
+    43,
+    31
+  ],
+  "knight_selection/variant-107-1.png": [
+    43,
+    31
+  ],
+  "knight_selection/variant-107-2.png": [
+    43,
+    31
+  ],
+  "knight_selection/variant-107-3.png": [
+    43,
+    31
+  ],
+  "knight_selection/variant-11-1.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-11-2.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-11-3.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-11-4.png": [
+    1960,
+    276
+  ],
+  "knight_selection/variant-111-1.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-111-2.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-111-3.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-12-1.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-12-2.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-12-3.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-12-4.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-120-1.png": [
+    55,
+    59
+  ],
+  "knight_selection/variant-120-2.png": [
+    55,
+    59
+  ],
+  "knight_selection/variant-120-3.png": [
+    55,
+    59
+  ],
+  "knight_selection/variant-121-1.png": [
+    39,
+    8
+  ],
+  "knight_selection/variant-121-2.png": [
+    39,
+    8
+  ],
+  "knight_selection/variant-121-3.png": [
+    39,
+    8
+  ],
+  "knight_selection/variant-122-1.png": [
+    60,
+    59
+  ],
+  "knight_selection/variant-122-2.png": [
+    60,
+    59
+  ],
+  "knight_selection/variant-122-3.png": [
+    60,
+    59
+  ],
+  "knight_selection/variant-123-1.png": [
+    49,
+    9
+  ],
+  "knight_selection/variant-123-2.png": [
+    49,
+    9
+  ],
+  "knight_selection/variant-123-3.png": [
+    49,
+    9
+  ],
+  "knight_selection/variant-124-1.png": [
+    60,
+    59
+  ],
+  "knight_selection/variant-124-2.png": [
+    60,
+    59
+  ],
+  "knight_selection/variant-124-3.png": [
+    60,
+    59
+  ],
+  "knight_selection/variant-126-1.png": [
+    47,
+    10
+  ],
+  "knight_selection/variant-126-2.png": [
+    47,
+    10
+  ],
+  "knight_selection/variant-126-3.png": [
+    47,
+    10
+  ],
+  "knight_selection/variant-13-1.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-13-2.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-13-3.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-13-4.png": [
+    1640,
+    369
+  ],
+  "knight_selection/variant-133-1.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-133-2.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-133-3.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-133-4.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-134-1.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-134-2.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-134-3.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-134-4.png": [
+    3072,
+    1936
+  ],
+  "knight_selection/variant-135-1.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-135-2.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-135-3.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-135-4.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-136-1.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-136-2.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-136-3.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-136-4.png": [
+    1576,
+    738
+  ],
+  "knight_selection/variant-137-1.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-137-2.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-137-3.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-137-4.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-138-1.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-138-2.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-138-3.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-138-4.png": [
+    3072,
+    1584
+  ],
+  "knight_selection/variant-139-1.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-139-2.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-139-3.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-139-4.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-14-1.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-14-2.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-14-3.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-14-4.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-140-1.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-140-2.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-140-3.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-140-4.png": [
+    1952,
+    2562
+  ],
+  "knight_selection/variant-141-1.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-141-2.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-141-3.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-15-1.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-15-2.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-15-3.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-15-4.png": [
+    1184,
+    810
+  ],
+  "knight_selection/variant-16-1.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-16-2.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-16-3.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-16-4.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-17-1.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-17-2.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-17-3.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-17-4.png": [
+    1240,
+    11625
+  ],
+  "knight_selection/variant-2-1.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-2-2.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-2-3.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-2-4.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-26-1.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-26-2.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-26-3.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-26-4.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-27-1.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-27-2.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-27-3.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-27-4.png": [
+    2568,
+    1026
+  ],
+  "knight_selection/variant-3-1.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-3-2.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-3-3.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-3-4.png": [
+    1792,
+    4602
+  ],
+  "knight_selection/variant-30-1.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-30-2.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-30-3.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-30-4.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-31-1.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-31-2.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-31-3.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-31-4.png": [
+    1136,
+    415
+  ],
+  "knight_selection/variant-4-1.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-4-2.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-4-3.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-4-4.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-40-1.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-40-2.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-40-3.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-40-4.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-41-1.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-41-2.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-41-3.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-41-4.png": [
+    3728,
+    3552
+  ],
+  "knight_selection/variant-46-1.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-46-2.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-46-3.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-46-4.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-47-1.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-47-2.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-47-3.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-47-4.png": [
+    2016,
+    710
+  ],
+  "knight_selection/variant-48-1.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-48-2.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-48-3.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-48-4.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-49-1.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-49-2.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-49-3.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-49-4.png": [
+    2016,
+    1176
+  ],
+  "knight_selection/variant-5-1.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-5-2.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-5-3.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-5-4.png": [
+    1752,
+    4425
+  ],
+  "knight_selection/variant-50-1.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-50-2.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-50-3.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-50-4.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-51-1.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-51-2.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-51-3.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-51-4.png": [
+    1384,
+    297
+  ],
+  "knight_selection/variant-52-1.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-52-2.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-52-3.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-52-4.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-53-1.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-53-2.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-53-3.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-53-4.png": [
+    2048,
+    1296
+  ],
+  "knight_selection/variant-54-1.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-54-2.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-54-3.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-54-4.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-55-1.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-55-2.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-55-3.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-55-4.png": [
+    2568,
+    456
+  ],
+  "knight_selection/variant-56-1.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-56-2.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-56-3.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-56-4.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-57-1.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-57-2.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-57-3.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-57-4.png": [
+    1696,
+    369
+  ],
+  "knight_selection/variant-60-1.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-60-2.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-60-3.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-60-4.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-61-1.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-61-2.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-61-3.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-61-4.png": [
+    1952,
+    2304
+  ],
+  "knight_selection/variant-62-1.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-62-2.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-62-3.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-62-4.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-63-1.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-63-2.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-63-3.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-63-4.png": [
+    1272,
+    3100
+  ],
+  "knight_selection/variant-64-1.png": [
+    24,
+    17
+  ],
+  "knight_selection/variant-64-2.png": [
+    24,
+    17
+  ],
+  "knight_selection/variant-64-3.png": [
+    24,
+    17
+  ],
+  "knight_selection/variant-65-1.png": [
+    34,
+    32
+  ],
+  "knight_selection/variant-65-2.png": [
+    34,
+    32
+  ],
+  "knight_selection/variant-65-3.png": [
+    34,
+    32
+  ],
+  "knight_selection/variant-66-1.png": [
+    34,
+    18
+  ],
+  "knight_selection/variant-66-2.png": [
+    34,
+    18
+  ],
+  "knight_selection/variant-66-3.png": [
+    34,
+    18
+  ],
+  "knight_selection/variant-67-1.png": [
+    34,
+    11
+  ],
+  "knight_selection/variant-67-2.png": [
+    34,
+    11
+  ],
+  "knight_selection/variant-67-3.png": [
+    34,
+    11
+  ],
+  "knight_selection/variant-68-1.png": [
+    34,
+    12
+  ],
+  "knight_selection/variant-68-2.png": [
+    34,
+    12
+  ],
+  "knight_selection/variant-68-3.png": [
+    34,
+    12
+  ],
+  "knight_selection/variant-69-1.png": [
+    36,
+    21
+  ],
+  "knight_selection/variant-69-2.png": [
+    36,
+    21
+  ],
+  "knight_selection/variant-69-3.png": [
+    36,
+    21
+  ],
+  "knight_selection/variant-70-1.png": [
+    28,
+    26
+  ],
+  "knight_selection/variant-70-2.png": [
+    28,
+    26
+  ],
+  "knight_selection/variant-70-3.png": [
+    28,
+    26
+  ],
+  "knight_selection/variant-8-1.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-8-2.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-8-3.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-8-4.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-9-1.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-9-2.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-9-3.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-9-4.png": [
+    2192,
+    2544
+  ],
+  "knight_selection/variant-92-1.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-92-2.png": [
+    320,
+    200
+  ],
+  "knight_selection/variant-92-3.png": [
+    320,
+    200
+  ],
+  "lairs/grassland_east.png": [
+    320,
+    200
+  ],
+  "lairs/grassland_north.png": [
+    320,
+    200
+  ],
+  "lairs/grassland_south.png": [
+    320,
+    200
+  ],
+  "lairs/grassland_west.png": [
+    320,
+    200
+  ],
+  "lairs/lair_05.png": [
+    320,
+    200
+  ],
+  "lairs/lair_06.png": [
+    320,
+    200
+  ],
+  "lairs/lair_07.png": [
+    320,
+    200
+  ],
+  "lairs/lair_08.png": [
+    320,
+    200
+  ],
+  "lairs/lair_09.png": [
+    320,
+    200
+  ],
+  "lairs/lair_10.png": [
+    320,
+    200
+  ],
+  "lairs/lair_11.png": [
+    320,
+    200
+  ],
+  "lairs/lair_12.png": [
+    320,
+    200
+  ],
+  "lairs/lair_13.png": [
+    320,
+    200
+  ],
+  "lairs/lair_14.png": [
+    320,
+    200
+  ],
+  "lairs/lair_15.png": [
+    320,
+    200
+  ],
+  "lairs/lair_16.png": [
+    320,
+    200
+  ],
+  "lairs/lair_17.png": [
+    320,
+    200
+  ],
+  "lairs/lair_18.png": [
+    320,
+    200
+  ],
+  "lairs/lair_19.png": [
+    320,
+    200
+  ],
+  "lairs/lair_20.png": [
+    320,
+    200
+  ],
+  "lairs/lair_21.png": [
+    320,
+    200
+  ],
+  "lairs/lair_22.png": [
+    320,
+    200
+  ],
+  "lairs/lair_23.png": [
+    320,
+    200
+  ],
+  "lairs/lair_24.png": [
+    320,
+    200
+  ],
+  "loot/background.png": [
+    320,
+    200
+  ],
+  "loot/battleplate.png": [
+    43,
+    33
+  ],
+  "loot/broad_sword.png": [
+    71,
+    11
+  ],
+  "loot/chainmail.png": [
+    39,
+    30
+  ],
+  "loot/claymore.png": [
+    82,
+    11
+  ],
+  "loot/constitution.png": [
+    29,
+    5
+  ],
+  "loot/cursor.png": [
+    16,
+    18
+  ],
+  "loot/dagger.png": [
+    5,
+    12
+  ],
+  "loot/endurance.png": [
+    29,
+    5
+  ],
+  "loot/font.png": [
+    128,
+    72
+  ],
+  "loot/gem_of_seeing.png": [
+    13,
+    15
+  ],
+  "loot/gold.png": [
+    35,
+    25
+  ],
+  "loot/gold_label.png": [
+    43,
+    5
+  ],
+  "loot/healing_potion.png": [
+    10,
+    12
+  ],
+  "loot/hit_label.png": [
+    56,
+    5
+  ],
+  "loot/key_forest.png": [
+    15,
+    16
+  ],
+  "loot/key_moors.png": [
+    15,
+    16
+  ],
+  "loot/key_wastes.png": [
+    15,
+    16
+  ],
+  "loot/key_wetlands.png": [
+    15,
+    16
+  ],
+  "loot/knight.png": [
+    13,
+    15
+  ],
+  "loot/long_sword.png": [
+    65,
+    9
+  ],
+  "loot/moonstone_full.png": [
+    15,
+    16
+  ],
+  "loot/moonstone_half_a.png": [
+    15,
+    16
+  ],
+  "loot/moonstone_half_b.png": [
+    15,
+    16
+  ],
+  "loot/moonstone_new.png": [
+    15,
+    16
+  ],
+  "loot/padded_armour.png": [
+    37,
+    27
+  ],
+  "loot/panels.png": [
+    320,
+    200
+  ],
+  "loot/platemail.png": [
+    39,
+    34
+  ],
+  "loot/ring_of_protection.png": [
+    7,
+    9
+  ],
+  "loot/scroll_back.png": [
+    4,
+    16
+  ],
+  "loot/scroll_of_acquisition.png": [
+    10,
+    16
+  ],
+  "loot/scroll_of_haste.png": [
+    10,
+    16
+  ],
+  "loot/scroll_of_protection.png": [
+    10,
+    16
+  ],
+  "loot/scroll_of_the_hawk.png": [
+    10,
+    16
+  ],
+  "loot/scroll_of_the_wyrm.png": [
+    10,
+    16
+  ],
+  "loot/single.png": [
+    320,
+    200
+  ],
+  "loot/strength.png": [
+    29,
+    5
+  ],
+  "loot/sword_of_sharpness.png": [
+    85,
+    9
+  ],
+  "loot/talisman_of_the_wyrm.png": [
+    16,
+    27
+  ],
+  "loot/xp_label.png": [
+    32,
+    5
+  ],
+  "mud_finishes/clean.png": [
+    1696,
+    369
+  ],
+  "mud_finishes/gore.png": [
+    1696,
+    369
+  ],
+  "mudman/clean.png": [
+    1712,
+    363
+  ],
+  "mudman/gore.png": [
+    1712,
+    363
+  ],
+  "ratman/clean.png": [
+    1952,
+    2304
+  ],
+  "ratman/gore.png": [
+    1952,
+    2304
+  ],
+  "recovered/A/message.piv/image.png": [
+    320,
+    200
+  ],
+  "recovered/B/KN1.ob/frames/000.png": [
+    23,
+    54
+  ],
+  "recovered/B/KN4.ob/frames/010.png": [
+    18,
+    4
+  ],
+  "recovered/B/TROGGAxe1.CEL/frames/000.png": [
+    37,
+    51
+  ],
+  "recovered/B/TROGGSpear1.CEL/frames/000.png": [
+    29,
+    56
+  ],
+  "recovered/B/TROLL1.CEL/frames/000.png": [
+    33,
+    52
+  ],
+  "recovered/B/test/04/image.png": [
+    320,
+    200
+  ],
+  "recovered/B/test/05/image.png": [
+    320,
+    200
+  ],
+  "recovered/B/test/07/image.png": [
+    320,
+    200
+  ],
+  "recovered/B/test/08/image.png": [
+    320,
+    200
+  ],
+  "recovered/C/Balok1.CEL/frames/000.png": [
+    37,
+    29
+  ],
+  "recovered/C/HighWood.PIV/image.png": [
+    320,
+    200
+  ],
+  "recovered/C/WaterDeep.PIV/image.png": [
+    320,
+    200
+  ],
+  "recovered/C/dice.piv/image.png": [
+    320,
+    200
+  ],
+  "recovered/C/hea.piv/image.png": [
+    320,
+    200
+  ],
+  "recovered/C/mys.piv/image.png": [
+    320,
+    200
+  ],
+  "spear_finishes/clean.png": [
+    1272,
+    3100
+  ],
+  "spear_finishes/gore.png": [
+    1272,
+    3100
+  ],
+  "stonehenge/000.png": [
+    24,
+    17
+  ],
+  "stonehenge/001.png": [
+    34,
+    32
+  ],
+  "stonehenge/002.png": [
+    34,
+    18
+  ],
+  "stonehenge/003.png": [
+    34,
+    11
+  ],
+  "stonehenge/004.png": [
+    34,
+    12
+  ],
+  "stonehenge/005.png": [
+    36,
+    21
+  ],
+  "stonehenge/006.png": [
+    28,
+    26
+  ],
+  "stonehenge/007.png": [
+    5,
+    18
+  ],
+  "stonehenge/008.png": [
+    8,
+    19
+  ],
+  "stonehenge/009.png": [
+    4,
+    22
+  ],
+  "stonehenge/010.png": [
+    5,
+    19
+  ],
+  "stonehenge/011.png": [
+    4,
+    23
+  ],
+  "stonehenge/012.png": [
+    5,
+    16
+  ],
+  "stonehenge/013.png": [
+    3,
+    14
+  ],
+  "stonehenge/014.png": [
+    6,
+    15
+  ],
+  "stonehenge/015.png": [
+    3,
+    16
+  ],
+  "stonehenge/016.png": [
+    3,
+    11
+  ],
+  "stonehenge/017.png": [
+    5,
+    12
+  ],
+  "stonehenge/018.png": [
+    2,
+    14
+  ],
+  "stonehenge/019.png": [
+    9,
+    22
+  ],
+  "stonehenge/020.png": [
+    9,
+    22
+  ],
+  "stonehenge/021.png": [
+    9,
+    21
+  ],
+  "stonehenge/022.png": [
+    6,
+    16
+  ],
+  "stonehenge/023.png": [
+    6,
+    17
+  ],
+  "stonehenge/024.png": [
+    6,
+    14
+  ],
+  "stonehenge/025.png": [
+    23,
+    64
+  ],
+  "stonehenge/026.png": [
+    25,
+    63
+  ],
+  "stonehenge/027.png": [
+    22,
+    63
+  ],
+  "stonehenge/background.png": [
+    320,
+    200
+  ],
+  "targeted_scrolls/black_life.png": [
+    13,
+    15
+  ],
+  "targeted_scrolls/scroll_of_acquisition.png": [
+    10,
+    16
+  ],
+  "targeted_scrolls/scroll_of_the_hawk.png": [
+    10,
+    16
+  ],
+  "town_locations/dice_10.png": [
+    15,
+    18
+  ],
+  "town_locations/dice_11.png": [
+    12,
+    19
+  ],
+  "town_locations/dice_12.png": [
+    17,
+    22
+  ],
+  "town_locations/dice_13.png": [
+    16,
+    14
+  ],
+  "town_locations/dice_14.png": [
+    17,
+    21
+  ],
+  "town_locations/dice_15.png": [
+    15,
+    22
+  ],
+  "town_locations/dice_16.png": [
+    15,
+    21
+  ],
+  "town_locations/dice_17.png": [
+    16,
+    18
+  ],
+  "town_locations/dice_18.png": [
+    19,
+    20
+  ],
+  "town_locations/dice_19.png": [
+    18,
+    20
+  ],
+  "town_locations/dice_20.png": [
+    15,
+    18
+  ],
+  "town_locations/dice_21.png": [
+    15,
+    15
+  ],
+  "town_locations/dice_22.png": [
+    16,
+    14
+  ],
+  "town_locations/dice_6.png": [
+    43,
+    31
+  ],
+  "town_locations/dice_7.png": [
+    43,
+    31
+  ],
+  "town_locations/dice_8.png": [
+    46,
+    26
+  ],
+  "town_locations/dice_9.png": [
+    40,
+    27
+  ],
+  "town_locations/frog.png": [
+    10,
+    12
+  ],
+  "town_locations/gift.png": [
+    320,
+    200
+  ],
+  "town_locations/tavern.png": [
+    320,
+    200
+  ],
+  "town_locations/tower.png": [
+    320,
+    200
+  ],
+  "town_locations/wizard_0.png": [
+    30,
+    39
+  ],
+  "town_locations/wizard_1.png": [
+    28,
+    37
+  ],
+  "town_locations/wizard_10.png": [
+    46,
+    48
+  ],
+  "town_locations/wizard_11.png": [
+    13,
+    28
+  ],
+  "town_locations/wizard_12.png": [
+    40,
+    32
+  ],
+  "town_locations/wizard_13.png": [
+    3,
+    3
+  ],
+  "town_locations/wizard_14.png": [
+    3,
+    3
+  ],
+  "town_locations/wizard_15.png": [
+    55,
+    59
+  ],
+  "town_locations/wizard_16.png": [
+    39,
+    8
+  ],
+  "town_locations/wizard_17.png": [
+    60,
+    59
+  ],
+  "town_locations/wizard_18.png": [
+    49,
+    9
+  ],
+  "town_locations/wizard_19.png": [
+    60,
+    59
+  ],
+  "town_locations/wizard_2.png": [
+    28,
+    31
+  ],
+  "town_locations/wizard_20.png": [
+    47,
+    10
+  ],
+  "town_locations/wizard_4.png": [
+    38,
+    13
+  ],
+  "town_locations/wizard_5.png": [
+    46,
+    48
+  ],
+  "town_locations/wizard_6.png": [
+    13,
+    28
+  ],
+  "town_locations/wizard_7.png": [
+    40,
+    32
+  ],
+  "town_locations/wizard_8.png": [
+    3,
+    3
+  ],
+  "town_locations/wizard_9.png": [
+    3,
+    3
+  ],
+  "trogg_axe/clean.png": [
+    3072,
+    1936
+  ],
+  "trogg_axe/gore.png": [
+    3072,
+    1936
+  ],
+  "trogg_hammer/clean.png": [
+    1576,
+    738
+  ],
+  "trogg_hammer/gore.png": [
+    1576,
+    738
+  ],
+  "trogg_spear/clean.png": [
+    3072,
+    1584
+  ],
+  "trogg_spear/gore.png": [
+    3072,
+    1584
+  ],
+  "war_beast/clean.png": [
+    1952,
+    2562
+  ],
+  "war_beast/gore.png": [
+    1952,
+    2562
+  ],
+  "world/dice_0.png": [
+    53,
+    23
+  ],
+  "world/dice_1.png": [
+    53,
+    24
+  ],
+  "world/dice_2.png": [
+    53,
+    23
+  ],
+  "world/dice_3.png": [
+    53,
+    23
+  ],
+  "world/dice_4.png": [
+    53,
+    23
+  ],
+  "world/dice_5.png": [
+    53,
+    23
+  ],
+  "world/dragon_0.png": [
+    35,
+    14
+  ],
+  "world/dragon_1.png": [
+    35,
+    16
+  ],
+  "world/dragon_2.png": [
+    34,
+    18
+  ],
+  "world/dragon_3.png": [
+    35,
+    23
+  ],
+  "world/dragon_4.png": [
+    36,
+    21
+  ],
+  "world/dragon_5.png": [
+    36,
+    20
+  ],
+  "world/dragon_6.png": [
+    35,
+    18
+  ],
+  "world/dragon_7.png": [
+    35,
+    15
+  ],
+  "world/healer_0.png": [
+    46,
+    26
+  ],
+  "world/healer_1.png": [
+    47,
+    26
+  ],
+  "world/healer_2.png": [
+    32,
+    8
+  ],
+  "world/healer_3.png": [
+    20,
+    8
+  ],
+  "world/healer_4.png": [
+    15,
+    9
+  ],
+  "world/healer_5.png": [
+    15,
+    9
+  ],
+  "world/healer_6.png": [
+    39,
+    12
+  ],
+  "world/healer_7.png": [
+    35,
+    10
+  ],
+  "world/knight.png": [
+    8,
+    10
+  ],
+  "world/knight_active.png": [
+    8,
+    10
+  ],
+  "world/lair.png": [
+    9,
+    5
+  ],
+  "world/map_0.png": [
+    8,
+    10
+  ],
+  "world/map_1.png": [
+    8,
+    10
+  ],
+  "world/map_2.png": [
+    8,
+    10
+  ],
+  "world/map_21.png": [
+    24,
+    19
+  ],
+  "world/map_22.png": [
+    24,
+    14
+  ],
+  "world/map_23.png": [
+    23,
+    11
+  ],
+  "world/map_24.png": [
+    15,
+    8
+  ],
+  "world/map_25.png": [
+    25,
+    32
+  ],
+  "world/map_26.png": [
+    32,
+    28
+  ],
+  "world/map_27.png": [
+    18,
+    12
+  ],
+  "world/map_28.png": [
+    13,
+    10
+  ],
+  "world/map_3.png": [
+    8,
+    10
+  ],
+  "world/map_30.png": [
+    7,
+    20
+  ],
+  "world/map_31.png": [
+    9,
+    5
+  ],
+  "world/map_33.png": [
+    8,
+    10
+  ],
+  "world/map_4.png": [
+    8,
+    10
+  ],
+  "world/map_5.png": [
+    8,
+    10
+  ],
+  "world/map_6.png": [
+    8,
+    10
+  ],
+  "world/map_7.png": [
+    8,
+    10
+  ],
+  "world/map_8.png": [
+    8,
+    10
+  ],
+  "world/map_9.png": [
+    8,
+    10
+  ],
+  "world/moon_0.png": [
+    57,
+    44
+  ],
+  "world/moon_1.png": [
+    57,
+    44
+  ],
+  "world/moon_2.png": [
+    57,
+    44
+  ],
+  "world/moon_3.png": [
+    57,
+    44
+  ],
+  "world/moon_4.png": [
+    57,
+    44
+  ],
+  "world/mystic_0.png": [
+    46,
+    26
+  ],
+  "world/mystic_1.png": [
+    47,
+    26
+  ],
+  "world/mystic_2.png": [
+    32,
+    8
+  ],
+  "world/mystic_3.png": [
+    20,
+    8
+  ],
+  "world/mystic_4.png": [
+    15,
+    9
+  ],
+  "world/mystic_5.png": [
+    15,
+    9
+  ],
+  "world/mystic_6.png": [
+    39,
+    12
+  ],
+  "world/mystic_7.png": [
+    35,
+    10
+  ],
+  "world/tavern-blue.png": [
+    320,
+    200
+  ]
+}

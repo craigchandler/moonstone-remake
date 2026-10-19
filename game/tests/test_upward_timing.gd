@@ -51,6 +51,6 @@ func _initialize() -> void:
         for event in m.events:
             if event.type=="attack" and event.actor==1:starts.append(n)
     check(starts==[0,43,86,129,172],"held repeat is43 ticks without invented cooldown")
-    check(m.snapshot().schema==22 and m.snapshot().content=="encounters.v27","clock change versions content without changing snapshot shape")
+    check(m.snapshot().schema==25 and m.snapshot().content=="encounters.v31","clock change versions content without changing snapshot shape")
     if failures==0:print("PASS:",checks," upward checks; mirrored seven-pass poses, full/held clocks, once-only tall-target damage, every-age cancel/commit and presentation isolation")
     quit(1 if failures else 0)

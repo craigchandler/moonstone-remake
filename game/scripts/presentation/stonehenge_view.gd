@@ -127,7 +127,7 @@ func pose_at(track: Array, tick: int, loop: bool) -> Dictionary:
 func draw_track(track: Array, tick: int, loop: bool) -> void:
     for layer in pose_at(track,tick,loop).layers:
         var texture: Texture2D=KnightArt.coloured(scene_art.frames[int(layer.frame)],journey.identity.kind)
-        draw_texture_rect(texture,Rect2(Vector2(layer.x,layer.y)*2,texture.get_size()*2),false)
+        draw_texture_rect(texture,Rect2(Vector2(layer.x,layer.y)*2,Images.size(texture)*2),false)
 
 func _draw() -> void:
     if journey==null or journey.henge.is_empty():return

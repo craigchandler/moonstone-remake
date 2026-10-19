@@ -1,6 +1,9 @@
 class_name CombatSimulation
 extends RefCounted
 
+const Knight = preload("res://scripts/domain/knight_combat.gd")
+const Ratman = preload("res://scripts/domain/ratman_combat.gd")
+const Balok = preload("res://scripts/domain/balok_combat.gd")
 const Math = preload("res://scripts/domain/character_math.gd")
 
 const EncounterScaling = preload("res://scripts/domain/encounter_scaling_host.gd")
@@ -30,6 +33,8 @@ var projectiles: Array[Dictionary] = []
 var next_projectile_id: int = 1
 var encounter_settings: Dictionary = {}
 var rat_perch: Dictionary = {}
+var ratman_wait_steps: int = 0
+var knight_random_state: int = 0x4b4e4947
 var beast_lane_toggle: int = 0
 var balok_finish_toggle: int = 0
 var entry_state: Dictionary = {}
@@ -47,6 +52,8 @@ func start(new_mode: StringName, second_player_peer: int = 0, new_encounter: Str
     projectiles.clear()
     next_projectile_id = 1
     rat_perch = {}
+    ratman_wait_steps = 0
+    knight_random_state = maxi(2,int(overrides.get("combat_seed",0x4b4e4947)) & 0xffffffff)
     beast_lane_toggle = 0
     balok_finish_toggle = 0
     entry_state = {}
@@ -54,6 +61,8 @@ func start(new_mode: StringName, second_player_peer: int = 0, new_encounter: Str
     encounter_settings = rules.encounters.get(String(encounter), {}).duplicate(true)
     for key in ["count", "concurrent"]:
         if overrides.has(key): encounter_settings[key] = clampi(int(overrides[key]), 1, 60 if key == "count" else 4)
+    if rules.encounters.get(String(encounter),{}).get("creature","")=="black_knight":
+        encounter_settings["knight_difficulty"]=clampi(int(overrides.get("knight_difficulty",0)),0,7)
     encounter_settings["moon_phase"] = clampi(int(overrides.get("moon_phase", 1)), 0, 7)
     if encounter_settings.has("entry_profile"):
         entry_state=EntryPlacement.prepare(rules,String(encounter_settings.entry_profile),String(overrides.get("arena_site","")),2 if mode==&"cooperative" else 1)
@@ -87,7 +96,7 @@ func make_actor(id: int, owner: int, team: int, kind: String, position: Vector2i
     var definition: Resource = rules.actor_definitions[kind]
     var maximum: int = definition.maximum_health
     if kind == "ratman": maximum = 7 if encounter_settings.get("moon_phase",1) == 0 else (12 if encounter_settings.get("moon_phase",1) == 4 else 5)
-    return {"id": id, "owner": owner, "team": team, "kind": kind, "x": position.x,
+    var result: Dictionary = {"id": id, "owner": owner, "team": team, "kind": kind, "x": position.x,
             "y": position.y, "facing": facing, "health": maximum, "maximum": maximum,
             "action": "idle", "last_attack": "", "attack_flow": {}, "height": 0,
             "leap_from_x": position.x, "leap_from_y": position.y, "leap_to_x": position.x, "leap_to_y": position.y, "remaining": 0, "guarding": false, "flash": 0,
@@ -105,6 +114,10 @@ func make_actor(id: int, owner: int, team: int, kind: String, position: Vector2i
             "entering": false, "beast": {}, "motion": {},
             "interaction": {}, "reaction_duration": 0, "vanished": false,
             "cooldown_remaining": definition.entry_attack_delay_ticks}
+    if kind=="black_knight":Knight.state(result)
+    if kind=="ratman":Ratman.state(result)
+    if kind=="balok":Balok.state(result)
+    return result
 
 func submit(peer: int, command: Dictionary) -> bool:
     # This is also the future network authority boundary. No remote code/resources.
@@ -222,7 +235,9 @@ func advance() -> void:
                 actor.visual_kind = ""
         if actor.stagger_remaining > 0:
             actor.stagger_remaining -= 1
-            continue
+            # The expiry step can act before contact collection. Otherwise a
+            # live blade can re-hit an unprotected actor that is still blocked.
+            if actor.stagger_remaining > 0: continue
         # Content defines preparation/recovery commitment; live blades remain locked.
         if actor.remaining > 0 and rules.actor_definitions[actor.kind].can_cancel_attacks and not command.is_empty():
             var evading: bool = command.action == "block" or (command.action == "idle" and (command.dx != 0 or command.dy != 0))
@@ -237,7 +252,9 @@ func advance() -> void:
         actor.guarding = command.get("action", "idle") == "block" and actor.remaining == 0
         if actor.remaining > 0:
             actor.remaining -= 1
-            var move: Dictionary = rules.moves[actor.action]
+            var move: Dictionary = move_for(actor)
+            if actor.kind=="balok" and actor.action in Balok.FLIGHTS and actor.remaining==move.recovery:
+                Balok.land(rules,actor,tick)
             if actor.attack_flow.get("branch","") == "contact":
                 if actor.remaining == 0:
                     actor.action = "idle"
@@ -285,10 +302,12 @@ func advance() -> void:
                     actor.action = "rat_leap"
                     actor.rat_tree = false
                     aim_leap(actor, rules.moves.rat_leap, false)
-                    actor.remaining = int(rules.moves.rat_leap.active) + int(rules.moves.rat_leap.recovery)
+                    var flight: Dictionary=move_for(actor)
+                    actor.remaining = int(flight.active)+int(flight.recovery)
                     actor.hit_targets = []
                     continue
                 if actor.kind == "ratman": actor.rest_height = actor.leap_to_height if actor.action == "rat_leap" else actor.rest_height
+                if actor.kind=="balok":Balok.finish(actor)
                 actor.action = "idle"
                 if actor.kind != "war_beast": actor.cooldown_remaining = rules.actor_definitions[actor.kind].attack_cooldown_ticks
         elif not command.is_empty():
@@ -307,10 +326,15 @@ func advance() -> void:
                 if actor.kind == "ratman" and not actor.terminal_clip.is_empty():
                     actor.rest_height = 0
                     actor.height = 0
+                if actor.kind=="balok" and command.action in Balok.FLIGHTS:
+                    if not Balok.begin(rules,actor,nearest_opponent(actor),tick):continue
                 actor.action = command.action
                 actor.terminal_clip = ""
                 actor.last_attack = command.action
-                if move.has("leap_range"): aim_leap(actor, move)
+                if actor.kind=="balok" and actor.action in Balok.FLIGHTS:move=move_for(actor)
+                elif move.has("leap_range"):
+                    aim_leap(actor, move)
+                    if actor.kind=="ratman":move=move_for(actor)
                 if actor.action == "beast_charge": begin_beast_pass(actor)
                 if actor.kind == "dragon" and actor.action in ["dragon_bite", "dragon_breath"]: actor.dragon_hit = false
                 actor.remaining = int(move.windup) + int(move.active) + int(move.recovery)
@@ -360,8 +384,8 @@ func advance() -> void:
         target.flash = 7
         events.append({"type": "damage", "actor": target.id, "amount": damage,
             "attacker": hit.attacker, "move": hit.move, "blocked": hit.blocked})
-        if target.kind == "giant_troll" and hit.has("x") and hit.has("y"):
-            # Retail stalker hitSpark is a separate, contact-anchored drawing.
+        if target.kind in ["giant_troll","balok"] and hit.has("x") and hit.has("y"):
+            # Retail stalker/drake hitSpark is a separate contact-anchored drawing.
             # Keep it out of authoritative actor/projectile state.
             events.append({"type":"hit_effect","actor":target.id,"effect":"blood_burst",
                 "x":hit.x,"y":hit.y,"facing":actors[hit.attacker].facing})
@@ -386,9 +410,12 @@ func advance() -> void:
         else:
             # Hits interrupt preparation/recovery. Strikes already collected in
             # this same tick still land, preserving simultaneous damage.
+            if target.kind=="balok":Balok.interrupt(target)
             target.action = "idle"
             target.attack_flow = {}
             target.remaining = 0
+            if rules.actor_definitions[target.kind].reset_cooldown_on_hit:
+                target.cooldown_remaining = 0
             target.guarding = false
             target.visual_kind = ""
             target.reaction = rules.actor_definitions[target.kind].reaction_clips.get(hit.move,
@@ -397,7 +424,7 @@ func advance() -> void:
             target.reaction_duration = target.reaction_remaining
             AttackFlow.reaction(rules,target,hit.move)
             target.stagger_remaining = rules.actor_definitions[target.kind].stagger_ticks
-            if rules.recovery.committed(target.kind,target.reaction):
+            if target.kind!="knight" and rules.recovery.committed(target.kind,target.reaction):
                 target.stagger_remaining=target.reaction_remaining
             if target.kind == "war_beast":
                 Beast.interrupt(self,target)
@@ -423,6 +450,10 @@ func advance() -> void:
                     target.reaction_remaining=36;target.reaction_duration=36
                 if hit.move == "balok_maul": Finishers.begin(self,actors[hit.attacker],target,"balok")
                 if actors[hit.attacker].kind == "mudman": Finishers.begin(self,actors[hit.attacker],target,"mud")
+                # Decide commitment after special reactions have been selected.
+                # Ratman victim/Beast impact/hop paths retain their own clocks.
+                if rules.recovery.committed(target.kind,target.reaction):
+                    target.stagger_remaining=target.reaction_remaining
             if hit_move.has("grab_ticks") and target.hidden_by == 0:
                 target.grabbed_by = hit.attacker
                 target.grab_remaining = int(hit_move.grab_ticks)
@@ -431,6 +462,7 @@ func advance() -> void:
         if source.kind == "war_beast" and source.health > 0 and source.beast.is_empty() and int(hit.amount) > 0:
             Beast.impact(source)
     AttackFlow.settle(rules,actors,hits,tick)
+    Ratman.contacts(self,hits)
     pending.clear()
     tick += 1
     fill_wave_slots()
@@ -542,7 +574,13 @@ func aim_leap(actor: Dictionary, move: Dictionary, allow_tree: bool = true) -> v
         actor.leap_to_height = int(move.transition_height)
         actor.dragon_raised = actor.action == "dragon_flight"
 
+func move_for(actor: Dictionary) -> Dictionary:
+    return Ratman.move(rules,actor) if actor.kind=="ratman" else Balok.move(rules,actor)
+
 func advance_leap(actor: Dictionary, move: Dictionary, progress: int) -> void:
+    if actor.kind=="balok" and not actor.get("balok",{}).get("flight",{}).is_empty():
+        Balok.advance(rules,actor,progress)
+        return
     var duration: int = move.active
     if actor.kind == "dragon":
         # The original calls this flight, but it raises/lowers the Dragon's neck
@@ -568,6 +606,7 @@ func collect_hits(attacker: Dictionary, move: Dictionary, elapsed: int = 0) -> A
     for id in ids:
         var target: Dictionary = actors[id]
         var execution: bool=target.health<=0 and Executions.can_hit(self,attacker,target)
+        if AttackFlow.hurt_protected(rules,target):continue
         if target.id == attacker.id or (target.health <= 0 and not execution) or target.team == attacker.team or id in attacker.hit_targets or target.hidden_by != 0:
             continue
         if abs(int(target.y) - int(attacker.y)) > int(move.get("depth_tolerance", rules.depth_tolerance)):
@@ -575,7 +614,9 @@ func collect_hits(attacker: Dictionary, move: Dictionary, elapsed: int = 0) -> A
         var geometry: Resource = rules.geometry.get(attacker.kind)
         var impact: Vector2 = hurt_box_for(target).get_center()
         if move.has("landing_radius"):
-            if elapsed < int(move.active) - int(move.landing_window) or abs(int(attacker.height)) > 20:
+            if attacker.kind=="balok":
+                if not Balok.can_contact(attacker):continue
+            elif elapsed < int(move.active) - int(move.landing_window) or abs(int(attacker.height)) > 20:
                 continue
             if abs(int(target.x) - int(attacker.x)) > int(move.landing_radius) or abs(int(target.height)) > 10:
                 continue
@@ -614,7 +655,7 @@ func collect_hits(attacker: Dictionary, move: Dictionary, elapsed: int = 0) -> A
     return hits
 
 func snapshot() -> Dictionary:
-    return {"schema": 22, "entry_state":entry_state.duplicate(true), "encounter_scaling_versions":EncounterScaling.manifest(rules), "attack_timing_versions":AttackFlow.manifest(rules), "content": String(rules.content_id), "behavior_versions":HoldBehaviors.manifest(rules), "mode": String(mode), "encounter": String(encounter), "encounter_settings": encounter_settings.duplicate(true), "rat_perch":rat_perch.duplicate(true), "beast_lane_toggle":beast_lane_toggle,"balok_finish_toggle":balok_finish_toggle,
+    return {"schema": 25, "knight_ai_versions":Knight.manifest(rules),"knight_random_state":knight_random_state, "ratman_versions":Ratman.manifest(rules),"ratman_wait_steps":ratman_wait_steps, "balok_versions":{rules.balok.profile_id:rules.balok.content_version}, "entry_state":entry_state.duplicate(true), "encounter_scaling_versions":EncounterScaling.manifest(rules), "attack_timing_versions":AttackFlow.manifest(rules), "content": String(rules.content_id), "behavior_versions":HoldBehaviors.manifest(rules), "mode": String(mode), "encounter": String(encounter), "encounter_settings": encounter_settings.duplicate(true), "rat_perch":rat_perch.duplicate(true), "beast_lane_toggle":beast_lane_toggle,"balok_finish_toggle":balok_finish_toggle,
             "tick": tick, "actors": actors.duplicate(true), "spawn_remaining": spawn_remaining,
             "next_creature_id": next_creature_id, "projectiles": projectiles.duplicate(true),
             "next_projectile_id": next_projectile_id}
@@ -822,7 +863,7 @@ func advance_projectiles() -> Array[Dictionary]:
             var geometry: Resource = rules.geometry.dragon
             for id in ids:
                 var target: Dictionary = actors[id]
-                if target.health <= 0 or target.team == projectile.team or id in projectile.hit_targets or target.hidden_by != 0: continue
+                if target.health <= 0 or target.team == projectile.team or id in projectile.hit_targets or target.hidden_by != 0 or AttackFlow.hurt_protected(rules,target): continue
                 if abs(target.y-projectile.y) > 5: continue
                 var box: Rect2 = hurt_box_for(target)
                 for contact in geometry.points_for("ground_fire", projectile.age, 144):
@@ -840,7 +881,7 @@ func advance_projectiles() -> Array[Dictionary]:
         var nearest_entry: int = 100000
         for id in ids:
             var target: Dictionary = actors[id]
-            if target.health <= 0 or target.team == projectile.team or target.hidden_by != 0:
+            if target.health <= 0 or target.team == projectile.team or target.hidden_by != 0 or AttackFlow.hurt_protected(rules,target):
                 continue
             if abs(int(target.y) - int(projectile.y)) > int(rules.depth_tolerance):
                 continue

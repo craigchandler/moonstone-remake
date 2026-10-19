@@ -1,5 +1,7 @@
 extends Resource
 
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
+
 @export var atlas: Texture2D
 @export var palette: Texture2D
 @export var music: AudioStream
@@ -37,5 +39,5 @@ func draw_text(view: CanvasItem,value: String,point: Vector2,centered: bool=true
     var x: float=point.x-text_width(value) if centered else point.x
     for ch in value:
         var g: Array=glyphs.get(ch,glyphs[" "])
-        view.draw_texture_rect_region(font_atlas,Rect2(x,point.y,g[2]*2,g[3]*2),Rect2(g[0],g[1],g[2],g[3]))
+        view.draw_texture_rect_region(font_atlas,Rect2(x,point.y,g[2]*2,g[3]*2),Images.source_rect(font_atlas,Rect2(g[0],g[1],g[2],g[3])))
         x+=(g[2]-2)*2

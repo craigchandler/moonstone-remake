@@ -57,6 +57,7 @@ func run_checks() -> void:
     check(view.practice_view!=null and view.practice_view.choices.size()==12,"P exposes all creatures with pictures")
     var choices: Array=view.practice_view.choices.duplicate()
     click(view.practice_view.row_rect(10).get_center())
+    press(KEY_ENTER)
     check(view.practice_view==null and view.arena!=null and view.arena.encounter==&"guardian_fight","pictured Guardian selection starts the actual encounter")
     view.arena.set_physics_process(false)
     press(KEY_F3)

@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="CombatRules" load_steps=11 format=3]
+[gd_resource type="Resource" script_class="CombatRules" load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/content/combat_rules.gd" id="1"]
 [ext_resource type="Resource" path="res://content/finish_rules.tres" id="2"]
 
 [ext_resource type="Resource" path="res://content/generated/death_frames.tres" id="3"]
 
-[ext_resource type="Resource" path="res://content/generated/hit_recovery.tres" id="4"]
+[ext_resource type="Resource" path="res://content/classic_hit_recovery.tres" id="4"]
 [ext_resource type="Resource" path="res://content/generated/knockback.tres" id="5"]
 [ext_resource type="Resource" path="res://content/generated/guardian.tres" id="6"]
 [ext_resource type="Resource" path="res://content/behaviors/ratman_ride.tres" id="7"]
@@ -15,7 +15,13 @@
 [ext_resource type="Resource" path="res://content/behaviors/classic_lair_scaling.tres" id="9"]
 [ext_resource type="Resource" path="res://content/generated/classic_beast_entry.tres" id="10"]
 
+[ext_resource type="Resource" path="res://content/behaviors/classic_balok.tres" id="11"]
+
+[ext_resource type="Resource" path="res://content/behaviors/classic_ratman.tres" id="12"]
+
 [resource]
+ratman = ExtResource("12")
+balok = ExtResource("11")
 entry_placement = ExtResource("10")
 encounter_scaling = ExtResource("9")
 attack_timing = ExtResource("8")
@@ -26,4 +32,4 @@ recovery = ExtResource("4")
 death_frames = ExtResource("3")
 finishes = ExtResource("2")
 hold_behaviors = {"classic:ratman.back_ride":ExtResource("7")}
-content_id = &"encounters.v27"
+content_id = &"encounters.v31"

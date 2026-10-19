@@ -1,5 +1,7 @@
 extends Node2D
 
+const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
+
 func _ready() -> void:
     add_to_group("moonstone_input_surfaces")
 
@@ -22,7 +24,7 @@ func draw_icon(id: String, target: Rect2) -> void:
         return
     var texture: Texture2D = art.icon_for(id)
     if texture == null: return
-    var size: Vector2 = texture.get_size() * 2
+    var size: Vector2 = Images.size(texture) * 2
     size *= minf(1.0, minf(target.size.x / size.x, target.size.y / size.y))
     draw_texture_rect(texture, Rect2(target.get_center() - size / 2, size), false)
 

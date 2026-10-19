@@ -72,6 +72,6 @@ func _initialize() -> void:
     check(fixture.verify(),"complete playable-command fixture")
     var snap: Dictionary=session.simulation.snapshot();anim.update(session.simulation.actors,rules,art)
     check(session.simulation.snapshot()==snap,"animation cannot mutate corrected hold")
-    check(snap.schema==22 and snap.content=="encounters.v27","new replay clock versions combat only")
+    check(snap.schema==25 and snap.content=="encounters.v31","new replay clock versions combat only")
     if failures==0:print("PASS: both-facing real tree route/contact, stable near/far perch, repeated full counter drawings/cadence, retained hold/tree, lethal elevated release, cue deduplication, idle drain/timeout, co-op rescue and render isolation")
     quit(1 if failures else 0)

@@ -33,19 +33,19 @@ func pixel_text(value: String, point: Vector2, centered: bool = false, colour: C
     var x: float = roundf(point.x - value.length()*5 if centered else point.x)
     for ch in value:
         var glyph: Array = art.glyphs.get(ch, art.glyphs[" "])
-        draw_texture_rect_region(art.pixel_font, Rect2(x,point.y,glyph[2]*2,glyph[3]*2), Rect2(glyph[0],glyph[1],glyph[2],glyph[3]),colour)
+        draw_texture_rect_region(art.pixel_font, Rect2(x,point.y,glyph[2]*2,glyph[3]*2), Images.source_rect(art.pixel_font,Rect2(glyph[0],glyph[1],glyph[2],glyph[3])),colour)
         x += 10
 
 func original_icon(id: String, point: Vector2) -> Rect2:
     var texture: Texture2D = art.icon_for(id)
     if texture == null: return Rect2()
-    var rect := Rect2(point*2,texture.get_size()*2)
+    var rect := Rect2(point*2,Images.size(texture)*2)
     draw_texture_rect(texture,rect,false)
     return rect
 
 func icon_region(id: String, point: Vector2) -> Rect2:
     var texture: Texture2D = art.icon_for(id)
-    return Rect2(point*2,texture.get_size()*2) if texture != null else Rect2()
+    return Rect2(point*2,Images.size(texture)*2) if texture != null else Rect2()
 
 func panel_columns(single: bool) -> Array[Rect2]:
     var result: Array[Rect2] = []
@@ -76,7 +76,7 @@ func draw_sheet(journey: RefCounted, shift: int, label: String="SIR KNIGHT", lif
     for index in range(knight.lives):
         var point:=Vector2(41+shift+index*19,59)
         if life_icon==null:original_icon("knight",point)
-        else:draw_texture_rect(life_icon,Rect2(point*2,life_icon.get_size()*2),false)
+        else:draw_texture_rect(life_icon,Rect2(point*2,Images.size(life_icon)*2),false)
     for index in range(knight.daggers): original_icon("dagger",Vector2(38+shift+index*10,78))
     original_icon(knight.effective_weapon(journey.inventory.items),Vector2(43+shift,95))
     original_icon(knight.armour,Vector2(29+shift,112))
@@ -126,17 +126,18 @@ func draw_pointer(selection: Vector2) -> void:
         draw_colored_polygon(PackedVector2Array([selection+Vector2(-12,-5),selection+Vector2(-12,5),selection+Vector2(-6,0)]),Color("ddc68c"))
     var controls: Node=get_node_or_null("/root/MoonstoneInput")
     if controls!=null and controls.using_controller and controls.pointer_active:return # Shared controller overlay owns the sword.
-    draw_texture_rect(art.sword_cursor,Rect2(cursor_position().round(),art.sword_cursor.get_size()*2),false)
+    draw_texture_rect(art.sword_cursor,Rect2(cursor_position().round(),Images.size(art.sword_cursor)*2),false)
 
 func draw_caption(value: String) -> void:
     pixel_text(value.to_upper(),Vector2(320,2),true)
 
-func draw_help(value: String) -> void:
+func draw_help(value: String, controller_help: String = "") -> void:
     if not help_visible: return
     var controls: Node=get_node_or_null("/root/MoonstoneInput")
     if controls!=null and controls.using_controller:
         value="CONTROLLER\nSTICK / D-PAD: MOVE OR SELECT\n"+controls.binding_name("accept")+": CHOOSE / USE / TAKE\n"+controls.binding_name("cancel")+": BACK / CLOSE\n"+controls.binding_name("inventory")+": INVENTORY\n"+controls.binding_name("previous_page")+" / "+controls.binding_name("next_page")+": PACK PAGES\n"+controls.binding_name("previous_tab")+" / "+controls.binding_name("next_tab")+": SHEETS\nREMAP IN OPTIONS / CONTROLLER"
         value+="\nRIGHT STICK: SWORD CURSOR / "+controls.binding_name("click")+": CLICK\nHOLD "+controls.binding_name("alternate")+" + PAGE: OWN PACK"
+    if controls!=null and controls.using_controller and not controller_help.is_empty(): value=controller_help
     var lines: Array[String]=[]
     for line in value.split("\n"):
         var current: String=""

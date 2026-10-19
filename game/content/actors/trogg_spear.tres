@@ -23,3 +23,5 @@ reaction_clips = {"swing": "hurt_b", "heavy": "hurt_a", "upward": "hurt_a", "dag
 defeat_clips = {"swing": "defeat_split", "lunge": "defeat_guts", "reverse": "defeat_guts"}
 defeat_ticks = 48
 defeat_durations = {"defeat_split": 60, "defeat_guts": 144}
+
+reset_cooldown_on_hit = true

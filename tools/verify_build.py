@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import shutil
 from build_support import ROOT, artifact_path, config, digest, isolated_env, run, workspace
+from verify_network import verify as verify_network
 
 
 def main():
@@ -35,6 +36,10 @@ def main():
     assert not controllers['failures'] and controllers['checks'] >= 787 and controllers['cursor_alignment_checks'] >= 14
     golden = json.loads((ROOT / 'game/tests/fixtures/combat_traces.json').read_text())
     assert controllers['session_traces'] == golden['session_traces'], 'Combat trace changed'
+    layers = probe('layered-graphics', ['--debug', '--layered-graphics-probe'], 'LAYERED_GRAPHICS_STATE=')
+    assert not layers['failures'] and layers['families'] == 37 and layers['layer_draws'] > 0 and layers['other_regions'] == 0
+    practice = probe('practice', ['--debug', '--practice-probe'], 'PRACTICE_STATE=')
+    assert not practice['failures'] and practice['checks'] >= 570 and len(practice['replays']) == 12 and practice['file_isolation'] == 'PASS'
     party = probe('party', ['--debug', '--local-players-probe'], 'LOCAL_PLAYERS_STATE=')
     assert not party['failures'] and party['checks'] >= 136
     guard = probe('debug-guard', ['--debug', '--debug-mode-probe'], 'DEBUG_MODE_STATE=')
@@ -64,15 +69,18 @@ def main():
     probe('protected-debug-continue', ['--debug', '--continue-smoke', '--save-path=' + str(saved)])
     guard_existing = probe('protected-debug-guard', ['--debug', '--debug-mode-probe', '--save-path=' + str(saved)], 'DEBUG_MODE_STATE=')
     assert not guard_existing['failures']
+    practice_existing = probe('protected-practice', ['--debug', '--practice-probe', '--save-path=' + str(saved)], 'PRACTICE_STATE=')
+    assert not practice_existing['failures'] and practice_existing['replays'] == practice['replays']
     assert {str(p): digest(p) for p in protected} == before
     standalone = directory / 'standalone'
     standalone.mkdir()
     executable = standalone / binary.name
     shutil.copy2(binary, executable)
     probe('standalone', ['--smoke'], executable=executable, case_env=isolated_env(standalone), cwd=standalone)
+    network = verify_network(binary, directory / 'network')
     report = {'result': 'PASS', 'stem': settings['stem'], 'build_manifest_sha256': digest(manifest_path),
               'source_suites': manifest['source_suites'], 'normal_launch': normal,
-              'linux_release': {'controllers': controllers, 'party': party['checks'], 'debug_guards': guard['checks'],
+              'linux_release': {'controllers': controllers, 'layered_graphics': layers, 'practice': practice, 'network_duels': network, 'party': party['checks'], 'debug_guards': guard['checks'],
                                 'continuations': continuations, 'existing_debug_files_unchanged': len(protected), 'standalone': 'PASS'},
               'logs': str(directory.relative_to(ROOT)),
               'limits': {'Linux_graphical_playtest': 'NOT_RUN', 'physical_controllers': 'NOT_RUN: injected input only',

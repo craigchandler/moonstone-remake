@@ -20,11 +20,13 @@ not needed during play.
 - World travel, lairs, loot, equipment, experience, stat upgrades, towns and
   quest progression.
 - Four knight identities, computer rivals, local human turns and human duels.
+- Standalone practice against every native creature and knight opponent.
+- Direct two-player network practice duels with host/join, readiness and rematches.
 - Keyboard, mouse and configurable controller input; campaign save/continue.
 - Native opening, menus, location scenes and ending sequences.
 
-Internet multiplayer, human cooperative encounters, a public mod API and HD/3D
-renderers are future work. Some timings, movement and presentation remain native
+Campaign networking, internet matchmaking/relay, human cooperative encounters,
+a public mod API and HD/3D renderers are future work. Some timings, movement and presentation remain native
 adaptations. Automated checks do not establish complete original-game parity.
 
 ## Build and run

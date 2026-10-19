@@ -39,6 +39,8 @@ tools/*
 !tools/build.py
 !tools/build.sh
 !tools/build_support.py
+!tools/network_fingerprint.py
+!tools/verify_network.py
 !tools/check_public_tree.py
 !tools/godot_notices.gd
 !tools/import_assets.sh

@@ -1,13 +1,16 @@
 class_name CombatRules
 extends Resource
 
-@export var content_id: StringName = &"encounters.v27"
+@export var content_id: StringName = &"encounters.v31"
+@export var knight_ai: Resource = preload("res://content/behaviors/classic_knight.tres")
+@export var ratman: Resource = preload("res://content/behaviors/classic_ratman.tres")
+@export var balok: Resource = preload("res://content/behaviors/classic_balok.tres")
 @export var entry_placement: Resource = preload("res://content/generated/classic_beast_entry.tres")
 @export var encounter_scaling: Resource = preload("res://content/behaviors/classic_lair_scaling.tres")
 @export var attack_timing: Resource = preload("res://content/classic_attack_timing.tres")
 @export var guardian: Resource = preload("res://content/generated/guardian.tres")
 @export var knockback: Resource = preload("res://content/generated/knockback.tres")
-@export var recovery: Resource = preload("res://content/generated/hit_recovery.tres")
+@export var recovery: Resource = preload("res://content/classic_hit_recovery.tres")
 @export var death_frames: Resource = preload("res://content/generated/death_frames.tres")
 @export var finishes: Resource = preload("res://content/finish_rules.tres")
 @export var hold_behaviors: Dictionary = {
@@ -85,6 +88,7 @@ extends Resource
     # are native and remain provisional until an input-matched Amiga comparison.
     "rat_strike": {"windup": 12, "active": 12, "recovery": 18, "range": 42, "damage": 1, "unblockable": true, "depth_tolerance": 5},
     "rat_bite": {"windup": 6, "active": 18, "recovery": 0, "range": 50, "damage": 3, "unblockable": true, "depth_tolerance": 5},
+    # Recovery is the tree-perch wait; the Ratman policy gives floor landings0.
     "rat_leap": {"windup": 12, "active": 84, "recovery": 180, "range": 270, "damage": 0, "unblockable": true, "leap_range": 270, "leap_peak": 65, "depth_tolerance": 5, "grab_ticks": 84, "hold_kind": "ride"},
     "rat_retreat": {"windup": 0, "active": 102, "recovery": 0, "range": 0, "damage": 0, "leap_range": 150, "leap_peak": 120, "no_contact": true},
     "mud_reach": {"windup": 12, "active": 18, "recovery": 12, "range": 100, "damage": 2, "unblockable": true, "depth_tolerance": 5, "grab_ticks": 65},

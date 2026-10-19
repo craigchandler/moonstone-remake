@@ -27,6 +27,18 @@ need no original disk images, original executables, upstream checkout or old
 review artifacts. Modern concept images alone cannot replace the required
 classic packs yet.
 
+The native set now includes `content/generated/classic_layered_art.tres` and
+`assets/classic/layered/`. To convert an older provisioned set, install the image
+dependencies from `requirements-import.txt`, then run:
+
+```bash
+python3 tools/import_classic_layers.py
+```
+
+This conversion needs native sprites and class variants, not disk images or
+original executable data. It preserves its inputs and reports exhaustive pixel
+comparisons in the local layered pack's `provenance.json`.
+
 ## Commands
 
 Without game assets:
@@ -64,7 +76,7 @@ see the import guide for its additional tools and licences.
 
 ## Evidence
 
-The baseline has 66 Godot suites and dependency-free Python tool tests. The
+The classic gameplay build has 81 Godot suites and dependency-free Python tool tests. The
 repeatable exported Linux acceptance covers input/debug guards, save/backup
 continuation, local-party flow, standalone startup and retained combat traces.
 Source checks, headless exported execution, graphical Linux playtests, physical
@@ -84,7 +96,39 @@ engine argument separator; packaged launchers add that separator themselves:
 Debug sessions do not create/replace progress, backups, temporary saves or
 preferences. Their checkpoints remain process-local. An editor/debug executable
 alone does not enable the shortcuts. Diagnostic fixtures are explicit developer
-entry points, not advertised normal game controls.
+entry points, not advertised normal game controls. The guarded `--recovery-roster`
+diagnostic checks held basic slashes against all eleven original monsters at
+five distances in both facings, with deterministic replay and layer isolation.
+It is a bounded combat check, not proof of original-game balance parity.
+The guarded `--ratman-ground-batch` fixture separately covers an idle knight
+after an evaded tree-to-ground flight, both facings, the retained perch wait
+and prompt melee resumption. Source regressions also check the original caster
+decisions and shared successful-hit pause.
+
+The guarded `--practice-probe` exercises the normal title-to-practice UI,
+all twelve fights, knight colours, keyboard/mouse/controller selections,
+deterministic retries, result handling and solo/party campaign isolation.
+Linux exported acceptance repeats it with absent and protected existing save
+files. Injected input checks do not establish physical controller coverage.
+
+Network suites separately cover authority, input delay/expiry, native death
+states, validated replicas, actual ENet peers and normal classic UI flow. Exported
+Linux acceptance launches two independent players for two real combat rounds and
+a rematch, then checks graceful leave and abrupt loss of either host or client.
+A loopback UDP proxy adds40-48ms each way and drops every257th datagram. These
+are same-machine network checks, not two-machine LAN or internet validation.
+Use `tools/verify_network.py --binary <player>` to repeat them. The guarded
+`--network-role` diagnostic drives ordinary UI/inputs and never writes progress.
+Graphical captures require a display and remain separate from headless checks.
+
+Additional real-socket regressions cover cancellation/retry, an unavailable host,
+a silent handshake, a stalled ready screen, protocol/build rejection and malformed
+headers. The optional `--profile stress` proxy adds100-140ms each way, drops every
+17th datagram and interrupts traffic for0.8 seconds after six seconds. Use
+`--rounds 6` with a current source build (or `--editor` and a Godot editor binary)
+for a longer sequence of alternating wins and agreed rematches. Defaults retain
+the shorter standard build acceptance. These simulated faults do not establish
+internet suitability or replace separate-computer playtesting.
 
 ## Repository hygiene
 
@@ -92,3 +136,9 @@ Public documentation and active build/import tools are selected by `.gitignore`.
 Historical research, local continuation notes and blog material remain outside
 the committed tree. Run `tools/check_public_tree.py` on the staged index before
 committing; use `--ref HEAD --history` before preparing public publication.
+
+The guarded `--knight-rhythm-batch` diagnostic compares seeded Black Knight
+fights and complete player recovery in both facings. Its source suite also
+checks numeric expectations from independent execution of the owned original
+knight decision routine. The original binary, disassembler and research stay
+local; runtime uses only native policies and numeric definitions.

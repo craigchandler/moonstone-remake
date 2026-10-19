@@ -151,3 +151,6 @@ PYMONSTER
 then
   python3 "$task_root/tools/import_monster_timing.py"
 fi
+if ! python3 "$task_root/tools/import_classic_layers.py" --check; then
+  python3 "$task_root/tools/import_classic_layers.py"
+fi

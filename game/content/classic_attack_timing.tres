@@ -2,11 +2,11 @@
 [ext_resource type="Script" path="res://scripts/content/attack_timing.gd" id="1"]
 [resource]
 script = ExtResource("1")
-content_version = 2
+content_version = 5
 moves = {
 "axe_swing":{"kinds":["trogg_axe"],"cancel_windup":false,"recovery_lock":5,"contact_hold":5,"contact_return":5},
 "axe_chop":{"kinds":["trogg_axe"],"cancel_windup":false,"recovery_lock":10,"contact_hold":5,"contact_return":5},
-"swing":{"kinds":["knight","black_knight"],"cancel_windup":true,"recovery_lock":5,"contact_hold":5,"contact_return":5},
+"swing":{"kinds":["knight","black_knight"],"cancel_windup":true,"recovery_lock":5,"contact_impact":5,"contact_hold":5,"contact_return":10},
 "heavy":{"kinds":["knight","black_knight"],"cancel_windup":false,"recovery_lock":10,"contact_hold":5,"contact_return":5},
 "reverse":{"kinds":["knight","black_knight"],"cancel_windup":true,"recovery_lock":5,"contact_hold":5,"contact_return":5},
 "lunge":{"kinds":["knight","black_knight"],"cancel_windup":false,"recovery_lock":10,"contact_hold":5,"contact_return":5},
@@ -14,3 +14,5 @@ moves = {
 "spear_thrust":{"kinds":["trogg_spear"],"cancel_windup":false,"recovery_lock":5,"contact_hold":5,"contact_return":1}
 }
 reactions = {"dagger":{"kinds":["knight","black_knight"],"clip":"hurt_b","ticks":30}}
+
+untargetable_reactions = {"knight":["hurt_a","hurt_b"],"mudman":["hurt_a","hurt_b"],"war_beast":["hurt_a","hurt_b"],"black_knight":["hurt_a","hurt_b"],"balok":["hurt_a"],"trogg_spear":["hurt_a","hurt_b","hurt_c"],"trogg_axe":["hurt_a","hurt_b","hurt_c"],"trogg_hammer":["hurt_a","hurt_b","hurt_c"],"ratman":["hurt_a","hurt_b","hurt_heavy"],"guardian":["hurt_a","hurt_b"],"dragon":["hurt_a","hurt_b"]}

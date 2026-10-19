@@ -24,6 +24,7 @@ def main():
     if not args.skip_import:
         print('Checking one-time native asset imports.', flush=True)
         run(['bash', ROOT / 'tools/import_assets.sh'], directory / 'asset-import.log', env=env, timeout=600)
+    run([sys.executable, ROOT / 'tools/network_fingerprint.py'], directory / 'network-fingerprint.log', env=env)
     print('Importing native resources with Godot ' + version, flush=True)
     run([editor, '--headless', '--editor', '--path', ROOT / 'game', '--import'], directory / 'import.log', env=env, timeout=180, allow_editor_socket_errors=True)
     suites = {}
