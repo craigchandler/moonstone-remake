@@ -1,6 +1,6 @@
 {
-  "artifact_id": "network-duel",
-  "stem": "Moonstone-Network-Duel",
+  "artifact_id": "network-campaign",
+  "stem": "Moonstone-Network-Campaign",
   "engine_version": "4.6.1",
   "guide": "docs/player-guide.md",
   "platforms": {

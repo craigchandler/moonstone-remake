@@ -62,7 +62,7 @@ func run_checks(parent: Node, path: String) -> Dictionary:
         host.save_store=Store.new(path,host.journey.validate_checkpoint,false)
         host.journey.store=host.save_store
         host.show_menu(saved)
-        check(host.menu_view.rows().has("practice") and host.menu_view.rows().size()==6,"normal title exposes practice beside Continue")
+        check(host.menu_view.rows().has("practice") and host.menu_view.rows().size()==7,"normal title exposes practice beside Continue")
         check(host.menu_view.button_rect(5).end.y<=376,"all six title rows fit above footer")
         press(KEY_P)
         check(host.practice_view!=null and not host.menu_view.visible and host.practice!=null,"normal title P opens classic practice")

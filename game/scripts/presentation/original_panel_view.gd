@@ -1,6 +1,6 @@
 extends "res://scripts/presentation/classic_panel_view.gd"
 
-const MOONSTONES=preload("res://content/generated/moonstone_quest.tres")
+const MOONSTONES=preload("res://content/packs/classic/campaign/moonstone_quest.tres")
 
 # Logical source coordinates are doubled once, keeping art and hit regions aligned.
 const GROUPS = {

@@ -83,6 +83,8 @@ var inventory_view: Node2D
 var inventory_attack_context: bool = false
 var practice_view: Node2D
 var practice: RefCounted
+var campaign_lobby: Node2D
+var campaign_view: Node2D
 var network_lobby: Node2D
 var equipment_demo: bool = false
 var loot_view: Node2D
@@ -996,6 +998,7 @@ func menu_choice(action: String) -> void:
     if action=="intro":show_intro();return
     if action=="new":show_selection();return
     if action=="practice":open_practice();return
+    if action=="network":open_campaign_network();return
     if action == "exit":
         get_tree().quit()
         return
@@ -1094,3 +1097,34 @@ func demo_win() -> void:
 
 func advance_campaign_demo() -> void:
     _debug().advance_campaign_demo()
+
+
+func open_campaign_network() -> void:
+    if menu_view==null or campaign_lobby!=null:return
+    menu_view.hide();menu_view.set_process_unhandled_key_input(false);menu_view.set_process_unhandled_input(false)
+    campaign_lobby=preload("res://scripts/presentation/campaign_menu.gd").new()
+    campaign_lobby.finished.connect(close_campaign_network)
+    campaign_lobby.connected.connect(show_campaign_network)
+    add_child(campaign_lobby)
+    get_node("/root/MoonstoneInput").block_held()
+
+func show_campaign_network() -> void:
+    if campaign_lobby==null or campaign_view!=null:return
+    campaign_lobby.hide();campaign_lobby.set_process(false);campaign_lobby.set_process_unhandled_key_input(false);campaign_lobby.set_process_unhandled_input(false)
+    campaign_view=load("res://scripts/presentation/campaign_world_view.gd").new()
+    campaign_view.connection=campaign_lobby.connection
+    campaign_view.finished.connect(close_campaign_network)
+    add_child(campaign_view)
+    var audio: Node=get_node_or_null("/root/MoonstoneAudio")
+    if audio!=null:audio.stop_music()
+    get_node("/root/MoonstoneInput").block_held()
+
+func close_campaign_network() -> void:
+    if campaign_lobby==null:return
+    campaign_lobby.connection.close()
+    if campaign_view!=null:
+        campaign_view.set_process(false);campaign_view.set_physics_process(false);campaign_view.set_process_unhandled_input(false);campaign_view.set_process_unhandled_key_input(false)
+        remove_child(campaign_view);campaign_view.queue_free();campaign_view=null
+    campaign_lobby.set_process(false);remove_child(campaign_lobby);campaign_lobby.queue_free();campaign_lobby=null
+    menu_view.show();menu_view.set_process_unhandled_key_input(true);menu_view.set_process_unhandled_input(true)
+    get_node("/root/MoonstoneInput").block_held()

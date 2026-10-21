@@ -76,12 +76,23 @@ see the import guide for its additional tools and licences.
 
 ## Evidence
 
-The classic gameplay build has 81 Godot suites and dependency-free Python tool tests. The
-repeatable exported Linux acceptance covers input/debug guards, save/backup
+The latest local validation (2026-10-21) passed **86 Godot suites and 37 Python
+tool tests**. Exported Linux checks cover input/debug guards, save/backup
 continuation, local-party flow, standalone startup and retained combat traces.
-Source checks, headless exported execution, graphical Linux playtests, physical
-controllers, Windows runtime and matched original-game comparisons are distinct
-results. State exactly which ran; passing one does not prove the others.
+
+Both campaign hosting paths have also passed with two independent exported game
+clients on local UDP: in-game host and standalone server. Scripted graphical
+Linux checks exercised towns, computer turns, monster combat, personal inventory,
+pause/reconnect and turn handoff; the standalone run injected 40–48 ms each-way
+delay and packet loss into both client connections. Separately, four asset-free
+campaign clients verified the exported server and saved-room process restart.
+The complete asset-free server release build passed from an audited source copy.
+
+Windows packages are exported, but Windows execution, separate-machine campaign
+LAN, Internet hosting, physical controllers, manual full-campaign playthroughs,
+running-original comparisons and the hosted GitHub release workflow remain
+unverified. Source checks, exported headless execution, scripted graphical
+checks and human playtesting are different evidence; report which ran.
 
 ## Diagnostics
 
@@ -93,8 +104,10 @@ engine argument separator; packaged launchers add that separator themselves:
 ./Moonstone-<build>-linux.x86_64 -- --debug
 ```
 
-Debug sessions do not create/replace progress, backups, temporary saves or
-preferences. Their checkpoints remain process-local. An editor/debug executable
+Solo/local debug sessions do not create/replace their normal progress, backups,
+temporary saves or preferences. Their checkpoints remain process-local. Network
+client profile persistence/resume is disabled in debug mode; campaign network
+fixtures use isolated user-data directories under `work/`. An editor/debug executable
 alone does not enable the shortcuts. Diagnostic fixtures are explicit developer
 entry points, not advertised normal game controls. The guarded `--recovery-roster`
 diagnostic checks held basic slashes against all eleven original monsters at
@@ -115,7 +128,7 @@ Network suites separately cover authority, input delay/expiry, native death
 states, validated replicas, actual ENet peers and normal classic UI flow. Exported
 Linux acceptance launches two independent players for two real combat rounds and
 a rematch, then checks graceful leave and abrupt loss of either host or client.
-A loopback UDP proxy adds40-48ms each way and drops every257th datagram. These
+A loopback UDP proxy adds 40–48 ms each way and drops every 257th datagram. These
 are same-machine network checks, not two-machine LAN or internet validation.
 Use `tools/verify_network.py --binary <player>` to repeat them. The guarded
 `--network-role` diagnostic drives ordinary UI/inputs and never writes progress.
@@ -123,12 +136,34 @@ Graphical captures require a display and remain separate from headless checks.
 
 Additional real-socket regressions cover cancellation/retry, an unavailable host,
 a silent handshake, a stalled ready screen, protocol/build rejection and malformed
-headers. The optional `--profile stress` proxy adds100-140ms each way, drops every
-17th datagram and interrupts traffic for0.8 seconds after six seconds. Use
+headers. The optional `--profile stress` proxy adds 100–140 ms each way, drops every
+17th datagram and interrupts traffic for 0.8 seconds after six seconds. Use
 `--rounds 6` with a current source build (or `--editor` and a Godot editor binary)
 for a longer sequence of alternating wins and agreed rematches. Defaults retain
 the shorter standard build acceptance. These simulated faults do not establish
 internet suitability or replace separate-computer playtesting.
+
+Campaign source suites cover 1–4 humans, classic turns, all creature snapshots,
+human duels, per-seat commands, duplicate loot, hidden rewards/RNG, rendering
+isolation, separate inventory, town/wizard panels, private room history and
+corrupt-save recovery. `tools/verify_campaign.py <player> --server <server>`
+launches two independent game clients against a standalone host. Omit `--server`
+to exercise embedded hosting. `--graphical` captures GPU-rendered screens;
+`--fault` adds 40–48 ms each-way delay and deterministic datagram loss to both
+standalone clients, or to the joining client with an embedded host.
+
+Repeat campaign checks after building the game and, for the second command,
+the standalone server:
+
+```bash
+python3 tools/verify_campaign.py outputs/Moonstone-Network-Campaign-linux.x86_64
+python3 tools/verify_campaign.py outputs/Moonstone-Network-Campaign-linux.x86_64 --server outputs/Moonstone-Duel-Server-linux.x86_64 --graphical --fault
+```
+
+`--graphical` requires a working X11 display. The guarded `--campaign-role`
+fixture drives ordinary menus, client requests and injected controls through
+map travel, a town purchase, computer turns, monster combat, spectator inventory,
+pause/reconnect and turn handoff. There are no diagnostic commands on the server.
 
 ## Repository hygiene
 
@@ -142,3 +177,56 @@ fights and complete player recovery in both facings. Its source suite also
 checks numeric expectations from independent execution of the owned original
 knight decision routine. The original binary, disassembler and research stay
 local; runtime uses only native policies and numeric definitions.
+
+## Standalone server
+
+The [server setup guide](server-guide.md#build-the-server-from-source) gives a
+complete source-only build with pinned toolchain installation. It does not need
+a game client or original assets. For extra checks against real game clients,
+build the game normally, then use:
+
+```bash
+python3 tools/verify_server.py --server outputs/Moonstone-Duel-Server-linux.x86_64 --client outputs/Moonstone-Network-Campaign-linux.x86_64 --output work/server-acceptance
+```
+
+This command checks practice duels. Use `tools/verify_campaign.py` as above for
+graphical campaign clients; the asset-free release procedure checks both modes.
+
+The server builder stages the shared dependency closure into a fresh project
+under `work/server-build-*`, retaining the exact compatibility manifest. It
+copies code and numeric rules only, with no artwork, audio, client autoloads or
+shared writable cache. Dedicated exports and matching engine notices are local.
+See [Godot's dedicated-server export documentation](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_dedicated_servers.html).
+
+Three-process Linux acceptance checks two ordinary clients, real combat wins
+in both directions, agreed rematches, sequential reuse of the same server,
+100–140ms each-way delay/loss/interruption, client loss and server loss. Both
+clients' terminal hashes must match the server. CLI checks cover help, invalid
+arguments, display-free startup and Ctrl+C. Graphical captures, separate-computer
+LAN play, physical controllers and Windows execution remain distinct evidence.
+The earlier user-reported LAN duel test applies to the prior in-game host build;
+this refactor needs a fresh real-LAN playtest. See the [server guide](server-guide.md).
+
+
+## Asset-free server release checks
+
+The [classic combat pack](gameplay-packs.md) supplies the source numeric rules,
+so a clean checkout can build the dedicated host without importing original
+assets. With Godot 4.6.1 and matching templates configured using the
+[server build steps](server-guide.md#build-the-server-from-source), run:
+
+```bash
+python3 tools/server_release.py --tag server-v0.1.0
+```
+
+The tag must match `game/server/version.json`. This command creates local
+versioned server ZIPs and checksums; it does not publish. It runs the shared
+network/host suites in an isolated minimal project, exercises the real Linux
+server with two art-free duel clients, checks real hits and rematches,
+compares terminal snapshots with server logs, and verifies fresh room reuse.
+It also runs four campaign clients through classic turns, map agreement, personal
+inventory, pause/reserved-seat reconnect and process restart from a saved room.
+These clients do not run the game's presentation or player-input adapters.
+Full game export acceptance, graphical playtesting, Windows execution and
+separate-machine LAN validation remain separate. See [server releases](server-guide.md#server-releases)
+for the tag-triggered GitHub workflow and the independent version stream.

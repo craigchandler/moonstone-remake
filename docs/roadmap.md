@@ -1,8 +1,8 @@
 # Roadmap
 
-The baseline is a playable native classic-style reconstruction, still requiring
-fidelity and platform playtesting. Planned capabilities below are not claims of
-implemented features.
+The game is a playable native classic-style reconstruction, still requiring
+fidelity and platform playtesting. Current capabilities and future work are
+set out below.
 
 ## Current graphics foundation
 
@@ -20,19 +20,38 @@ provenance and their own publication decision.
 ## Network practice
 
 Practice supports direct host/join knight duels, shared readiness and agreed
-rematches. Host-only combat authority and detached client state preserve the
-classic rules. Two-process loopback/fault tests are distinct from real LAN,
+rematches, plus an optional standalone command-line host for two game clients.
+The same independent host core runs inside the game. Host-only combat authority
+and detached client state preserve the classic rules. Two-process loopback/fault tests are distinct from real LAN,
 internet, Windows and manual playtesting.
+
+## Classic network campaign
+
+Classic sequential campaigns support up to four humans, with computer knights
+in the other seats. Both standalone and embedded game hosting use the same
+campaign authority. Waiting players watch the active turn and may browse their
+own inventory. Disconnect pauses play and reserves the missing player's knight.
+All humans agree before resuming. Separate host saves preserve normal solo/local
+progress. Live battle reconnect and safe recovery after a host restart are
+different contracts; see [the architecture](architecture.md#network-campaign).
+
+Further validation includes sustained human playthroughs, separate-machine LAN,
+Internet conditions and Windows execution. Scripted local UDP/fault checks do
+not establish those results or complete original-game parity.
+
+A simultaneous campaign follows as a separate mode with explicit encounter,
+location-conflict and calendar policies. Optional invites/voice, Internet
+connection services and multiple server rooms can be added around the same core.
 
 ## Subsequent work
 
-- Resolve concrete playtest defects and verify graphical Linux/real Windows
-  behavior, controllers and remaining original-game differences.
+- Resolve concrete playtest defects and extend manual Linux playthroughs, real
+  Windows execution, controller checks and original-game comparisons.
 - Extend the enhanced art pipeline after a small playable comparison succeeds.
 - Expand bounded script/content interfaces with versioning and save migration;
   then design a public mod API/loader with explicit trust boundaries.
-- Validate network practice on separate machines/platforms before adding
-  campaign/cooperative networking or internet services, preserving stable
+- Validate network practice and campaigns on separate machines/platforms before
+  cooperative networking or internet services, preserving stable
   identities, determinism and content fingerprints.
 
 Sequence and scope may change with testing. New rendering should not force a

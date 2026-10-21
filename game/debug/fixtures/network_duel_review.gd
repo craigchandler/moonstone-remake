@@ -9,6 +9,7 @@ var failures: Array[String]=[]
 var captures: String=""
 var captured: Dictionary={}
 var traced: String=""
+var seat_reported: bool=false
 
 func check(ok: bool,label: String) -> void:
     checks+=1
@@ -28,18 +29,20 @@ func capture(label: String) -> void:
     if captures.is_empty() or captured.has(label) or DisplayServer.get_name()=="headless":return
     captured[label]=true;DirAccess.make_dir_recursive_absolute(captures)
     await world.get_tree().process_frame
-    await RenderingServer.frame_post_draw
+    # A covered/minimised test window may not emit frame_post_draw. Render the
+    # current presentation explicitly; this does not advance combat.
+    RenderingServer.force_draw()
     check(world.get_viewport().get_texture().get_image().save_png(captures+"/"+label+".png")==OK,"capture "+label)
 
 func write_report(path: String, role: String, phase: String, rounds: Dictionary, saved: Dictionary, protected: Dictionary) -> void:
     check(world.journey.checkpoint()==saved,"network mode preserves campaign checkpoint")
     check(files()==protected,"network mode preserves existing/absent save and preference files")
-    var result: Dictionary={"role":role,"phase":phase,"checks":checks,"failures":failures,"rounds":rounds,"notice":link.notice,"state":link.state,"captures":captured.keys()}
+    var result: Dictionary={"role":role,"local_actor":link.local_actor,"hosting":link.authority,"authoritative":link.session.authoritative,"phase":phase,"checks":checks,"failures":failures,"rounds":rounds,"notice":link.notice,"state":link.state,"captures":captured.keys()}
     var file: FileAccess=FileAccess.open(path,FileAccess.WRITE)
     file.store_string(JSON.stringify(result,"  ")+"\n");file.close()
 
 func report(parent: Node) -> void:
-    var role: String="host";var port: int=27866;var address: String="127.0.0.1";var output: String="";var drop: String="guest";var graceful: bool=false;var target_rounds: int=2
+    var role: String="host";var port: int=27866;var address: String="127.0.0.1";var output: String="";var drop: String="guest";var graceful: bool=false;var target_rounds: int=2;var dedicated: bool=false
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--network-role="):role=argument.trim_prefix("--network-role=")
         elif argument.begins_with("--network-port="):port=int(argument.trim_prefix("--network-port="))
@@ -49,6 +52,7 @@ func report(parent: Node) -> void:
         elif argument.begins_with("--network-capture="):captures=argument.trim_prefix("--network-capture=")
         elif argument.begins_with("--network-rounds="):target_rounds=clampi(int(argument.trim_prefix("--network-rounds=")),2,12)
         elif argument=="--network-graceful":graceful=true
+        elif argument=="--network-dedicated":dedicated=true
     if role not in ["host","guest"] or output.is_empty():push_error("Network probe requires role/result");parent.get_tree().quit(1);return
     var protected: Dictionary=files()
     world=load("res://scenes/main.tscn").instantiate();world.debug_mode=false;world.parse_launch_arguments=false;world.saving_enabled=false
@@ -63,7 +67,7 @@ func report(parent: Node) -> void:
     var lobby: Node=world.network_lobby
     lobby.knight_kind=0 if role=="host" else 3;lobby.port_text=str(port);lobby.address=address
     await capture("lobby-idle")
-    lobby.activate("host" if role=="host" else "join");link=lobby.connection
+    lobby.activate("host" if role=="host" and not dedicated else "join");link=lobby.connection
     await capture("lobby-connecting")
     var controls: Node=parent.get_node("/root/MoonstoneInput")
     var rounds: Dictionary={};var drop_written: bool=false
@@ -71,6 +75,8 @@ func report(parent: Node) -> void:
     while Time.get_ticks_msec()<deadline:
         await parent.get_tree().physics_frame
         controls.focused=true;controls.refresh_context();controls.blocked.clear();controls.buttons.clear()
+        if link.state=="seated" and not seat_reported:
+            seat_reported=true;write_report(output,role,"seated",rounds,saved,protected);print("NETWORK_SEATED ",role," actor=",link.local_actor)
         if link.state=="waiting":
             await capture("lobby-ready");link.ready()
         elif link.state=="playing" and world.arena!=null:
@@ -120,8 +126,9 @@ func report(parent: Node) -> void:
         elif link.state=="closed":
             check(rounds.size()==target_rounds,"requested real combat rounds and rematches completed")
             await capture("disconnected")
-            press(KEY_ENTER)
-            check(world.arena==null and world.network_lobby==null and world.practice_view.visible,"disconnect confirmation returns to practice")
+            print("NETWORK_DISCONNECT ",role," notice=",link.notice)
+            press(KEY_ENTER if world.arena!=null else KEY_ESCAPE)
+            check(world.arena==null and world.network_lobby==null and world.practice_view!=null and world.practice_view.visible,"disconnect confirmation returns to practice")
             write_report(output,role,"complete",rounds,saved,protected)
             print("PASS: network role ",role," disconnect and ",checks," checks")
             link.close();world.queue_free();await parent.get_tree().process_frame

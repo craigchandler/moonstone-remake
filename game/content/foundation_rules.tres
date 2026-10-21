@@ -3,17 +3,17 @@
 [ext_resource type="Script" path="res://scripts/content/combat_rules.gd" id="1"]
 [ext_resource type="Resource" path="res://content/finish_rules.tres" id="2"]
 
-[ext_resource type="Resource" path="res://content/generated/death_frames.tres" id="3"]
+[ext_resource type="Resource" path="res://content/packs/classic/tables/death_frames.tres" id="3"]
 
 [ext_resource type="Resource" path="res://content/classic_hit_recovery.tres" id="4"]
-[ext_resource type="Resource" path="res://content/generated/knockback.tres" id="5"]
-[ext_resource type="Resource" path="res://content/generated/guardian.tres" id="6"]
+[ext_resource type="Resource" path="res://content/packs/classic/tables/knockback.tres" id="5"]
+[ext_resource type="Resource" path="res://content/packs/classic/tables/guardian.tres" id="6"]
 [ext_resource type="Resource" path="res://content/behaviors/ratman_ride.tres" id="7"]
 
 [ext_resource type="Resource" path="res://content/classic_attack_timing.tres" id="8"]
 
 [ext_resource type="Resource" path="res://content/behaviors/classic_lair_scaling.tres" id="9"]
-[ext_resource type="Resource" path="res://content/generated/classic_beast_entry.tres" id="10"]
+[ext_resource type="Resource" path="res://content/packs/classic/tables/classic_beast_entry.tres" id="10"]
 
 [ext_resource type="Resource" path="res://content/behaviors/classic_balok.tres" id="11"]
 

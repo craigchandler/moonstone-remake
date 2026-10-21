@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/guardian_rules.gd" id="1"]
+[resource]
+script = ExtResource("1")
+clocks = {
+    "windup": 30,
+    "miss_close": 6,
+    "grab_close": 12,
+    "release_close": 18,
+    "miss_far": 6,
+    "grab_far": 6,
+    "release_far": 18,
+    "crush": 96
+}
+crush_damage_tick = 12
+crush_release_tick = 90
+crush_damage = 10
+close_min = 120
+close_max = 140
+far_min = 130
+far_max = 150
+release_offset = 137

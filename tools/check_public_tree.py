@@ -7,8 +7,8 @@ import subprocess
 import struct
 import zlib
 
-PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md screenshots.md upstream-sources.json'.split())
-PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py network_fingerprint.py verify_network.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py verify_build.py'.split())
+PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md screenshots.md server-guide.md gameplay-packs.md upstream-sources.json'.split())
+PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py build_server.py server_version.py verify_server_release.py server_release.py install_server_toolchain.py server-toolchain.json network_fingerprint.py campaign_fingerprint.py verify_campaign.py verify_network.py verify_server.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py verify_build.py'.split())
 PUBLIC_SCREENSHOTS = frozenset('docs/screenshots/' + name + '.png' for name in
     'intro main-menu practice-menu world-map battle town-highwood town-waterdeep town-tavern'.split())
 PUBLIC_ROOT = frozenset('.gitattributes .gitignore AGENTS.md CONTRIBUTING.md LICENSE README.md THIRD_PARTY.md requirements-import.txt'.split())
@@ -36,6 +36,8 @@ def allowed_path(name):
         return False
     if path.name.startswith('.env') and path.name != '.env.example':
         return False
+    if name == '.github/workflows/server-release.yml':
+        return True
     if name in PUBLIC_SCREENSHOTS:
         return True
     if path.suffix.lower() in BLOCKED_SUFFIXES or name == 'STATUS.md':

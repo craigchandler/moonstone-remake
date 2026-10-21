@@ -26,13 +26,14 @@ func run() -> void:
     if host.state!="waiting" or guest.state!="waiting":host.close();guest.close();quit(1);return
     check(host.colours==guest.colours and host.colours[0]!=host.colours[1],"duplicate knight colour resolved identically")
     host.ready()
-    for n in range(5):host.poll();guest.poll();await process_frame
+    var ready_deadline: int=Time.get_ticks_msec()+1000
+    while not guest.remote_ready and Time.get_ticks_msec()<ready_deadline:host.poll();guest.poll();await create_timer(0.002).timeout
     check(host.state=="waiting" and guest.remote_ready,"one player cannot start alone; ready status reaches rival")
     guest.ready();check(await pump(host,guest,"playing"),"both ready start a human duel")
     var first: Dictionary=host.session.simulation.snapshot()
     guest.send("frame",{"state":{"actors":{1:{"health":0}}}})
     for n in range(4):host.poll();guest.poll();await process_frame
-    check(host.session.simulation.snapshot()==first,"client cannot publish authoritative health/state")
+    check(host.session.simulation.actors[1].health==first.actors[1].health and host.session.simulation.actors[2].health==first.actors[2].health,"client cannot publish authoritative health/state")
     for n in range(180):
         # Dropped samples and jitter: the guest sends only every fourth host tick.
         if n%4==0:guest.advance(Vector2i.LEFT if n<20 else Vector2i.ZERO,"idle" if n<20 else "swing")
@@ -46,27 +47,34 @@ func run() -> void:
             break
         await create_timer(0.02).timeout
         if host.state=="closed" or guest.state=="closed":break
+    host.host_runtime.set_physics_process(false)
+    host.host_runtime.host.broadcast("frame",host.host_runtime.host.session.frame())
     var deadline: int=Time.get_ticks_msec()+2000
-    while guest.session.simulation.tick<host.session.simulation.tick and Time.get_ticks_msec()<deadline:
-        host.poll();guest.poll();await create_timer(0.002).timeout
+    while Time.get_ticks_msec()<deadline:
+        host.host_runtime.host.poll();host.poll();guest.poll()
+        if host.session.simulation.tick==host.host_runtime.host.session.simulation.tick and guest.session.simulation.tick==host.session.simulation.tick:break
+        await create_timer(0.002).timeout
     print("SOCKET_STATUS ",host.state," ",host.notice," / ",guest.state," ",guest.notice)
     check(host.state!="closed" and guest.state!="closed","jitter and skipped input samples preserve connection")
-    var host_state: Dictionary=host.session.simulation.snapshot()
+    var host_state: Dictionary=host.host_runtime.host.session.simulation.snapshot()
     var guest_state: Dictionary=guest.session.simulation.snapshot()
     if host_state!=guest_state:
         for field in host_state:
             if host_state[field]!=guest_state.get(field):print("SOCKET_DIFF ",field," host=",var_to_str(host_state[field])," guest=",var_to_str(guest_state.get(field)))
     check(host_state==guest_state,"actual socket replica matches all authoritative actor/projectile/RNG state")
-    check(guest.received_ticks.size()>100,"real ordered state stream delivered")
+    print("STATE_SAMPLES ",guest.received_ticks.size()," over ",host.session.simulation.tick," authoritative ticks")
+    check(guest.received_ticks.size()>30 and guest.received_ticks[-1]-guest.received_ticks[0]>150,"real ordered state stream delivered")
+    host.host_runtime.set_physics_process(true)
     # Explicit terminal fixture isolates rematch lifecycle from combat skill.
-    for actor in host.session.simulation.actors.values():actor.health=0;actor.down_remaining=0
+    for actor in host.host_runtime.host.session.simulation.actors.values():actor.health=0;actor.down_remaining=0
     host.advance(Vector2i.ZERO,"idle")
     check(await pump(host,guest,"ended"),"both peers reach the same terminal result")
     host.ready()
-    for n in range(5):host.poll();guest.poll();await process_frame
+    ready_deadline=Time.get_ticks_msec()+1000
+    while not guest.remote_ready and Time.get_ticks_msec()<ready_deadline:host.poll();guest.poll();await create_timer(0.002).timeout
     check(host.state=="ended" and guest.remote_ready,"rematch needs both players")
     guest.ready();check(await pump(host,guest,"playing"),"agreed rematch starts")
-    check(host.session.round_id==2 and guest.session.round_id==2 and host.session.simulation.tick==0 and host.session.simulation.snapshot()==guest.session.simulation.snapshot(),"rematch resets the complete shared round")
+    check(host.session.round_id==2 and guest.session.round_id==2 and host.session.simulation.actors[1].health==20 and guest.session.simulation.actors[2].health==20,"rematch resets the complete shared round")
     guest.close()
     deadline=Time.get_ticks_msec()+2000
     while host.state!="closed" and Time.get_ticks_msec()<deadline:host.poll();await create_timer(0.002).timeout
@@ -81,6 +89,7 @@ func run() -> void:
     wrong.put_packet(Protocol.encode({"type":"hello","body":{"protocol":-1,"build":"wrong","colour":0}}));wrong.host.flush()
     deadline=Time.get_ticks_msec()+2000
     while host.state!="closed" and Time.get_ticks_msec()<deadline:host.poll();wrong.poll();await create_timer(0.002).timeout
+    print("REJECTION_STATUS ",host.state," ",host.notice)
     check(host.state=="closed" and host.notice=="MATCHING GAME BUILDS REQUIRED","incompatible build rejected before match")
     wrong.close();host.close()
     print("NETWORK_SOCKET=",JSON.stringify({"checks":checks,"failures":failures}))

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/hit_recovery.gd" id="1"]
+[resource]
+script = ExtResource("1")
+clocks = {
+    "trogg_hammer": {
+        "hurt_a": 36,
+        "hurt_b": 30,
+        "hurt_c": 30
+    },
+    "ratman": {
+        "hurt_a": 24,
+        "hurt_b": 30,
+        "hurt_heavy": 36
+    },
+    "knight_finishes": {
+        "hop": 54
+    }
+}

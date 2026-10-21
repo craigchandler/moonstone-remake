@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="MoonstoneLootRules" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/loot_rules.gd" id="1"]
+[resource]
+script = ExtResource("1")
+lair_bands = [[50, 1], [70, 2], [90, 3], [100, 4]]
+item_bands = [[25, 0, "healing_potion"], [35, 2, "gem_of_seeing"], [45, 4, "sword_of_sharpness"], [55, 6, "ring_of_protection"], [65, 8, "talisman_of_the_wyrm"], [75, 10, "scroll_of_haste"], [80, 14, "scroll_of_the_hawk"], [85, 12, "scroll_of_acquisition"], [94, 16, "scroll_of_the_wyrm"], [100, 18, "scroll_of_protection"]]
+items = {"healing_potion": {"name": "Potion of Healing", "slot": 0}, "gem_of_seeing": {"name": "Gem of Seeing", "slot": 2}, "sword_of_sharpness": {"name": "Sword of Sharpness", "slot": 4}, "ring_of_protection": {"name": "Ring of Protection", "slot": 6}, "talisman_of_the_wyrm": {"name": "Talisman of the Wyrm", "slot": 8}, "scroll_of_haste": {"name": "Scroll of Haste", "slot": 10}, "scroll_of_acquisition": {"name": "Scroll of Acquisition", "slot": 12}, "scroll_of_the_hawk": {"name": "Scroll of the Hawk", "slot": 14}, "scroll_of_the_wyrm": {"name": "Scroll of the Wyrm", "slot": 16}, "scroll_of_protection": {"name": "Scroll of Protection", "slot": 18}}

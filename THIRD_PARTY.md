@@ -12,6 +12,13 @@ holders. The public tree contains no original game package or recovered media.
 Locally imported scenes retain the original credits. This unofficial remake is
 not an endorsement or affiliation.
 
+The built-in classic combat pack includes reviewed original-derived numeric
+contact/timing, map-travel, loot and quest definitions alongside new native
+gameplay rules. These are
+documented in [gameplay packs](docs/gameplay-packs.md); they are not recovered
+artwork, audio, executable code or original archives. The source MIT licence
+does not relicense the original game data or grant rights to its media.
+
 ## Runtime engine
 
 [Godot Engine](https://github.com/godotengine/godot) is MIT licensed and includes

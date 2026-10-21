@@ -30,7 +30,7 @@ func raw_client(host: RefCounted,port: int) -> ENetMultiplayerPeer:
     var deadline: int=Time.get_ticks_msec()+2000
     while Time.get_ticks_msec()<deadline:
         host.poll();raw.poll()
-        if raw.get_connection_status()==MultiplayerPeer.CONNECTION_CONNECTED and host.remote!=0:return raw
+        if raw.get_connection_status()==MultiplayerPeer.CONNECTION_CONNECTED and host.host_runtime.host.clients.has(raw.get_unique_id()):return raw
         await create_timer(0.002).timeout
     raw.close();return null
 

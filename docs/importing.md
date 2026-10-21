@@ -61,6 +61,12 @@ optional reference helpers. They do not execute those scripts during gameplay.
 Source holds and native timing adaptations are not proof of exact Amiga cadence.
 
 Outputs go to local `game/assets/classic/` and `game/content/generated/`.
+The final import stage also builds and verifies the separated classic layer
+pages and `classic_layered_art.tres`; no manual copying from another checkout
+is required for a fresh supported-disk import.
+The curated [classic gameplay definitions](gameplay-packs.md) ship combat and
+campaign numeric rules in source. Imported combat/campaign tables are local comparison candidates and do not
+overwrite those rules; artwork imports cannot silently alter server combat.
 Converters may also write ignored trace reports under `docs/` and `work/`;
 these are not required by a normally provisioned build. After import:
 

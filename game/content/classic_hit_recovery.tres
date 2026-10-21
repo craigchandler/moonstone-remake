@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3]
 [ext_resource type="Script" path="res://scripts/content/hit_recovery.gd" id="1"]
-[ext_resource type="Resource" path="res://content/generated/hit_recovery.tres" id="2"]
+[ext_resource type="Resource" path="res://content/packs/classic/tables/hit_recovery.tres" id="2"]
 [resource]
 script = ExtResource("1")
 base = ExtResource("2")

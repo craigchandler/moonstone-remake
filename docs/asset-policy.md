@@ -51,3 +51,13 @@ Local build tools generate engine/third-party notices using the matching Godot
 editor and include them in personal packages. Packaging is local; it does not
 publish a release, upload assets or create a remote repository. Public hosted
 checks must remain source-only unless asset handling is separately arranged.
+
+The reviewed numeric tables in `game/content/packs/classic/tables/` and
+`game/content/packs/classic/campaign/` are an explicit source-content exception
+to local generated inputs. They contain gameplay numbers and script references
+only, including map travel, loot, quest rules and
+the existing town dice clock. The dedicated server release workflow may
+package these definitions with shared native code and Godot notices; it must not
+include artwork, audio, original archives or other ignored generated resources.
+This exception grants no rights to original media and does not relicense
+original-derived data. See [gameplay packs](gameplay-packs.md).

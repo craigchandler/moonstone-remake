@@ -85,34 +85,114 @@ Practice uses the classic panel arches, bitmap text and layered actor previews.
 Those selections and drawings do not alter simulation rules or campaign RNG.
 ## Network practice duels
 
-DuelConnection uses ENet for one host and one guest. NetworkDuelSession maps
-their connection identities to stable actor owners1/2 and steps the ordinary
-50-tick Simulation only on the host. There is no AI takeover. Clients send bounded
-sequence-numbered held input, never positions, damage, actor IDs or outcomes.
-The host schedules both seats three ticks after receipt. Held intent expires
-after ten more ticks without replacement. Late/duplicate/previous-round inputs
-are rejected without weakening CombatSimulation.submit's tick/owner checks.
+DuelHost owns one ENet room, stable seats 1/2 and NetworkDuelSession authority.
+DuelHostRunner advances the ordinary 50-tick Simulation independently of screens,
+including while local menus are open. Every player uses DuelConnection and a
+DuelReplica without command/step authority. In-game hosting starts the same
+runner plus a loopback client reserved for seat 1. The command-line host has two
+remote clients and occupies neither seat. No presentation node steps the host.
+
+Clients send bounded sequence-numbered held input, never positions, damage,
+actor IDs or outcomes. The host schedules both seats three ticks after receipt;
+this is a common buffer, not latency compensation. Held intent expires after ten
+more ticks without replacement. Late/duplicate/previous-round inputs are rejected
+without weakening CombatSimulation.submit's tick/owner checks. There is no AI
+takeover. Combat and campaign/save schemas are unchanged.
 
 Compressed control, round results and periodic checkpoints use a reliable ordered
 channel. Current full-state frames and held input use separate unreliable ordered
 channels, so retrying an old frame cannot block the current position. Decompression is bounded
-to64KiB and object/resource decoding is disabled. DuelReplica is a detached
+to 64 KiB and object/resource decoding is disabled. DuelReplica is a detached
 read model with no command/step API. Each accepted frame carries the complete
 combat snapshot plus that tick's feedback; rendering/audio consume those values.
 Skipped state packets may skip transient feedback; animation phases continue
 from authoritative clocks. State hashes validate transfer, not remote authentication. Local menus neutralise
 input while the host clock continues. Both players must ready before play and
-agree to rematch. Disconnect or prolonged stale state stops the match; rejoining
-starts a new match. There is no live reconnection or host migration.
+agree to rematch. Disconnect or prolonged stale state stops the match. The
+standalone host clears players, input and combat/RNG state. After a brief
+notification grace, a fresh ENet listener on the same port replaces the retired
+transport and accepts a fresh pair. This releases absent peers and avoids
+Godot 4.6.1 per-peer cleanup during the next match. In-game hosting stops its runner when
+its local client leaves. Rejoining starts a new match; live reconnection, host
+migration and simultaneous rooms remain future work.
 
 The build fingerprints the static combat-code/rule dependency closure, including
 collision and timing resources but excluding images/audio/presentation code.
 Editor play checks for stale source hashes. Generate the compatibility file with
 `python3 tools/network_fingerprint.py` after gameplay edits; normal builds do
 this before importing/exporting. Mismatched peers are rejected before play.
-Combat/save schemas and ordinary campaign sessions are unchanged.
+Protocol 2 rejects older client/server builds. The standalone export stages the
+same code and numeric rules into a minimal project with its own import cache,
+no client autoloads and no artwork/audio. Its entry point parses the mode/settings, selects the shared duel or campaign
+runner and logs lifecycle events. See [hosting](server-guide.md).
+
+## Network campaign
+
+Classic campaigns use four stable knight seats, with one to four humans and
+computer knights in the remaining seats. `CampaignSession` owns the existing
+`JourneySession`/`LocalParty` policies and schedules map travel, computer turns,
+monster/human battles, towns, quest scenes and ending clocks at 50 Hz. The same
+`CampaignHostRunner` runs in the game and the standalone server. The embedded
+host's player connects through the ordinary client path and occupies one seat;
+a standalone server occupies none.
+
+Computer knights retain the existing world behavior: off-screen lair visits use
+world logic rather than hidden monster simulations. Encounter policies, combat
+rules, seeded streams and save migrations are shared with local play. Human
+knight encounters require both participants ready, and each controls their own
+fighter even when defending outside their map turn.
+
+`CampaignProjection` produces detached live read models, separate from disk
+checkpoints. They expose the active screen and the requesting seat's inventory.
+Unrevealed pre-rolled treasure, campaign random streams and private reconnect
+credentials stay on the host. Rival possessions are supplied to the active
+knight when an Acquisition scroll needs its existing object-selection UI.
+Classic network panels submit commands through a replica adapter. Waiting
+players watch the active screen and browse their own inventory read-only;
+browsing does not pause the host. Rendering never advances campaign policy.
+
+Campaign protocol 1 uses direct Godot 4.6.1 ENet connections. Clients must match the
+campaign source/content fingerprint. Reliable sequenced commands and replies
+carry purchases, loot and turn transitions; stale epochs, duplicate transactions
+and incorrect seat ownership are rejected. Map frames use a separate channel at
+25 Hz, combat frames at 50 Hz and held input a separate channel with a one-tick
+receipt buffer and ten-tick expiry. Shared frames are compressed once per host
+update. Recent feedback IDs avoid duplicate hit effects after packet loss.
+
+Client movement forecasting is limited to eight unacknowledged idle inputs and
+changes presentation positions only. Remote positions receive bounded smoothing.
+Confirmed combat ticks, attacks, collision, damage and random decisions remain
+host-owned. This is not attack rollback or a claim of unnoticeable high latency.
+Tests distinguish local UDP with injected faults from separate-PC/internet play.
+See [Godot's channel documentation](https://docs.godotengine.org/en/4.6/tutorials/networking/high_level_multiplayer.html#channels).
+
+A stalled connection pauses after 1.5 seconds; confirmed disconnection reserves
+the knight and requires all humans to rejoin and choose Ready. Godot 4.6.1 native
+transport recovery reopens the listener while retaining the logical campaign,
+including exact live battle state. Old held input is cleared. Private client
+credentials are stored locally by room; the host saves only their hashes.
+
+Network campaigns use a separate checksummed host envelope with backup/atomic
+replacement and the existing schema 17 safe checkpoint. It is saved on commands,
+phase changes, pause/close and every two seconds on the map. Solo/local saves
+remain separate. Live reconnect resumes an exact paused fight while the host
+survives. Restarting the host process follows existing disk semantics: an
+unfinished fight resumes at its entrance. It is not an exact combat save.
+
+Each host runs one campaign or one practice-duel room. Simultaneous campaigns
+need a separate scheduler and mode identity, with encounter ownership, contested
+locations and calendar policies. Multiple rooms, host migration, directories,
+relays and optional platform invites are later work. Connection data remains
+independent of any platform; an optional invite layer can reuse it.
 
 ## Gameplay extension points
+
+The first built-in [gameplay pack](gameplay-packs.md) contains classic combat
+defaults and reviewed numeric tables. Its manifest and static references are
+fingerprinted. The legacy CombatRules class remains a compatibility wrapper,
+and saved content IDs and combat values are preserved. Actor/policy resources
+remain a shared catalogue. The curated campaign tables extend the same source content directory; runtime
+mod loading remains later work.
 
 Trusted GDScript policy interfaces currently cover encounter scaling, entry
 placement and a bounded hold interaction. Hosts supply copied facts and validate
@@ -122,7 +202,7 @@ loader or sandbox.
 Future scripts need supplied simulation ticks/RNG, explicit serializable state,
 stable IDs, API/pack versions, deterministic load order, save migrations and
 multiplayer fingerprints. Engine services retain validation, persistence and
-future network authority; policies/content define gameplay choices.
+network authority; policies/content define gameplay choices.
 
 ## Rendering and input
 
@@ -140,7 +220,8 @@ configuration rather than gameplay state.
 ## Diagnostics
 
 Development shortcuts require the explicit `--debug` game flag. Normal play
-filters their arguments and actions. Debug sessions keep save/preferences in
-memory and do not overwrite normal progress. Diagnostic modules load lazily;
+filters their arguments and actions. Solo/local debug sessions keep save/preferences in memory and do not overwrite
+normal progress. Network client profile persistence/resume is disabled in debug
+mode, and network fixtures use isolated user-data directories. Diagnostic modules load lazily;
 tests are excluded from player exports. See [development](development.md) for
 validation levels and commands.

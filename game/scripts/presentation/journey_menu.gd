@@ -19,9 +19,10 @@ func _ready() -> void:
 
 func rows() -> Array:
     if options_open:return ["revisit","controller","back"]
-    return ["continue", "new", "practice", "intro", "options", "exit"] if not saved.is_empty() else ["new", "practice", "intro", "options", "exit"]
+    return ["continue", "new", "network", "practice", "intro", "options", "exit"] if not saved.is_empty() else ["new", "network", "practice", "intro", "options", "exit"]
 
 func button_rect(index: int) -> Rect2:
+    if rows().size()>6:return Rect2(96,132+index*36,480,34)
     return Rect2(96,(142+index*38) if rows().size()>5 else (152+index*46),480,38)
 
 func activate(action: String) -> void:
@@ -50,6 +51,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
     elif help_visible:help_visible=false
     elif event.keycode == KEY_C and not saved.is_empty() and not options_open: activate("continue")
     elif event.keycode == KEY_N and not options_open: activate("new")
+    elif event.keycode == KEY_M and not options_open: activate("network")
     elif event.keycode == KEY_P and not options_open: activate("practice")
     elif event.keycode == KEY_O: activate("back" if options_open else "options")
     elif event.keycode == KEY_ESCAPE: activate("back" if options_open else "exit")
@@ -84,7 +86,7 @@ func _draw() -> void:
     draw_texture_rect(OPENING.background,Rect2(0,0,640,400),false)
     draw_texture_rect(OPENING.title,Rect2(10,20,610,108),false)
     if debug_mode:pixel_text("DEBUG - PROGRESS IS NOT SAVED",Vector2(320,130),true,Color("ddc68c"))
-    var labels: Dictionary = {"continue":"Continue", "new":"New journey", "practice":"Practice", "intro":"Watch intro", "options":"Options", "exit":"Exit", "controller":"Controller", "revisit":"Revisit: "+("On" if revisit_battles else "Off"), "back":"Back"}
+    var labels: Dictionary = {"continue":"Continue", "new":"New journey", "network":"Network journey", "practice":"Practice", "intro":"Watch intro", "options":"Options", "exit":"Exit", "controller":"Controller", "revisit":"Revisit: "+("On" if revisit_battles else "Off"), "back":"Back"}
     for index in range(rows().size()):
         var rect: Rect2=button_rect(index)
         OPENING.draw_text(self,labels[rows()[index]],Vector2(336,rect.position.y))

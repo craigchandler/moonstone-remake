@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="MoonstoneWorldDefinition" load_steps=3 format=3]
 [ext_resource type="Script" path="res://scripts/content/world_definition.gd" id="1"]
-[ext_resource type="Resource" path="res://content/generated/classic_map_travel.tres" id="2"]
+[ext_resource type="Resource" path="res://content/packs/classic/campaign/classic_map_travel.tres" id="2"]
 [resource]
 script = ExtResource("1")
 content_id = &"journey.v8"

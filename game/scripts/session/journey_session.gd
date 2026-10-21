@@ -20,11 +20,11 @@ const Knight = preload("res://scripts/domain/knight_progression.gd")
 const Roller = preload("res://scripts/domain/loot_roller.gd")
 const Henge = preload("res://scripts/domain/stonehenge_visit.gd")
 const Locations = preload("res://scripts/domain/map_locations.gd")
-var quest_rules: Resource=preload("res://content/generated/moonstone_quest.tres")
+var quest_rules: Resource=preload("res://content/packs/classic/campaign/moonstone_quest.tres")
 var quest: Dictionary={}
 var henge: Dictionary = {}
 var henge_lock: bool = false
-var loot_rules: Resource = preload("res://content/generated/classic_loot.tres")
+var loot_rules: Resource = preload("res://content/packs/classic/campaign/classic_loot.tres")
 var world: RefCounted
 var combat: RefCounted
 var rules: Resource

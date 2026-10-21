@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/knockback_rules.gd" id="1"]
+[resource]
+script = ExtResource("1")
+hop_steps = PackedInt32Array(30, 25, 20, 20)
+step_ticks = 6
+front_offset = 25
+left_limit = 10
+right_limit = 320

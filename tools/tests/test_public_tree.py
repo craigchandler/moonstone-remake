@@ -32,11 +32,11 @@ class PublicTreeTests(unittest.TestCase):
         self.git('add', '--', name)
 
     def test_source_and_numeric_fixtures_are_allowed(self):
-        for name in ['README.md', 'LICENSE', 'docs/art-packs.md', 'game/tests/fixtures/trace.json', 'tools/import_example.py', 'game/assets/classic/.gitkeep']:
+        for name in ['README.md', 'LICENSE', 'docs/art-packs.md', 'game/tests/fixtures/trace.json', 'tools/import_example.py', 'game/assets/classic/.gitkeep', '.github/workflows/server-release.yml', 'docs/gameplay-packs.md']:
             self.stage(name)
         issues, count, _ = audit(self.root)
         self.assertEqual(issues, [])
-        self.assertEqual(count, 6)
+        self.assertEqual(count, 8)
 
     def test_assets_notes_config_and_archives_are_rejected(self):
         for name in ['docs/source-notes.md', 'STATUS.md', '.codex/config.toml', 'reference/manifest.json', 'game/assets/modern/knight.png', 'game/content/generated/content.tres', 'outputs/build.zip', 'work/blog.md']:

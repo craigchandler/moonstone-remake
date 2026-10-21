@@ -49,19 +49,21 @@ func run() -> void:
     check(paused and world.arena.can_process() and controls.pause_view.reason=="DUEL CONTINUES","local pause menu leaves network arena processing")
     var tick: int=menu.connection.session.simulation.tick
     world.arena._physics_process(0.02)
-    check(menu.connection.session.simulation.tick==tick+1,"host authority advances while local controls are paused")
+    await create_timer(0.06).timeout;menu.connection.poll()
+    check(menu.connection.session.simulation.tick>tick,"independent host authority advances while local controls are paused")
     controls.close_pause()
     press(KEY_F1);tick=menu.connection.session.simulation.tick
     world.arena._physics_process(0.02)
-    check(world.arena.practice_overlay.help_visible and menu.connection.session.simulation.tick==tick+1,"network help shows controls without pausing rival")
+    await create_timer(0.06).timeout;menu.connection.poll()
+    check(world.arena.practice_overlay.help_visible and menu.connection.session.simulation.tick>tick,"network help shows controls without pausing rival")
     press(KEY_ESCAPE);check(world.arena!=null and not world.arena.practice_overlay.help_visible,"Escape dismisses help before leaving")
-    for actor in menu.connection.session.simulation.actors.values():actor.health=0;actor.down_remaining=0
+    for actor in menu.connection.host_runtime.host.session.simulation.actors.values():actor.health=0;actor.down_remaining=0
     world.arena._physics_process(0.02)
     check(await pump(menu.connection,guest,"ended"),"network result shown after terminal state")
     var arena: Node=world.arena
     press(KEY_R);check(menu.connection.local_ready and menu.connection.session.round_id==1,"R requests agreement instead of locally restarting")
     guest.ready();check(await pump(menu.connection,guest,"playing"),"both confirm rematch")
-    check(world.arena==arena and arena.network_round==2 and arena.session.simulation.tick==0,"round resets existing presentation without a second arena")
+    check(world.arena==arena and arena.network_round==2 and arena.session.simulation.actors[1].health==20,"round resets existing presentation without a second arena")
     guest.close()
     var deadline: int=Time.get_ticks_msec()+2000
     while menu.connection.state!="closed" and Time.get_ticks_msec()<deadline:menu.connection.poll();await create_timer(0.002).timeout

@@ -17,7 +17,7 @@ func apply(snapshot: Dictionary, feedback: Array) -> void:
 func snapshot() -> Dictionary: return state.duplicate(true)
 
 func outcome() -> String:
-    var alive: Array = [false,false]
+    var alive: Array = [false,spawn_remaining>0]
     for actor in actors.values():
         if actor.health>0: alive[actor.team-1]=true
     return "ongoing" if alive[0] and alive[1] else ("victory" if alive[0] else ("defeat" if alive[1] else "draw"))

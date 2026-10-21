@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/gameplay/classic_entry_placement.gd" id="1"]
+[resource]
+script = ExtResource("1")
+behavior_id = &"classic:beast_entry"
+api_version = 1
+content_version = 1
+initial_counter = 0
+default_low_edge = 99
+foot_offset = 52
+site_edges = {
+    "grassland_east": 123,
+    "grassland_south": 124
+}

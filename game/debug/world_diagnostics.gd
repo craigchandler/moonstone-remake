@@ -8,6 +8,12 @@ func _init(view: Node) -> void:
 
 func start(arguments: PackedStringArray) -> void:
     for argument in arguments:
+        if argument.begins_with("--campaign-role="):
+            host.set_physics_process(false);host.set_process_input(false);host.set_process_unhandled_key_input(false);host.set_process_unhandled_input(false)
+            host.debug_mode_review=load("res://debug/fixtures/campaign_review.gd").new()
+            host.debug_mode_review.report.call_deferred(host)
+            return
+    for argument in arguments:
         if argument.begins_with("--network-role="):
             host.set_physics_process(false);host.set_process_input(false);host.set_process_unhandled_key_input(false);host.set_process_unhandled_input(false)
             host.debug_mode_review=preload("res://debug/fixtures/network_duel_review.gd").new()

@@ -43,32 +43,57 @@ not needed during play.
 - Four knight identities, computer rivals, local human turns and human duels.
 - Standalone practice against every native creature and knight opponent.
 - Direct two-player network practice duels with host/join, readiness and rematches.
+- Classic network campaigns for one to four humans, with computer knights filling
+  the other seats, spectator inventory browsing and reserved-seat reconnect.
+- Optional command-line host for campaigns or practice duels, sharing the same
+  authority as in-game hosting.
 - Keyboard, mouse and configurable controller input; campaign save/continue.
 - Native opening, menus, location scenes and ending sequences.
 
-Campaign networking, internet matchmaking/relay, human cooperative encounters,
+Simultaneous campaign turns, internet matchmaking/relay, human cooperative encounters,
 a public mod API and HD/3D renderers are future work. Some timings, movement and presentation remain native
 adaptations. Automated checks do not establish complete original-game parity.
 
-## Build and run
+## Set up and play
 
-Development currently uses **Godot 4.6.1**, matching Linux/Windows export
-templates, Python 3.11+ and Bash. Players of a locally built package do not need
-these tools.
+| What you want to do | Start here | Original assets needed? |
+| --- | --- | --- |
+| Run an existing local game package | [Player guide](docs/player-guide.md) | Included in that private package |
+| Build the classic game from your own disks | [One-time import](docs/importing.md), then [build instructions](docs/development.md) | Yes |
+| Host from the game | [Network journey](docs/player-guide.md#network-journey) | A provisioned game client |
+| Run or build a standalone server | [Server setup](docs/server-guide.md) | No |
 
-1. Provision the local native assets described in [development](docs/development.md),
-   or follow the [one-time import](docs/importing.md).
-2. Open `game/project.godot` in Godot, or build from the repository root:
+For a game build, use **Godot 4.6.1**, matching Linux/Windows export templates,
+Python 3.11+, Bash and Git. After provisioning compatible local assets or
+completing the one-time import, run from the repository root:
 
-   ```bash
-   bash tools/build.sh --skip-import
-   ```
+```bash
+bash tools/build.sh --skip-import
+```
 
-3. Extract the resulting local ZIP from `outputs/`. Run `Moonstone.sh` on Linux
-   or `Moonstone.cmd` on Windows. See the [player guide](docs/player-guide.md).
+Extract `outputs/Moonstone-Network-Campaign-Linux.zip` or
+`outputs/Moonstone-Network-Campaign-Windows.zip`. Run `Moonstone.sh` on Linux or
+`Moonstone.cmd` on Windows. Players need neither Godot nor the import/build tools.
+The public repository does not include these asset-containing game packages.
 
-Without original assets, the dependency-free build-tool and publication checks
-can still run:
+For a campaign, choose **Network journey** on the title screen. One player uses
+**Host new journey**, or everyone joins a [standalone server](docs/server-guide.md#host-a-campaign).
+All humans choose **Ready**. The default is **UDP 27867**; practice duels use
+**UDP 27866**. Use the host computer's LAN address when joining from another
+computer. See the guides for reconnect, backups and troubleshooting.
+
+Standalone server builds need source and the pinned toolchain, with no original
+assets or disk import. See the [complete server build steps](docs/server-guide.md#build-the-server-from-source).
+Server versions and `server-v*` tags are independent of the game version.
+
+Current validation includes automated source tests, exported Linux execution,
+scripted graphical Linux checks and local UDP tests with injected delay/loss.
+Windows packages are exported; Windows execution, separate-machine campaign LAN
+play, manual full-campaign playthroughs and the hosted release workflow still
+need validation. See [validation status](docs/development.md#evidence).
+
+Without original assets, dependency-free build-tool and publication checks can
+still run:
 
 ```bash
 python3 -m unittest discover -s tools/tests
@@ -78,9 +103,11 @@ python3 tools/check_public_tree.py --ref HEAD
 ## Project documentation
 
 - [Architecture and deterministic gameplay](docs/architecture.md)
+- [Classic gameplay pack and script boundaries](docs/gameplay-packs.md)
 - [Artwork and renderer boundaries](docs/art-packs.md)
 - [Build, test and export workflow](docs/development.md)
 - [Screenshot gallery](docs/screenshots.md)
+- [Command-line hosting](docs/server-guide.md)
 - [Original-data import](docs/importing.md)
 - [Asset and distribution policy](docs/asset-policy.md)
 - [Roadmap](docs/roadmap.md)

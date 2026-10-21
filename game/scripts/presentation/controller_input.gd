@@ -83,6 +83,7 @@ func active_surface() -> Node:
     return null
 
 func kind(surface: Node) -> String:
+    if surface!=null and surface.has_method("input_kind"):return surface.input_kind()
     return "" if surface==null else String(surface.get_script().resource_path).get_file().get_basename()
 
 func refresh_context() -> void:
@@ -290,7 +291,7 @@ func ui_key(context: String,action: String) -> int:
 func local_journey() -> RefCounted:
     if not is_inside_tree():return null
     for surface in get_tree().get_nodes_in_group(GROUP):
-        if kind(surface)=="world_view" and surface.journey!=null and surface.journey.party!=null and surface.menu_view==null and surface.selection_view==null and surface.local_setup==null:return surface.journey
+        if kind(surface)=="world_view" and not surface.has_method("is_network_campaign") and surface.journey!=null and surface.journey.party!=null and surface.menu_view==null and surface.selection_view==null and surface.local_setup==null:return surface.journey
     return null
 
 func direction_for(slot: int,secondary: bool=false) -> Vector2i:

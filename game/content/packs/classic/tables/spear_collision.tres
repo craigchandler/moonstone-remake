@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="MoonstoneCombatGeometry" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/content/combat_geometry.gd" id="1"]
+[resource]
+script = ExtResource("1")
+attacks = {
+    "spear_thrust": [
+        {
+            "points": [
+                [
+                    101,
+                    -24
+                ],
+                [
+                    107,
+                    -24
+                ],
+                [
+                    113,
+                    -24
+                ],
+                [
+                    119,
+                    -24
+                ],
+                [
+                    125,
+                    -24
+                ],
+                [
+                    131,
+                    -24
+                ]
+            ],
+            "weight": 3
+        }
+    ]
+}

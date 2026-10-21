@@ -23,8 +23,8 @@ def manifest(game):
         files[name] = hashlib.sha256(data).hexdigest()
         todo.extend(re.findall(r'res://([^"\s]+\.(?:gd|tres|json))', data.decode()))
     files = dict(sorted(files.items()))
-    material = "moonstone-duel:1:godot4.6.1:50hz\n" + "".join(f"{name}:{value}\n" for name, value in files.items())
-    return {"protocol": 1, "digest": hashlib.sha256(material.encode()).hexdigest(), "files": files}
+    material = "moonstone-duel:2:godot4.6.1:50hz\n" + "".join(f"{name}:{value}\n" for name, value in files.items())
+    return {"protocol": 2, "digest": hashlib.sha256(material.encode()).hexdigest(), "files": files}
 
 
 def main():

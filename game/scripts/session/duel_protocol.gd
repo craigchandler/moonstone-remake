@@ -1,6 +1,6 @@
 extends RefCounted
 
-const VERSION: int = 1
+const VERSION: int = 2
 const MAX_PACKET: int = 65536
 const INPUT_DELAY: int = 3
 const INPUT_TTL: int = 10

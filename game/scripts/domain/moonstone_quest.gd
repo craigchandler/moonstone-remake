@@ -1,6 +1,6 @@
 extends RefCounted
 
-const RULES=preload("res://content/generated/moonstone_quest.tres")
+const RULES=preload("res://content/packs/classic/campaign/moonstone_quest.tres")
 const HENGE=preload("res://scripts/domain/stonehenge_visit.gd")
 const ENDING_TICKS: int=4062
 

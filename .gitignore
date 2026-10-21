@@ -33,6 +33,8 @@ docs/*
 !docs/roadmap.md
 !docs/upstream-sources.json
 !docs/screenshots.md
+!docs/server-guide.md
+!docs/gameplay-packs.md
 
 # Selected documentation captures only; full game artwork stays local.
 !docs/screenshots/
@@ -52,8 +54,16 @@ tools/*
 !tools/build.py
 !tools/build.sh
 !tools/build_support.py
+!tools/build_server.py
+!tools/server_version.py
+!tools/server-toolchain.json
+!tools/install_server_toolchain.py
+!tools/server_release.py
+!tools/verify_server_release.py
 !tools/network_fingerprint.py
+!tools/campaign_fingerprint.py
 !tools/verify_network.py
+!tools/verify_server.py
 !tools/check_public_tree.py
 !tools/godot_notices.gd
 !tools/import_assets.sh
@@ -105,3 +115,5 @@ __pycache__/
 *.dll
 *.so
 *.x86_64
+
+!tools/verify_campaign.py
