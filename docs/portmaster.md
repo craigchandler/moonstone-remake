@@ -12,8 +12,9 @@ independent of artwork. This is not a PortMaster catalogue release.
 ## Install
 
 See the [short PortMaster installation guide](portmaster-readme.md), also included
-as `moonstone/README.txt` and `moonstone/README.md` in the release ZIP. It lists
-controls, disk names, CLI commands, content-copy paths, artwork and troubleshooting.
+as `moonstone/README.md` in the release ZIP. It lists
+controls, disk names, content-copy paths, artwork and troubleshooting.
+The longer development/testing guides stay in the source repository.
 
 The ZIP uses the standard **`Moonstone.sh` + `moonstone/`** layout. On most
 PortMaster firmware, place both inside the firmware's ports directory. For a
@@ -122,8 +123,9 @@ handheld; shoulders use L1/R1 and L2/R2, with SE/ST for Select/Start. Other
 controllers retain their usual labels. Saved remaps remain in effect; the table
 below describes defaults.
 
-The controller helper has an explicit configuration with keyboard/mouse bindings
-unassigned, so it supplies the exit chord without duplicate gameplay events.
+PortMaster's gptokeyb2 supplies only the Select + Start exit chord, with no mapping
+file or virtual keyboard/mouse. Godot continues to read the real controller.
+Update PortMaster if the launcher reports that gptokeyb2 is missing.
 
 | Control | Action |
 | --- | --- |
@@ -180,10 +182,10 @@ Do not reset your saved bindings unless you want to restore the defaults.
 
 ## Community testing
 
-See [testing coverage and report template](portmaster-testing.md). Metadata marks
-the build experimental and requires original data, ARM64, glibc 2.28+, and a
-640×480-or-larger display. The ZIP follows the installed PortMaster layout; a
-future catalogue source PR has a separate structure and review process.
+See [testing coverage and report template](portmaster-testing.md). Metadata requires
+original data, ARM64, glibc 2.28+, and a 640×480-or-larger display. The ZIP follows
+the installed PortMaster layout; a future catalogue source PR has a separate
+structure and review process.
 
 ## Build locally
 

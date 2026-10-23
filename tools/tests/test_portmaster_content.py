@@ -282,6 +282,21 @@ if setup:
         self.assertFalse(any(r['setup'] or r['cache_ready'] for r in records))
         self.assertTrue(records[-1]['content'].endswith('/content with spaces/assets.pck'))
 
+    @unittest.skipUnless(sys.platform.startswith('linux') and shutil.which('cc'), 'Requires Linux and a C compiler')
+    def test_copied_content_survives_graphics_preload_stdout(self):
+        with tempfile.TemporaryDirectory(prefix='moonstone-preload-') as tmp:
+            root=Path(tmp);source=root/'preload.c';library=root/'preload.so'
+            source.write_text('#include <stdio.h>\n__attribute__((constructor)) static void start(void) { puts("Graphics wrapper startup"); fflush(stdout); }\n')
+            subprocess.run(['cc','-shared','-fPIC',source,'-o',library],check=True,capture_output=True)
+            with patch.dict(os.environ, {'LD_PRELOAD':str(library)}):
+                code,records,output,_=self.launch(copied=True)
+            self.assertEqual(code,0,output)
+            self.assertIn('Graphics wrapper startup',output)
+            self.assertEqual([r['verify'] for r in records],[True,False])
+            self.assertFalse(any(r['setup'] or r['cache_ready'] for r in records))
+            self.assertTrue(records[-1]['content'].endswith('/content with spaces/assets.pck'))
+            self.assertEqual(records[-1]['preload'],str(library))
+
     def test_damaged_importer_reports_failure_without_launching_game(self):
         code,records,output,status=self.launch(corrupt=True,cancel=False)
         self.assertNotEqual(code,0,output)

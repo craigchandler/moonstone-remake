@@ -50,7 +50,7 @@ def package(importer, output):
     with tarfile.open(stage/'importer.tar','w',format=tarfile.USTAR_FORMAT,dereference=True) as archive:
         for name in sorted([*helper['files'],'manifest.json']):archive.add(importer/name,arcname=name,recursive=False,filter=owner)
     (stage/'importer.sha256').write_text(digest(stage/'importer.tar')+'  importer.tar\n')
-    for source,target in [('tools/run_portmaster.sh','moonstone-run.sh'),('tools/portmaster.gptk','moonstone.gptk'),
+    for source,target in [('tools/run_portmaster.sh','moonstone-run.sh'),
                           ('docs/portmaster.md','READ-ME.txt'),('docs/asset-policy.md','ASSET-POLICY.txt'),('LICENSE','LICENSE.txt'),('THIRD_PARTY.md','THIRD-PARTY.txt')]:
         shutil.copy2(ROOT/source,stage/target)
     (stage/'NOTICES.txt').write_text('''Moonstone remake — code and original-data importer

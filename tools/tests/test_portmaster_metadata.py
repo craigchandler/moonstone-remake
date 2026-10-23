@@ -36,7 +36,8 @@ class PortMasterPackageTests(unittest.TestCase):
         self.assertEqual(result['hardware_execution'], 'NOT_RUN')
         info = json.loads(members['moonstone/port.json'])
         self.assertFalse(info['attr']['rtr'])
-        self.assertTrue(info['attr']['exp'])
+        self.assertFalse(info['attr']['exp'])
+        self.assertEqual(info['attr']['reqs'], ['!lowres', 'aarch64'])
         self.assertEqual(info['attr']['porter'], ['Craig Chandler'])
         self.assertNotIn('conf', info['items'])
 
@@ -62,7 +63,9 @@ class PortMasterPackageTests(unittest.TestCase):
 
     def test_missing_or_misleading_requirements_are_rejected(self):
         members = self.members()
-        for attr, value in [('rtr', True), ('arch', []), ('runtime', []), ('min_glibc', ''), ('porter', ['wrong name'])]:
+        for attr, value in [('rtr', True), ('exp', True), ('arch', ['aarch64']),
+                            ('reqs', ['notlowres']), ('reqs', ['!lowres']),
+                            ('runtime', []), ('min_glibc', ''), ('porter', ['wrong name'])]:
             info = json.loads(members['moonstone/port.json'])
             info['attr'][attr] = value
             with self.subTest(attr=attr), self.assertRaisesRegex(ValueError, 'requirements'):

@@ -32,7 +32,7 @@ Westonpack runtimes; its launcher offers to install missing runtimes through
 PortMaster when connected. See [PortMaster details](portmaster.md) for muOS paths
 and runtime installation. PortMaster is an experimental testing ZIP with metadata
 and a screenshot, not
-an accepted catalogue release. Read `moonstone/README.txt` before installing;
+an accepted catalogue release. Read `moonstone/README.md` before installing;
 the ZIP no longer has the earlier muOS SD-root wrapper directories. See the
 [short PortMaster guide](portmaster-readme.md) and [testing guide](portmaster-testing.md).
 

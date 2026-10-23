@@ -5,7 +5,9 @@ screenshot to view it at its native 640 × 400 capture size. The additional
 [PortMaster catalogue capture](screenshots/portmaster.png) renders the battle
 at 640 × 480 with the 640 × 400 game view letterboxed, matching its intended
 4:3 presentation. It was captured from Linux, not from another handheld.
-Release packaging also derives a 320 × 200 muOS thumbnail from `battle.png`.
+The 320 × 200 [muOS thumbnail](screenshots/portmaster-thumbnail.png) comes from
+`battle.png`. Both PortMaster PNGs use 256-colour compression for smaller
+packages; their dimensions and framing are unchanged.
 
 | Intro | Main menu |
 | --- | --- |

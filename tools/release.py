@@ -60,8 +60,7 @@ def package(platform, importer, templates, output, tag, *, root=ROOT):
         with tarfile.open(stage/'importer.tar','w',format=tarfile.USTAR_FORMAT,dereference=True) as archive:
             for name,path in rows:archive.add(path,arcname=name,recursive=False,filter=owner)
         (stage/'importer.sha256').write_text(digest(stage/'importer.tar')+'  importer.tar\n')
-        for source,target in [('tools/run_portmaster.sh','moonstone-run'),('tools/portmaster.gptk','moonstone.gptk')]:
-            shutil.copy2(root/source,stage/target)
+        shutil.copy2(root/'tools/run_portmaster.sh',stage/'moonstone-run')
     else:
         for name,path in rows:
             target=stage/'importer'/name;target.parent.mkdir(parents=True,exist_ok=True)
@@ -84,13 +83,15 @@ def package(platform, importer, templates, output, tag, *, root=ROOT):
             (stage/'Moonstone.sh').write_text(launch);(stage/'Moonstone.sh').chmod(0o755)
             (stage/'Import-Content.sh').write_text(command);(stage/'Import-Content.sh').chmod(0o755)
     (stage/'disks').mkdir();(stage/'content').mkdir()
-    (stage/'disks/PUT-YOUR-DISKS-HERE.txt').write_text('Supply your own supported retail images:\nMoonstone_DiskA.ipf\nMoonstone_DiskB.ipf\nMoonstone_DiskC.ipf\n\nOr copy a verified content folder from another Moonstone platform. See README.txt.\n')
-    (stage/'content/PUT-CONTENT-HERE.txt').write_text('Copy current.json and its classic-v1-<checksum> directory here. Do not nest another content directory. See README.txt.\n')
-    for name in ['releases.md','importing.md','portmaster.md','portmaster-readme.md','portmaster-testing.md','player-guide.md','asset-policy.md','server-guide.md']:
-        target=stage/'docs'/name;target.parent.mkdir(exist_ok=True);shutil.copy2(root/'docs'/name,target)
-    for source,target in [('docs/releases.md','README.txt'),('LICENSE','SOURCE-LICENSE.txt'),('THIRD_PARTY.md','ATTRIBUTION.txt')]:shutil.copy2(root/source,stage/target)
+    readme='README.md' if platform=='PortMaster' else 'README.txt'
+    (stage/'disks/PUT-YOUR-DISKS-HERE.txt').write_text('Supply your own supported retail images:\nMoonstone_DiskA.ipf\nMoonstone_DiskB.ipf\nMoonstone_DiskC.ipf\n\nOr copy a verified content folder from another Moonstone platform. See '+readme+'.\n')
+    (stage/'content/PUT-CONTENT-HERE.txt').write_text('Copy current.json and its classic-v1-<checksum> directory here. Do not nest another content directory. See '+readme+'.\n')
     if platform=='PortMaster':
         for name,data in metadata_files(root).items():(stage/name).write_bytes(data)
+    else:
+        for name in ['releases.md','importing.md','portmaster.md','portmaster-readme.md','portmaster-testing.md','player-guide.md','asset-policy.md','server-guide.md']:
+            target=stage/'docs'/name;target.parent.mkdir(exist_ok=True);shutil.copy2(root/'docs'/name,target)
+        for source,target in [('docs/releases.md','README.txt'),('LICENSE','SOURCE-LICENSE.txt'),('THIRD_PARTY.md','ATTRIBUTION.txt')]:shutil.copy2(root/source,stage/target)
     # Notices come from the matching official editor, rather than copied from a
     # previously provisioned private export.
     editor=Path(os.environ.get('GODOT_BIN',root/'work/server-toolchain/Godot_v4.6.1-stable_linux.x86_64'))
@@ -100,10 +101,6 @@ def package(platform, importer, templates, output, tag, *, root=ROOT):
     (notice_project/'project.godot').write_text('config_version=5\n')
     run([editor,'--headless','--path',notice_project,'--script',root/'tools/godot_notices.gd','--',notices],directory/'notices.log',env=isolated_env(directory))
     if platform=='PortMaster':
-        # muOS renders box artwork at native size; keep its small menu image
-        # separate from the required 4:3 PortMaster catalogue screenshot.
-        run([editor,'--headless','--path',notice_project,'--script',root/'tools/portmaster_art.gd',
-             '--',root/'docs/screenshots/battle.png',stage/'muos-thumbnail.png'],directory/'artwork.log',env=isolated_env(directory))
         for source,target in [('LICENSE','SOURCE-LICENSE.txt'),('THIRD_PARTY.md','ATTRIBUTION.txt')]:
             shutil.copy2(root/source,notices/target)
         # Expose bundled dependency notices without requiring a first-run unpack.
@@ -118,7 +115,8 @@ def package(platform, importer, templates, output, tag, *, root=ROOT):
             'importer_manifest_sha256':digest(importer/'manifest.json'),
             'runtime_acceptance':'NOT_RUN','stage':str(stage.relative_to(root))}
     if platform=='PortMaster':report['documentation_images']=['screenshot.png','muos-thumbnail.png']
-    (stage/'build-manifest.json').write_text(json.dumps(report,indent=2)+'\n')
+    if platform!='PortMaster':
+        (stage/'build-manifest.json').write_text(json.dumps(report,indent=2)+'\n')
     output.mkdir(parents=True,exist_ok=True)
     archive_path=output/f'Moonstone-{version}-{platform}.zip'
     with ZipFile(archive_path,'w') as archive:
@@ -207,7 +205,7 @@ content generated locally from your own supported original IPF disks. No origina
 runtime artwork, music, sounds or disk images are included. PortMaster includes
 documentation screenshots for its menu/catalogue. First launch opens setup;
 command-line import is also available. A generated content folder can be copied
-between all three platforms. Read README.txt (moonstone/README.txt for PortMaster)
+between all three platforms. Read README.txt (moonstone/README.md for PortMaster)
 in your ZIP for exact paths/commands. PortMaster uses Moonstone.sh + moonstone/;
 muOS users place the launcher in roms/PORTS and the folder in ports on their games
 SD card. The PortMaster build is experimental; other CFWs/devices need testing.

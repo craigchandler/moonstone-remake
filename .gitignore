@@ -49,6 +49,7 @@ docs/screenshots/*
 !docs/screenshots/world-map.png
 !docs/screenshots/battle.png
 !docs/screenshots/portmaster.png
+!docs/screenshots/portmaster-thumbnail.png
 !docs/screenshots/town-highwood.png
 !docs/screenshots/town-waterdeep.png
 !docs/screenshots/town-tavern.png
@@ -83,7 +84,6 @@ tools/*
 !tools/launch_portmaster.sh
 !tools/run_portmaster.sh
 !tools/portmaster-runtimes.json
-!tools/portmaster.gptk
 !tools/portmaster_art.gd
 !tools/portmaster_*.py
 !tools/portmaster_*.gd

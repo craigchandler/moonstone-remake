@@ -15,19 +15,22 @@ def metadata_files(root):
         'path': './Moonstone.sh', 'name': info['attr']['title'],
         'desc': info['attr']['desc'], 'developer': 'Craig Chandler',
         'publisher': 'Craig Chandler', 'genre': 'Action / RPG',
-        'players': '1-4', 'image': './moonstone/screenshot.png',
+        'image': './moonstone/screenshot.png',
     }.items():
         ET.SubElement(game, name).text = text
     ET.indent(tree, space='  ')
     screenshot = (root / 'docs/screenshots/portmaster.png').read_bytes()
     if not valid_screenshot(screenshot, (640, 480)):
         raise ValueError('PortMaster screenshot must be a complete 640x480 PNG')
+    thumbnail = (root / 'docs/screenshots/portmaster-thumbnail.png').read_bytes()
+    if not valid_screenshot(thumbnail, (320, 200)):
+        raise ValueError('muOS thumbnail must be a complete 320x200 PNG')
     readme = (root / 'docs/portmaster-readme.md').read_bytes()
     return {
         'port.json': (json.dumps(info, indent=2) + '\n').encode(),
         'gameinfo.xml': ET.tostring(tree, encoding='utf-8', xml_declaration=True) + b'\n',
-        'README.md': readme, 'README.txt': readme,
-        'screenshot.png': screenshot,
+        'README.md': readme,
+        'screenshot.png': screenshot, 'muos-thumbnail.png': thumbnail,
         'override.cfg': b'[display]\nwindow/stretch/aspect="keep"\n',
     }
 
@@ -53,7 +56,7 @@ def validate_archive(path):
         expected = {'Moonstone.sh', 'moonstone/moonstone.pck', 'moonstone/importer.pck',
                     'moonstone/moonstone-run',
                     'moonstone/importer.tar', 'moonstone/importer.sha256',
-                    'moonstone/README.txt', 'moonstone/README.md', 'moonstone/port.json',
+                    'moonstone/README.md', 'moonstone/port.json',
                     'moonstone/gameinfo.xml', 'moonstone/screenshot.png',
                     'moonstone/override.cfg', 'moonstone/muos-thumbnail.png'}
         if not expected.issubset(names):
@@ -64,9 +67,10 @@ def validate_archive(path):
         attr = info['attr']
         if (info['version'] != 4 or info['name'] != 'moonstone.zip' or
                 info['items'] != ['Moonstone.sh', 'moonstone'] or
-                attr['rtr'] is not False or attr['exp'] is not True or
+                attr['rtr'] is not False or attr['exp'] is not False or
                 attr['porter'] != ['Craig Chandler'] or
-                attr['arch'] != ['aarch64'] or attr['min_glibc'] != '2.28' or
+                attr['arch'] != [] or attr['reqs'] != ['!lowres', 'aarch64'] or
+                attr['min_glibc'] != '2.28' or
                 set(attr['runtime']) != {'godot_4.6.3.squashfs', 'weston_pkg_0.2.squashfs'}):
             raise ValueError('Incorrect PortMaster requirements or installation metadata')
         xml = ET.fromstring(archive.read('moonstone/gameinfo.xml'))

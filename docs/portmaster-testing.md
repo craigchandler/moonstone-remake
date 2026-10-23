@@ -7,36 +7,10 @@ that check is not evidence of execution on other firmware.
 
 See the [short installation guide](portmaster-readme.md) and
 [PortMaster's packaging/testing process](https://portmaster.games/packaging.html).
-The community testing thread precedes any catalogue submission. Maintainers
-decide acceptance and the appropriate repository for this unofficial remake.
-
-## Suggested testing-thread introduction
-
-> Moonstone Remake — experimental ARM64 testing build
->
-> This is an unofficial native Godot remake of Moonstone: A Hard Day's Knight.
-> It is still in development. The existing hardware baseline is RG40XX H/muOS;
-> I'm looking for feedback on fresh installation and other compatible ARM64
-> firmware/devices, resolutions and controllers.
->
-> You need your own supported retail IPF disk set, or a content pack generated
-> using the Linux/Windows package from the same release. No original disks or
-> playable content pack are included. First launch can convert your disks;
-> desktop-created content can be copied over to skip handheld conversion.
->
-> Install Godot 4.6.3 and Westonpack 0.2 through PortMaster. The ZIP contains
-> Moonstone.sh and moonstone/. Read moonstone/README.txt before extracting:
-> muOS puts the launcher and game folder in separate locations.
->
-> Please report your device, firmware/version, resolution, ZIP version/checksum,
-> setup method, controls, audio, gameplay, battle-result confirmation and
-> Save/Continue. If it fails, include log.txt and import.log when present, plus
-> whether you deliberately exited. Please don't share disks or generated content.
-
-Attach the actual tested ZIP or its GitHub release link and SHA256. Include the
-results for that exact archive; the earlier 2:08 handheld import measurement is
-a baseline, not an acceptance test of every subsequent build. A GitHub source
-commit alone is not a playable download. Never claim a test was run from this template.
+The package has already been posted for community testing. Maintainers decide
+catalogue acceptance and the appropriate repository for this unofficial remake.
+Record results against the exact ZIP version and SHA256 being tested; previous
+hardware results do not validate a later package.
 
 ## Coverage to record
 
@@ -47,6 +21,8 @@ Record device/firmware versions and a result separately for each case:
   game launch; subsequent launch reuses content.
 - Content copied from the matching Linux/Windows release: verifies and starts
   without converting; no desktop binaries copied.
+- PortMaster gptokeyb2: Select + Start force exit, then relaunch successfully;
+  normal controls must not generate duplicate keyboard/mouse input.
 - Practice: face buttons, both sticks, shoulders/triggers, remapping, pause,
   sound and normal exit. Check result confirmation after both victory and defeat.
 - Journey: map movement, inventory, town entry, combat, loot, Save/Continue.
@@ -82,9 +58,9 @@ Result: PASS / FAIL / NOT_RUN for each tested case
 The release ZIP uses `Moonstone.sh` at its root and puts metadata, README,
 screenshot, notices, import tools and game code inside `moonstone/`. Current
 HarbourMaster accepts `moonstone/port.json`; the older `*.port.json` spelling is
-not duplicated. Metadata marks the port experimental and not ready-to-run,
-declares its ARM64 importer and both runtimes, and links XML to the actual launcher
-and screenshot. A separate cover is optional; the gameplay screenshot is used.
+not duplicated. Metadata marks the port not ready-to-run, keeps `exp` false,
+requires ARM64 through `reqs` with both runtimes declared, and links XML to the
+actual launcher and screenshot. A separate cover is optional; the gameplay screenshot is used.
 
 A future PortMaster source PR has a different layout: `ports/moonstone/` contains
 `port.json`, `README.md`, `gameinfo.xml`, `screenshot.png`, `Moonstone.sh` and the

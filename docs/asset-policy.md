@@ -20,8 +20,9 @@ The selected images listed explicitly by `tools/check_public_tree.py` under
 `docs/screenshots/` are documentation captures of the classic remake. This
 exception covers those screenshots only, including the 640×480 PortMaster
 catalogue capture. The PortMaster release may include that screenshot and a
-320×200 menu thumbnail generated from the allowlisted battle capture. Runtime asset packs, sprite sheets,
-fonts, original data, audio, footage and build packages remain excluded.
+320×200 menu thumbnail derived from the allowlisted battle capture. Both
+PortMaster PNGs may be palette-compressed for distribution. Runtime asset packs,
+sprite sheets, fonts, original data, audio, footage and build packages remain excluded.
 
 Screenshots contain original Moonstone artwork, which retains its respective
 rights and is not covered by the source code's MIT licence. See the

@@ -1,24 +1,38 @@
 {
   "version": 4,
   "name": "moonstone.zip",
-  "items": ["Moonstone.sh", "moonstone"],
+  "items": [
+    "Moonstone.sh",
+    "moonstone"
+  ],
   "items_opt": [],
   "attr": {
     "title": "Moonstone Remake",
-    "porter": ["Craig Chandler"],
+    "porter": [
+      "Craig Chandler"
+    ],
     "desc": "An unofficial, work-in-progress native remake of Moonstone: A Hard Day's Knight (1991). Explore the map, battle monsters and rival knights, collect equipment and complete the quest. Experimental ARM64 build; RG40XX H with muOS is the tested hardware baseline. Original game data is required.",
     "desc_md": null,
-    "inst": "Requires your own supported retail IPF disks, named Moonstone_DiskA.ipf, Moonstone_DiskB.ipf and Moonstone_DiskC.ipf, in moonstone/disks/. First launch converts them locally. Alternatively copy a generated content/current.json and its classic-v1-<checksum> folder into moonstone/content/. Install Godot 4.6.3 and Westonpack 0.2 with PortMaster. Allow 1 GB free for conversion. See moonstone/README.txt for installation, muOS paths, controls and troubleshooting.",
+    "inst": "Requires your own supported retail IPF disks, named Moonstone_DiskA.ipf, Moonstone_DiskB.ipf and Moonstone_DiskC.ipf, in moonstone/disks/. First launch converts them locally. Alternatively copy a generated content/current.json and its classic-v1-<checksum> folder into moonstone/content/. Install Godot 4.6.3 and Westonpack 0.2 with PortMaster. Allow 1 GB free for conversion. See moonstone/README.md for installation, muOS paths, controls and troubleshooting.",
     "inst_md": null,
-    "genres": ["action", "rpg"],
-    "image": {"screenshot": "screenshot.png"},
+    "genres": [
+      "action",
+      "rpg"
+    ],
+    "image": null,
     "rtr": false,
-    "exp": true,
-    "runtime": ["godot_4.6.3.squashfs", "weston_pkg_0.2.squashfs"],
+    "exp": false,
+    "runtime": [
+      "weston_pkg_0.2.squashfs",
+      "godot_4.6.3.squashfs"
+    ],
     "store": [],
-    "availability": "full",
-    "reqs": ["notlowres"],
-    "arch": ["aarch64"],
+    "availability": "paid",
+    "reqs": [
+      "!lowres",
+      "aarch64"
+    ],
+    "arch": [],
     "min_glibc": "2.28"
   }
 }

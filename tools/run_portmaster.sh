@@ -83,7 +83,7 @@ if [ -f "$PWD/importer.pck" ]; then
             importer_temporary=$(mktemp -d "$PWD/cache/importer-XXXXXX") || exit 1
             preparation_status running 'Unpacking import tools. This first step can take a little while.' 0
             # muOS BusyBox tar has no -z option; use the ordinary POSIX archive.
-            preparation_command tar -xf "$PWD/importer.tar" -C "$importer_temporary" || exit 1
+            preparation_command tar --no-same-owner -xf "$PWD/importer.tar" -C "$importer_temporary" || exit 1
             mv "$importer_temporary" "$MOONSTONE_IMPORTER_DIR" || exit 1
             importer_temporary=
         fi
@@ -102,7 +102,7 @@ if [ -f "$PWD/importer.pck" ]; then
             local checked
             checked=$(unset LD_PRELOAD; "$godot_engine" --headless --audio-driver Dummy \
                 --main-pack "$PWD/importer.pck" -- --verify-content "$PWD") || return 1
-            content_pack=$(printf '%s\n' "$checked" | sed -n 's/^CONTENT_PACK_PATH=//p')
+            content_pack=$(unset LD_PRELOAD; printf '%s\n' "$checked" | sed -n 's/^CONTENT_PACK_PATH=//p')
             [[ -n "$content_pack" && "$content_pack" != *$'\n'* ]] && [ -f "$content_pack" ]
             return
         fi
