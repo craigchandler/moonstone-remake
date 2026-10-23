@@ -55,7 +55,7 @@ class PublicTreeTests(unittest.TestCase):
     def test_only_named_documentation_screenshots_are_allowed(self):
         self.stage('docs/screenshots.md')
         for name in PUBLIC_SCREENSHOTS:
-            self.stage(name, self.screenshot())
+            self.stage(name, self.screenshot(height=480 if name.endswith('/portmaster.png') else 400))
         self.assertEqual(audit(self.root)[0], [])
         self.stage('docs/screenshots/sprite-atlas.png', self.screenshot())
         issues, _, _ = audit(self.root)
@@ -65,6 +65,8 @@ class PublicTreeTests(unittest.TestCase):
         for content in [b'not an image', self.screenshot(320, 200), self.screenshot()[:-1]]:
             self.stage('docs/screenshots/intro.png', content)
             self.assertTrue(any('PNG screenshot' in issue for issue in audit(self.root)[0]))
+        self.stage('docs/screenshots/portmaster.png', self.screenshot())
+        self.assertTrue(any('640x480 PNG' in issue for issue in audit(self.root)[0]))
 
     def test_screenshot_exception_preserves_staged_content_and_credential_checks(self):
         name = 'docs/screenshots/intro.png'

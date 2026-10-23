@@ -60,7 +60,7 @@ adaptations. Automated checks do not establish complete original-game parity.
 | --- | --- | --- |
 | Install a release ZIP or copy content between platforms | [Release and content guide](docs/releases.md) | Your supported disks on first setup, or a copied content pack |
 | Play an installed game | [Player guide](docs/player-guide.md) | A separately generated content pack |
-| Run on RG40XX H / muOS | [PortMaster guide](docs/portmaster.md) | Generated on first launch from your own supported disks |
+| Install/test on PortMaster (RG40XX H / muOS baseline) | [PortMaster installation](docs/portmaster-readme.md), [testing guide](docs/portmaster-testing.md) | Generated on first launch from your own supported disks |
 | Build the classic game from your own disks | [One-time import](docs/importing.md), then [build instructions](docs/development.md) | Yes |
 | Host from the game | [Network journey](docs/player-guide.md#network-journey) | A provisioned game client |
 | Run or build a standalone server | [Server setup](docs/server-guide.md) | No |

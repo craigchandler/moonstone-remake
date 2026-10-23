@@ -10,8 +10,11 @@ import zlib
 PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md screenshots.md server-guide.md gameplay-packs.md portmaster.md releases.md upstream-sources.json'.split())
 PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py build_server.py server_version.py verify_server_release.py server_release.py install_server_toolchain.py server-toolchain.json network_fingerprint.py campaign_fingerprint.py verify_campaign.py verify_network.py verify_server.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py package_portmaster.py launch_portmaster.sh run_portmaster.sh portmaster-runtimes.json portmaster.gptk portmaster_art.gd portmaster_content.py portmaster_convert.gd portmaster_import.py portmaster_setup.gd portmaster-importer-runtimes.json build_portmaster_importer.py package_portmaster_external.py verify_build.py'.split())
 PUBLIC_TOOLS |= frozenset('release.py release_source.py release_launcher.py release-toolchain.json install_release_toolchain.py verify_release.py'.split())
+PUBLIC_TOOLS |= frozenset('portmaster_metadata.py portmaster-port.json'.split())
+PUBLIC_DOCS |= frozenset(['portmaster-readme.md', 'portmaster-testing.md'])
 PUBLIC_SCREENSHOTS = frozenset('docs/screenshots/' + name + '.png' for name in
     'intro main-menu practice-menu world-map battle town-highwood town-waterdeep town-tavern'.split())
+PUBLIC_SCREENSHOTS |= frozenset(['docs/screenshots/portmaster.png'])
 PUBLIC_ROOT = frozenset('.gitattributes .gitignore AGENTS.md CONTRIBUTING.md LICENSE README.md THIRD_PARTY.md requirements-import.txt'.split())
 BLOCKED_SUFFIXES = frozenset('.ipf .adf .hdf .mp4 .mkv .webm .mov .avi .wav .mp3 .ogg .zip .7z .tar .gz .exe .dll .so .x86_64 .png .jpg .jpeg .gif .webp .blend .fbx .glb .gltf .pem .key .pfx .p12'.split())
 MAX_BYTES = 2 * 1024 * 1024
@@ -62,8 +65,8 @@ def allowed_path(name):
     return path.parts[0] == 'game' or (len(path.parts) == 1 and name in PUBLIC_ROOT)
 
 
-def valid_screenshot(content):
-    """Only complete 640x400 PNG captures qualify for the exact-name exception."""
+def valid_screenshot(content, dimensions=(640, 400)):
+    """Require a complete PNG with the dimensions permitted for its exact path."""
     if not content.startswith(b'\x89PNG\r\n\x1a\n'):
         return False
     offset, chunks = 8, []
@@ -78,7 +81,7 @@ def valid_screenshot(content):
         if zlib.crc32(kind + payload) != crc:
             return False
         if not chunks and (kind != b'IHDR' or size != 13 or
-                           struct.unpack('>II', payload[:8]) != (640, 400)):
+                           struct.unpack('>II', payload[:8]) != dimensions):
             return False
         chunks.append(kind)
         if kind == b'IEND':
@@ -127,8 +130,9 @@ def check_tree(root, ref=None):
         if size > MAX_BYTES:
             issues.append(name + ': exceeds source-file size limit')
         if name in PUBLIC_SCREENSHOTS:
-            if not valid_screenshot(content):
-                issues.append(name + ': expected a complete 640x400 PNG screenshot')
+            dimensions = (640, 480) if name == 'docs/screenshots/portmaster.png' else (640, 400)
+            if not valid_screenshot(content, dimensions):
+                issues.append(name + ': expected a complete %dx%d PNG screenshot' % dimensions)
         elif b'\0' in content:
             issues.append(name + ': binary content')
         for pattern, label in SIGNATURES:

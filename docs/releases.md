@@ -5,7 +5,8 @@ game ZIPs, plus separate Linux and Windows standalone server ZIPs. Download the
 ZIP for your platform and check its SHA256 against the release's `SHA256SUMS`.
 Extract the entire ZIP, keeping its directories together. The game packages
 include their engine/import tools; Python, Pillow and NumPy do not need separate
-installation. The original game's disks, artwork and audio are not included.
+installation. Original disks and playable artwork/audio packs are not included.
+PortMaster includes documentation screenshots for its catalogue and menu.
 
 The server packages are asset-free and need neither disks nor conversion tools.
 Use `Moonstone-Server.sh` or `Moonstone-Server.cmd`; their `READ ME.txt` explains
@@ -22,15 +23,18 @@ inside Windows Program Files. Do not launch a file from inside the ZIP viewer.
 | --- | --- | --- | --- | --- |
 | Linux x86_64 | Any writable game folder | `./Moonstone.sh` | `disks/` beside the launcher | `content/` beside the launcher |
 | Windows x86_64 | Any writable game folder | Double-click `Moonstone.cmd` | `disks\` beside the launcher | `content\` beside the launcher |
-| PortMaster ARM64 | SD-card root, preserving `roms/PORTS` and `ports/moonstone` | Ports → Moonstone | `ports/moonstone/disks/` | `ports/moonstone/content/` |
+| PortMaster ARM64 | `Moonstone.sh` + `moonstone/` inside the firmware ports directory; muOS: launcher → `roms/PORTS/`, folder → `ports/` | Ports → Moonstone | `disks/` inside `moonstone/` | `content/` inside `moonstone/` |
 
 Linux uses glibc 2.28 or newer and a working OpenGL 3.3 driver/display environment;
 normal system graphics/audio libraries are still required. Windows uses 64-bit
 Windows and an OpenGL 3.3 capable driver. PortMaster needs its Godot 4.6.3 FRT and
 Westonpack runtimes; its launcher offers to install missing runtimes through
 PortMaster when connected. See [PortMaster details](portmaster.md) for muOS paths
-and runtime installation. PortMaster is a manual-install ZIP, not a catalogue
-submission.
+and runtime installation. PortMaster is an experimental testing ZIP with metadata
+and a screenshot, not
+an accepted catalogue release. Read `moonstone/README.txt` before installing;
+the ZIP no longer has the earlier muOS SD-root wrapper directories. See the
+[short PortMaster guide](portmaster-readme.md) and [testing guide](portmaster-testing.md).
 
 Place your supported retail IPF images in the platform's `disks` directory with
 these exact names:

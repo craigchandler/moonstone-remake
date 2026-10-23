@@ -1,39 +1,36 @@
-# Moonstone on RG40XX H / muOS
+# Moonstone on PortMaster
 
-This is a manually installed PortMaster package for the Anbernic RG40XX H running muOS.
+This is an experimental ARM64 PortMaster testing package. The Anbernic RG40XX H
+running muOS is the existing hardware baseline; other firmware/devices need testing.
 The external-assets package supplies game code and import tools. It contains no
-original disk images or recovered Moonstone artwork, fonts, music or sounds.
+original disk images or playable Moonstone artwork, fonts, music or sounds.
+Documentation screenshots for the catalogue/menu are included separately.
 The first launch converts the user's supported disks into a separate content
 pack on the SD card. Combat, RNG, network fingerprints and save formats remain
 independent of artwork. This is not a PortMaster catalogue release.
 
 ## Install
 
-1. Install/update PortMaster in muOS.
-2. Extract **Moonstone-0.1.0-PortMaster.zip** (or the matching release version) to the root of the games SD
-   card (SD2 when used for games). It creates `roms/PORTS/Moonstone.sh` and
-   `ports/moonstone/`.
-3. Install **Godot 4.6.3** (not Mono) and **Westonpack 0.2** through PortMaster's
-   Runtime Manager. Keep an existing newer Westonpack. The game launcher
-   requests missing runtimes when connected; offline users must install them
-   beforehand. They are not embedded in the game release ZIP.
-4. Copy your own supported original images into `ports/moonstone/disks/`:
+See the [short PortMaster installation guide](portmaster-readme.md), also included
+as `moonstone/README.txt` and `moonstone/README.md` in the release ZIP. It lists
+controls, disk names, CLI commands, content-copy paths, artwork and troubleshooting.
 
-   ```text
-   Moonstone_DiskA.ipf
-   Moonstone_DiskB.ipf
-   Moonstone_DiskC.ipf
-   ```
+The ZIP uses the standard **`Moonstone.sh` + `moonstone/`** layout. On most
+PortMaster firmware, place both inside the firmware's ports directory. For a
+**muOS manual install**, place the launcher in `roms/PORTS/` and the directory in
+`ports/`, on the same games SD card. Do not extract the new ZIP straight to the
+SD-card root. Existing installed muOS paths have not changed.
 
-5. Open **Explore Content → PORTS → Moonstone**. First launch displays conversion
-   progress. Keep the handheld powered on until it finishes. Allow at least
-   **1 GB free** for temporary conversion files in addition to the installed
-   package. The native importer completed conversion and the headless game check
-   in **1 minute 56 seconds** on an RG40XX H. The user reported **2 minutes
-   8 seconds** overall including initial tool setup, followed by an automatic
-   game launch. This includes parallel resource packing; a one-minute first
-   installation has not been established.
-   SD card and device conditions can change this one-time setup duration.
+Install **Godot 4.6.3** (not Mono) and **Westonpack 0.2** with PortMaster's Runtime
+Manager. The launcher requests missing runtimes when connected; install them
+before playing offline. Place your own `Moonstone_DiskA.ipf`,
+`Moonstone_DiskB.ipf` and `Moonstone_DiskC.ipf` in `moonstone/disks/`, or copy
+verified desktop-created content into `moonstone/content/`. Open Moonstone from
+Ports. Allow at least **1 GB free** for temporary conversion files.
+
+The earlier RG40XX H/muOS importer completed conversion and validation in **1:56**,
+with a user-reported **2:08 overall** including tool setup and automatic launch.
+This is a hardware baseline, not a promised time or validation of a later ZIP.
 
 Only the traced retail IPF version described in [importing](importing.md) is
 supported. ADFs and other releases are not accepted. Originals are read only.
@@ -108,17 +105,13 @@ The earlier **Moonstone-RG40XXH-muOS.zip** is a separate private package contain
 preconverted assets. `tools/package_portmaster.py` can still reproduce that
 baseline. It must not be confused with the external-assets distribution.
 
-Existing Ports artwork remains independent of game content. The earlier private
-**Moonstone-muOS-Artwork.zip** contains a 320×200 battle thumbnail. Place it on the
-card selected for **Catalogue** storage, at:
-
-```text
-MUOS/info/catalogue/External - Ports/box/Moonstone.png
-MUOS/info/catalogue/External - Ports/preview/Moonstone.png
-```
-
-It is not included in the external-assets ZIP. Leave and reopen Ports after
-changing artwork. See [muOS artwork storage](https://muos.dev/installation/artwork).
+The ZIP includes `port.json`, `gameinfo.xml`, a 640×480 gameplay `screenshot.png`
+and a separate 320×200 `muos-thumbnail.png`. For muOS copy the thumbnail, renamed
+`Moonstone.png`, to `MUOS/info/catalogue/External - Ports/box/` on the card selected for
+Catalogue storage (the tested muOS association is `External - Ports`). Leave and reopen Ports. Do not use the full-size screenshot
+as muOS box art; it can cover the menu. XML/JSON metadata can be consumed by
+PortMaster and compatible frontends; manual extraction alone may not update a
+frontend's database. See [muOS artwork storage](https://muos.dev/installation/artwork).
 
 ## Controls and first test
 
@@ -159,8 +152,9 @@ enter your home village, open/close inventory and check Continue after exiting.
 Use the game's normal exit when possible so it can finish saving.
 
 The 640×400 game view keeps its aspect ratio on the 640×480 display. Black bars
-are expected. Options → Controller provides remapping. Physical button mapping,
-trigger recognition and performance still need a real handheld playtest.
+are expected. Options → Controller provides remapping. The earlier RG40XX H/muOS tests
+confirmed button recognition and battle-result
+confirmation. The repackaged release and other devices still need physical testing.
 
 ## Saves and troubleshooting
 
@@ -177,11 +171,19 @@ reconnect keys. Network play is present, but communication between the desktop
 
 If launch returns to the menu, inspect `ports/moonstone/log.txt`. Check that the
 game folder and launcher are on the same SD card, PortMaster is updated, and
-both runtimes are installed on SD1. The log records device/firmware/architecture
+both runtimes are installed in the PortMaster installation used by the launcher.
+The log records device/firmware/architecture
 and Godot errors. If controls fail or double-trigger, retain that log and report
 which buttons work. The log also records the mapping actually supplied to Godot.
 The controller settings screen should identify the built-in pad as **RG40XX H**.
 Do not reset your saved bindings unless you want to restore the defaults.
+
+## Community testing
+
+See [testing coverage and report template](portmaster-testing.md). Metadata marks
+the build experimental and requires original data, ARM64, glibc 2.28+, and a
+640×480-or-larger display. The ZIP follows the installed PortMaster layout; a
+future catalogue source PR has a separate structure and review process.
 
 ## Build locally
 

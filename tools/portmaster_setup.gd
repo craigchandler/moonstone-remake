@@ -93,7 +93,9 @@ func start_import() -> void:
     cancelling=false
     var python: String=OS.get_environment("MOONSTONE_LAUNCHER_PYTHON")
     if python.is_empty():
-        worker=OS.create_process("/bin/bash",[game_dir.path_join("moonstone-run.sh"),
+        var runner: String=game_dir.path_join("moonstone-run")
+        if not FileAccess.file_exists(runner):runner=game_dir.path_join("moonstone-run.sh")
+        worker=OS.create_process("/bin/bash",[runner,
             "--prepare-content",OS.get_executable_path()])
     else:
         worker=OS.create_process(python,["-B",game_dir.path_join("moonstone-launcher.py"),"--prepare-content"])

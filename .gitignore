@@ -29,6 +29,8 @@ docs/*
 !docs/asset-policy.md
 !docs/development.md
 !docs/portmaster.md
+!docs/portmaster-readme.md
+!docs/portmaster-testing.md
 !docs/releases.md
 !docs/importing.md
 !docs/player-guide.md
@@ -46,6 +48,7 @@ docs/screenshots/*
 !docs/screenshots/practice-menu.png
 !docs/screenshots/world-map.png
 !docs/screenshots/battle.png
+!docs/screenshots/portmaster.png
 !docs/screenshots/town-highwood.png
 !docs/screenshots/town-waterdeep.png
 !docs/screenshots/town-tavern.png

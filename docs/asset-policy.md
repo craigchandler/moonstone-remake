@@ -18,7 +18,9 @@ It is a publication aid, not a legal review or a general secret scanner.
 
 The selected images listed explicitly by `tools/check_public_tree.py` under
 `docs/screenshots/` are documentation captures of the classic remake. This
-exception covers those screenshots only. Runtime asset packs, sprite sheets,
+exception covers those screenshots only, including the 640×480 PortMaster
+catalogue capture. The PortMaster release may include that screenshot and a
+320×200 menu thumbnail generated from the allowlisted battle capture. Runtime asset packs, sprite sheets,
 fonts, original data, audio, footage and build packages remain excluded.
 
 Screenshots contain original Moonstone artwork, which retains its respective
@@ -69,7 +71,9 @@ original-derived data. See [gameplay packs](gameplay-packs.md).
 The `v*` release workflow publishes code-only Linux/Windows/PortMaster packages
 and asset-free standalone servers. Game ZIPs include separately licensed
 conversion tools and pinned runtimes; they contain no original disks or recovered
-artwork/audio. CI checks use synthetic test media. Players supply their own
+runtime artwork/audio packs. PortMaster includes the explicitly allowlisted
+documentation screenshots described above; they are not a playable content pack.
+CI runtime checks use synthetic test media. Players supply their own
 supported disks or copy a locally generated compatible `content/` directory,
 which remains outside the executable/code pack and outside Git. See
 [release setup and content transfer](releases.md).

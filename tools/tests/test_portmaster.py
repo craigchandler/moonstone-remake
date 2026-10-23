@@ -69,14 +69,15 @@ class PackTests(unittest.TestCase):
 
 
 class LauncherTests(unittest.TestCase):
-    def run_launcher(self, fail_mount=False, missing_runtime=False, game_exit=0):
-        with tempfile.TemporaryDirectory(prefix='moonstone-launch-') as tmp:
+    def run_launcher(self, fail_mount=False, missing_runtime=False, game_exit=0, adjacent=False):
+        with tempfile.TemporaryDirectory(prefix='moonstone launch ') as tmp:
             root = Path(tmp)
             control = root / 'PortMaster'
-            game = root / 'ports/moonstone'
+            game = root / ('moonstone' if adjacent else 'ports/moonstone')
             control.mkdir(); game.mkdir(parents=True)
             (control / 'libs').mkdir()
             (game / 'moonstone.pck').write_bytes(b'pack')
+            (game / ('moonstone-run' if adjacent else 'moonstone-run.sh')).write_text('#!/bin/bash\n')
             (game / 'moonstone.gptk').write_bytes((TOOLS / 'portmaster.gptk').read_bytes())
             for name in ['godot_4.6.3', 'weston_pkg_0.2']:
                 if not missing_runtime:
@@ -99,6 +100,7 @@ GPTOKEYB="true"
 get_controls() { sdl_controllerconfig=test_mapping; }
 pm_message() { echo "$*"; }
 pm_finish() { echo finish >> "$EVENTS"; }
+pm_platform_helper() { echo "platform:$1" >> "$EVENTS"; }
 mount() { echo "mount:$2" >> "$EVENTS"; [ "$FAIL_MOUNT" != 1 ] || [ "$2" != "$TEST_ROOT/godot" ]; }
 umount() { echo "umount:$1" >> "$EVENTS"; }
 ''')
@@ -119,7 +121,14 @@ umount() { echo "umount:$1" >> "$EVENTS"; }
         self.assertEqual(code, 7, output)
         self.assertIn('wrapper:headless noop kiosk crusty_x11egl bash ./moonstone-run.sh', events)
         self.assertIn('wrapper:cleanup', events)
+        self.assertIn('platform:', events)
+        self.assertLess(events.index('platform:'),events.index('wrapper:headless'))
         self.assertTrue(events.endswith('finish\n'), events)
+
+    def test_standard_adjacent_folder_layout(self):
+        code, events, output = self.run_launcher(adjacent=True)
+        self.assertEqual(code,0,output)
+        self.assertIn('wrapper:headless noop kiosk crusty_x11egl bash ./moonstone-run\n',events)
 
     def test_partial_mount_failure_cleans_up(self):
         code, events, _ = self.run_launcher(fail_mount=True)
@@ -132,7 +141,7 @@ umount() { echo "umount:$1" >> "$EVENTS"; }
         code, events, output = self.run_launcher(missing_runtime=True)
         self.assertNotEqual(code, 0, output)
         self.assertNotIn('wrapper:', events)
-        self.assertIn('offline runtime', output)
+        self.assertIn('Runtime Manager', output)
 
 
 class NativeInputTests(unittest.TestCase):

@@ -2,6 +2,7 @@
 # Moonstone's native controller adapter uses PortMaster's SDL mapping.
 # Westonpack supplies the X11/EGL environment; gameplay remains in moonstone.pck.
 case "${1:-}" in ''|--import-content|--verify-content) ;; *) echo 'Usage: Moonstone.sh [--import-content [--force] | --verify-content]'; exit 2 ;; esac
+launcher_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)" || exit 1
 XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 for candidate in /mnt/mmc/MUOS/PortMaster /opt/system/Tools/PortMaster /opt/tools/PortMaster "$XDG_DATA_HOME/PortMaster" /roms/ports/PortMaster; do
     if [ -f "$candidate/control.txt" ]; then
@@ -10,7 +11,7 @@ for candidate in /mnt/mmc/MUOS/PortMaster /opt/system/Tools/PortMaster /opt/tool
     fi
 done
 if [ -z "${controlfolder:-}" ]; then
-    echo "PortMaster was not found. Install/update it in muOS first."
+    echo "PortMaster was not found. Install/update PortMaster for your firmware first."
     exit 1
 fi
 source "$controlfolder/control.txt" || exit 1
@@ -18,16 +19,28 @@ if [ -f "$controlfolder/mod_${CFW_NAME}.txt" ]; then
     source "$controlfolder/mod_${CFW_NAME}.txt" || exit 1
 fi
 get_controls
-GAMEDIR="/${directory#/}/ports/moonstone"
+# Standard PortMaster installs keep these together. muOS relocates launchers to
+# roms/PORTS while keeping game data in the SD card's ports directory.
+GAMEDIR="$launcher_dir/moonstone"
 if [ ! -f "$GAMEDIR/moonstone.pck" ]; then
-    pm_message "Missing ports/moonstone/moonstone.pck on the same SD card as the launcher."
+    GAMEDIR="/${directory#/}/ports/moonstone"
+fi
+if [ ! -f "$GAMEDIR/moonstone.pck" ]; then
+    pm_message "Missing moonstone/moonstone.pck beside the launcher or in this SD card's ports directory. See moonstone/README.txt."
     exit 1
 fi
 cd "$GAMEDIR" || exit 1
+runner=moonstone-run
+# Retain compatibility with the earlier private/manual packages.
+if [ ! -f "$runner" ]; then runner=moonstone-run.sh; fi
+if [ ! -f "$runner" ]; then
+    pm_message "Missing Moonstone launch helper. Reinstall the package."
+    exit 1
+fi
 exec > >(tee "$GAMEDIR/log.txt") 2>&1
 echo "Moonstone PortMaster: device=${DEVICE_NAME:-unknown}, firmware=${CFW_NAME:-unknown}, arch=${DEVICE_ARCH:-unknown}"
 if [ "${DEVICE_ARCH:-}" != aarch64 ]; then
-    pm_message "This Moonstone package requires aarch64 (RG40XX H / muOS)."
+    pm_message "This Moonstone package requires aarch64. Other architectures are not included."
     exit 1
 fi
 CONFDIR="$GAMEDIR/conf"
@@ -41,7 +54,7 @@ ensure_runtime() {
     local filename=$1
     if [ ! -s "$controlfolder/libs/$filename" ]; then
         if [ ! -f "$controlfolder/harbourmaster" ]; then
-            pm_message "Update PortMaster, or install the supplied offline runtime ZIP on SD1."
+            pm_message "Update PortMaster and install Godot 4.6.3 and Westonpack 0.2 through its Runtime Manager before playing offline."
             return 1
         fi
         $ESUDO "$controlfolder/harbourmaster" --quiet --no-check runtime_check "$filename" || return 1
@@ -89,11 +102,11 @@ if [ ! -x "$godot_dir/godot463.aarch64" ] || [ ! -x "$weston_dir/westonwrap.sh" 
 fi
 if [ "${1:-}" = --import-content ]; then
     rm -f "$GAMEDIR/import-cancel"
-    bash ./moonstone-run.sh --prepare-content "$godot_dir/godot463.aarch64" "${@:2}"
+    bash "./$runner" --prepare-content "$godot_dir/godot463.aarch64" "${@:2}"
     exit $?
 fi
 if [ "${1:-}" = --verify-content ]; then
-    bash ./moonstone-run.sh --verify-content
+    bash "./$runner" --verify-content
     exit $?
 fi
 # No key mapping: Godot handles both sticks, context-sensitive buttons and pause.
@@ -108,9 +121,10 @@ if [ ! -f "$GAMEDIR/moonstone.gptk" ]; then
 fi
 $GPTOKEYB godot463.aarch64 -c "$GAMEDIR/moonstone.gptk" &
 mapper_pid=$!
+pm_platform_helper "$godot_dir/godot463.aarch64"
 weston_started=1
 # Use relative paths: Westonpack's wrapper constructs a shell command internally.
 # Keep native gamepad input enabled and forward SDL's per-device mapping.
 $ESUDO env CRUSTY_BLOCK_INPUT=0 "$weston_dir/westonwrap.sh" headless noop kiosk crusty_x11egl \
-    bash ./moonstone-run.sh
+    bash "./$runner"
 exit $?
