@@ -73,7 +73,9 @@ def launcher(platform, binary_name, root=ROOT):
 def godot_binary(settings, root=ROOT):
     selected = os.environ.get('GODOT_BIN')
     bundled = root / 'work' / ('godot-' + settings['engine_version']) / ('Godot_v' + settings['engine_version'] + '-stable_linux.x86_64')
-    binary = Path(selected) if selected else bundled if bundled.is_file() else Path(shutil.which('godot') or '')
+    installed = root / 'work/server-toolchain' / bundled.name
+    local = next((path for path in [bundled, installed] if path.is_file()), None)
+    binary = Path(selected) if selected else local or Path(shutil.which('godot') or '')
     if not binary.is_file():
         raise RuntimeError('Set GODOT_BIN to the matching Godot editor; see docs/development.md.')
     binary = binary.resolve()
@@ -83,13 +85,17 @@ def godot_binary(settings, root=ROOT):
     return binary, version
 
 
-def stage_templates(settings, env):
+def stage_templates(settings, env, root=ROOT):
     version = settings['engine_version'] + '.stable'
     explicit = os.environ.get('GODOT_TEMPLATES_DIR')
     candidates = [Path(explicit)] if explicit else [
         Path(os.environ.get('XDG_DATA_HOME', Path.home() / '.local/share')) / 'godot/export_templates' / version,
         Path.home() / '.local/share/godot/export_templates' / version,
     ]
+    installed = root / 'work/server-toolchain/templates'
+    identity = installed / 'version.txt'
+    if not explicit and identity.is_file() and identity.read_text().strip() == version:
+        candidates.insert(0, installed)
     source = next((p for p in candidates if (p / 'linux_release.x86_64').is_file() and (p / 'windows_release_x86_64.exe').is_file()), None)
     if source is None:
         raise RuntimeError('Install matching Linux/Windows export templates or set GODOT_TEMPLATES_DIR.')

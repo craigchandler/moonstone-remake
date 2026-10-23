@@ -16,7 +16,10 @@ locally provisioned assets in Linux/Windows players.
 - Locally provisioned `game/assets/classic/` and `game/content/generated/`.
 
 `GODOT_BIN` may name an editor installed anywhere; the fallback is
-`work/godot-4.6.1/Godot_v4.6.1-stable_linux.x86_64`, then `godot` on PATH.
+`work/godot-4.6.1/Godot_v4.6.1-stable_linux.x86_64`, then the editor installed by
+`tools/install_server_toolchain.py` under `work/server-toolchain/`, then `godot`
+on PATH. Matching templates under `work/server-toolchain/templates/` are also
+discovered automatically. Explicit environment overrides take precedence.
 The build rejects a different version. Set `GODOT_TEMPLATES_DIR` if matching
 standard templates are outside the usual Godot data directory. Presets contain
 no developer-specific paths.

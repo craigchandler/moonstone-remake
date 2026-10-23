@@ -136,9 +136,10 @@ jobs:
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.12'
-      - name: Install engine and accept lightweight server ZIPs
+      - name: Install pinned server engine and templates
+        run: python3 tools/install_server_toolchain.py
+      - name: Build and accept lightweight server ZIPs
         run: |
-          python3 tools/install_server_toolchain.py
           server_version=$(python3 -c 'import json; print(json.load(open("game/server/version.json"))["version"])')
           python3 tools/server_release.py --tag "server-v$server_version"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
