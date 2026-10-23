@@ -1,0 +1,21 @@
+{
+  "zig_version": "0.17.0",
+  "sources": [
+    {
+      "name": "moonstone-ace",
+      "url": "https://codeload.github.com/Jarskih/moonstone-ace-public/tar.gz/f0d699a2b92d42d5380429ea9f2d94f7534324ef",
+      "revision": "f0d699a2b92d42d5380429ea9f2d94f7534324ef",
+      "sha256": "3a38db94dad9048ca409b6a919bc0276e19adf56d29a1fffd6e57a8b60b6b690"
+    },
+    {
+      "name": "capsimg",
+      "url": "https://codeload.github.com/FrodeSolheim/capsimg/tar.gz/ed4cb0912fb1a2a0d5203111c6f6abd50d411b56",
+      "revision": "ed4cb0912fb1a2a0d5203111c6f6abd50d411b56",
+      "sha256": "32f37abcdf41a72414e216e80e730aa7d6c1522f0b3bb86fd193844b9dfef626"
+    }
+  ],
+  "zig": {
+    "url": "https://ziglang.org/download/0.17.0/zig-x86_64-linux-0.17.0.tar.xz",
+    "sha256": "1cbe9df9f27e6b78d14ccbca43b6703a404ef79ef1c463de901d7f088d4e2026"
+  }
+}

@@ -1,6 +1,7 @@
 extends RefCounted
 
 const Profile=preload("res://scripts/session/controller_profile.gd")
+const Labels=preload("res://scripts/presentation/controller_labels.gd")
 const Runtime=preload("res://scripts/session/runtime_mode.gd")
 const Local=preload("res://scripts/session/local_session.gd")
 var controls: Node
@@ -9,6 +10,10 @@ var failures: Array[String]=[]
 var traces: Dictionary={}
 var device: int=42
 var cursor_checks: int=0
+
+class HandheldInput:
+    extends "res://scripts/presentation/controller_input.gd"
+    func device_name() -> String:return "RG40XX H"
 
 func check(ok: bool,label: String) -> void:
     checks+=1
@@ -107,6 +112,20 @@ func run_checks(parent: Node) -> Dictionary:
     var controller_before: PackedByteArray=FileAccess.get_file_as_bytes(old_path) if FileAccess.file_exists(old_path) else PackedByteArray()
     var preferences_before: PackedByteArray=FileAccess.get_file_as_bytes("user://preferences.cfg") if FileAccess.file_exists("user://preferences.cfg") else PackedByteArray()
     check(not Profile.validate(Profile.defaults()).is_empty(),"default profile validates")
+    var handheld: Dictionary={JOY_BUTTON_A:"A",JOY_BUTTON_B:"B",JOY_BUTTON_X:"X",JOY_BUTTON_Y:"Y",JOY_BUTTON_BACK:"SE",JOY_BUTTON_START:"ST",JOY_BUTTON_LEFT_SHOULDER:"L1",JOY_BUTTON_RIGHT_SHOULDER:"R1",JOY_BUTTON_LEFT_STICK:"L3",JOY_BUTTON_RIGHT_STICK:"R3"}
+    for code in handheld:
+        check(Labels.label(Profile.button(code),"RG40XX H")==handheld[code],"handheld printed button "+handheld[code])
+    check(Labels.label(Profile.trigger(JOY_AXIS_TRIGGER_LEFT),"RG40XX H")=="L2" and Labels.label(Profile.trigger(JOY_AXIS_TRIGGER_RIGHT),"RG40XX H")=="R2","handheld digital trigger labels")
+    for action in Profile.COMBAT+Profile.MENUS:
+        var binding: Dictionary=controls.profile.bindings[action]
+        check(Labels.label(binding,"Xbox Controller")==Profile.label(binding),"desktop label preserved "+action)
+    # Supply the device name while exercising remapped prompts in the adapter.
+    var handheld_controls:=HandheldInput.new()
+    var handheld_profile: Dictionary=Profile.remap(controls.profile,"swing",Profile.button(JOY_BUTTON_A))
+    handheld_controls.profile=handheld_profile.duplicate(true)
+    check(handheld_controls.binding_name("swing")=="A" and handheld_controls.binding_name("lunge")=="X" and handheld_controls.pause_name()=="ST","handheld prompts follow saved remaps and printed pause button")
+    check(handheld_controls.profile==handheld_profile,"label lookup preserves saved bindings")
+    handheld_controls.free()
     var swapped: Dictionary=Profile.remap(Profile.defaults(),"heavy",Profile.button(JOY_BUTTON_X))
     check(swapped.bindings.heavy.code==JOY_BUTTON_X and swapped.bindings.swing.code==JOY_BUTTON_Y,"conflicting combat bindings swap atomically")
     var shared: Dictionary=Profile.remap(Profile.defaults(),"accept",Profile.button(JOY_BUTTON_X))
@@ -215,7 +234,10 @@ func run_checks(parent: Node) -> Dictionary:
     world.journey.combat.simulation.spawn_remaining=0
     for actor in world.journey.combat.simulation.actors.values():
         if actor.team==2:actor.health=0
-    world.journey.persist();world.show_loot()
+    check(world.arena.confirm_ready(),"campaign victory accepts controller confirmation")
+    check(world.arena.result_hint("victory").begins_with("A: collect loot"),"victory prompt names the active controller binding")
+    tap(JOY_BUTTON_A)
+    check(world.loot_view!=null,"controller confirm opens campaign victory loot")
     await parent.get_tree().process_frame
     release_all();var gold: int=world.journey.inventory.gold
     tap(JOY_BUTTON_A)
@@ -255,6 +277,28 @@ func run_checks(parent: Node) -> Dictionary:
     market.queue_free()
     await parent.get_tree().process_frame
     await cursor_alignment_checks(parent,world)
+    # Campaign defeat must acknowledge through the mapped confirm button, not
+    # require the unrelated retreat binding. Keep normal death-animation gating.
+    var defeat_site: String=world.definition.lairs[1].id
+    world.journey.world.position=world.journey.world.lair(defeat_site).position
+    release_all();tap(JOY_BUTTON_A)
+    check(world.arena!=null,"controller enters defeat fixture lair")
+    world.arena.set_physics_process(false)
+    await parent.get_tree().process_frame
+    release_all();button(JOY_BUTTON_A)
+    check(world.arena!=null and world.loot_view==null,"confirm during live combat cannot leave the fight")
+    world.journey.combat.simulation.actors[1].health=0
+    world.journey.combat.simulation.actors[1].down_remaining=5
+    button(JOY_BUTTON_A,false);tap(JOY_BUTTON_A)
+    check(world.arena!=null and not world.arena.confirm_ready(),"confirm waits for the ordinary death sequence")
+    world.journey.combat.simulation.actors[1].down_remaining=0
+    controls.bind_action("accept",Profile.button(JOY_BUTTON_RIGHT_STICK));release_all()
+    check(world.arena.result_hint("defeat").begins_with("R3: return to map") and world.arena.navigation_hint().begins_with("R3: return to map"),"defeat prompts follow remapped confirm")
+    tap(JOY_BUTTON_A)
+    check(world.arena!=null,"old confirm binding cannot acknowledge defeat after a remap")
+    tap(JOY_BUTTON_RIGHT_STICK)
+    check(world.arena==null and world.journey.combat==null,"remapped controller confirm settles defeat and returns to the campaign map")
+    controls.reset_defaults();release_all()
     world.queue_free()
     await parent.get_tree().process_frame
     # Full session state parity for every held combat action, including AI/RNG.

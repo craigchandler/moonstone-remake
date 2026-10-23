@@ -20,6 +20,10 @@ const ms::SynthHw hw{nullptr,write16,write32,read16};
 void interrupt(void*) { ms::synthInt4(synth,hw); }
 void le(FILE* f, uint32_t v, unsigned bytes) { while(bytes--) { fputc(v&255,f); v>>=8; } }
 int main(int argc, char** argv) {
+#ifdef MOONSTONE_EXTERNAL_SYNTH
+    extern bool moonstoneLoadSynthTables();
+    if(!moonstoneLoadSynthTables())return 6;
+#endif
     // memory, output, seconds, mono(1)/stereo(2), sequence(s on consecutive channels)
     if(argc<6) return 2;
     std::ifstream input(argv[1],std::ios::binary);

@@ -7,8 +7,9 @@ import subprocess
 import struct
 import zlib
 
-PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md screenshots.md server-guide.md gameplay-packs.md upstream-sources.json'.split())
-PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py build_server.py server_version.py verify_server_release.py server_release.py install_server_toolchain.py server-toolchain.json network_fingerprint.py campaign_fingerprint.py verify_campaign.py verify_network.py verify_server.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py verify_build.py'.split())
+PUBLIC_DOCS = frozenset('architecture.md art-packs.md asset-policy.md development.md importing.md player-guide.md roadmap.md screenshots.md server-guide.md gameplay-packs.md portmaster.md releases.md upstream-sources.json'.split())
+PUBLIC_TOOLS = frozenset('build-config.json build.py build.sh build_support.py build_server.py server_version.py verify_server_release.py server_release.py install_server_toolchain.py server-toolchain.json network_fingerprint.py campaign_fingerprint.py verify_campaign.py verify_network.py verify_server.py check_public_tree.py godot_notices.gd import_assets.sh launch_moonstone.sh launch_moonstone.cmd package_builds.py package_portmaster.py launch_portmaster.sh run_portmaster.sh portmaster-runtimes.json portmaster.gptk portmaster_art.gd portmaster_content.py portmaster_convert.gd portmaster_import.py portmaster_setup.gd portmaster-importer-runtimes.json build_portmaster_importer.py package_portmaster_external.py verify_build.py'.split())
+PUBLIC_TOOLS |= frozenset('release.py release_source.py release_launcher.py release-toolchain.json install_release_toolchain.py verify_release.py'.split())
 PUBLIC_SCREENSHOTS = frozenset('docs/screenshots/' + name + '.png' for name in
     'intro main-menu practice-menu world-map battle town-highwood town-waterdeep town-tavern'.split())
 PUBLIC_ROOT = frozenset('.gitattributes .gitignore AGENTS.md CONTRIBUTING.md LICENSE README.md THIRD_PARTY.md requirements-import.txt'.split())
@@ -36,7 +37,7 @@ def allowed_path(name):
         return False
     if path.name.startswith('.env') and path.name != '.env.example':
         return False
-    if name == '.github/workflows/server-release.yml':
+    if name in {'.github/workflows/server-release.yml', '.github/workflows/release.yml'}:
         return True
     if name in PUBLIC_SCREENSHOTS:
         return True
@@ -55,7 +56,7 @@ def allowed_path(name):
     if path.parts[0] == 'tools':
         if name.startswith('tools/tests/'):
             return path.suffix == '.py'
-        return len(path.parts) == 2 and (path.name in PUBLIC_TOOLS or
+        return len(path.parts) == 2 and (path.name in PUBLIC_TOOLS or path.name == 'import_accel.cpp' or
             (path.name.startswith('import_') and path.suffix == '.py') or
             (path.name.startswith('bake_') and path.suffix == '.cpp'))
     return path.parts[0] == 'game' or (len(path.parts) == 1 and name in PUBLIC_ROOT)

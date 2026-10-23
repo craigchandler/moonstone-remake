@@ -8,6 +8,7 @@ import hashlib
 import json
 import struct
 import subprocess
+from import_support import require_reference, audio_helper
 from PIL import Image, ImageOps
 from import_intro_menu import ROOT, H, D, REL, facts, SHA, UP, gd
 
@@ -68,7 +69,7 @@ def track(name):
 
 
 def main():
-    assert subprocess.check_output(['git', '-C', str(UP), 'rev-parse', 'HEAD'], text=True).strip() == 'f0d699a2b92d42d5380429ea9f2d94f7534324ef'
+    require_reference(UP, 'f0d699a2b92d42d5380429ea9f2d94f7534324ef')
     OUT.mkdir(parents=True, exist_ok=True); WORK.mkdir(parents=True, exist_ok=True)
     sources = {}
     def verify(name):
@@ -230,14 +231,16 @@ def main():
             for spec in palette_specs:
                 target=spec['pal'].copy()
                 if spec['knight']:target[8:12]=knight_colours[kind]
+                ramps=[tuple(tuple(max(0,((c>>s)&15)-(15-strength))*17 for s in (8,4,0)) for c in target)
+                       for strength in range(16)]
                 for t in range(spec['ticks']):
                     if spec['fade_in']:strength=min(15,(t+1)//spec['fade_in'])
                     elif spec['fade_out']:strength=max(0,15-(t+1)//spec['fade_out'])
                     else:strength=15
-                    rows.extend(tuple(max(0,((c>>s)&15)-(15-strength))*17 for s in (8,4,0)) for c in target)
+                    rows.extend(ramps[strength])
             im=Image.new('RGB',(32,tick));im.putdata(rows);im.save(OUT/f'palette-{code}.png');palettes[code]=f'palette-{code}.png'
     exe=WORK/'bake-music'
-    subprocess.run(['g++','-O2','-std=c++17','-I'+str(UP/'include'),str(ROOT/'tools/bake_ending_music.cpp'),*[str(UP/f'src/engine/{n}.cpp') for n in ['rnc','modplay','paula']],'-o',str(exe)],check=True)
+    exe=audio_helper(ROOT,UP,WORK,'bake-module',[ROOT/'tools/bake_ending_music.cpp',*[UP/f'src/engine/{n}.cpp' for n in ['rnc','modplay','paula']]])
     subprocess.run([str(exe),str(ROOT/'reference/extracted/A/vmusic.cmp'),str(OUT/'music.wav'),str(tick-old['music_tick']+50)],check=True)
     resource='[ext_resource type="Script" path="res://scripts/content/ending_art.gd" id="script"]\n'
     for id,type,name in [('atlas','Texture2D','indices.png'),('music','AudioStream','music.wav')]+[(f'p{k}','Texture2D',v) for k,v in palettes.items()]:

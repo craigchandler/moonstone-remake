@@ -19,7 +19,7 @@ func _draw() -> void:
     draw_rect(Rect2(0,360,640,40),Color.BLACK)
     var controls: Node=get_node("/root/MoonstoneInput")
     pixel_text("NETWORK DUEL / ROUND "+str(link.session.round_id),Vector2(320,366),true,gold)
-    pixel_text((controls.binding_name("retreat").to_upper()+" LEAVE / START CONTROLS") if controls.using_controller else "ESC LEAVE / F1 CONTROLS",Vector2(320,384),true)
+    pixel_text((controls.binding_name("retreat").to_upper()+" LEAVE / "+controls.pause_name().to_upper()+" CONTROLS") if controls.using_controller else "ESC LEAVE / F1 CONTROLS",Vector2(320,384),true)
     if link.state=="closed" or link.session.settled:
         draw_rect(Rect2(94,68,452,96),Color.BLACK)
         draw_rect(Rect2(94,68,452,96),gold,false,2)

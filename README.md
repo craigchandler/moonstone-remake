@@ -1,7 +1,7 @@
 # Moonstone Remake
 
 An unofficial native remake of **Moonstone: A Hard Day’s Knight (1991)** by
-Craig Chandler, built with Godot for Linux and Windows.
+Craig Chandler, built with Godot for Linux, Windows and PortMaster ARM64.
 
 The project recreates the original game’s combat and campaign while preparing
 for replaceable graphics and gameplay content. It is a work in progress, not a
@@ -58,12 +58,19 @@ adaptations. Automated checks do not establish complete original-game parity.
 
 | What you want to do | Start here | Original assets needed? |
 | --- | --- | --- |
-| Run an existing local game package | [Player guide](docs/player-guide.md) | Included in that private package |
+| Install a release ZIP or copy content between platforms | [Release and content guide](docs/releases.md) | Your supported disks on first setup, or a copied content pack |
+| Play an installed game | [Player guide](docs/player-guide.md) | A separately generated content pack |
+| Run on RG40XX H / muOS | [PortMaster guide](docs/portmaster.md) | Generated on first launch from your own supported disks |
 | Build the classic game from your own disks | [One-time import](docs/importing.md), then [build instructions](docs/development.md) | Yes |
 | Host from the game | [Network journey](docs/player-guide.md#network-journey) | A provisioned game client |
 | Run or build a standalone server | [Server setup](docs/server-guide.md) | No |
 
-For a game build, use **Godot 4.6.1**, matching Linux/Windows export templates,
+Tag-triggered public releases build without original assets and include automatic
+and command-line setup. See the [release guide](docs/releases.md) for downloads,
+exact disk/content paths, desktop-to-handheld copying, and the `v*` workflow.
+Standalone server ZIPs remain asset-free and contain no importer.
+
+For a private asset-containing development build, use **Godot 4.6.1**, matching Linux/Windows export templates,
 Python 3.11+, Bash and Git. After provisioning compatible local assets or
 completing the one-time import, run from the repository root:
 
@@ -88,12 +95,13 @@ Server versions and `server-v*` tags are independent of the game version.
 
 Current validation includes automated source tests, exported Linux execution,
 scripted graphical Linux checks and local UDP tests with injected delay/loss.
-Windows packages are exported; Windows execution, separate-machine campaign LAN
+The external-content release packages also pass Linux checks and Windows
+conversion/content-transfer checks under Wine. Native Windows execution, separate-machine campaign LAN
 play, manual full-campaign playthroughs and the hosted release workflow still
 need validation. See [validation status](docs/development.md#evidence).
 
-Without original assets, dependency-free build-tool and publication checks can
-still run:
+Without original assets, build-tool and publication checks can still run
+(install `requirements-import.txt` to include conversion tests):
 
 ```bash
 python3 -m unittest discover -s tools/tests
@@ -105,6 +113,7 @@ python3 tools/check_public_tree.py --ref HEAD
 - [Architecture and deterministic gameplay](docs/architecture.md)
 - [Classic gameplay pack and script boundaries](docs/gameplay-packs.md)
 - [Artwork and renderer boundaries](docs/art-packs.md)
+- [Install releases, extract and copy content](docs/releases.md)
 - [Build, test and export workflow](docs/development.md)
 - [Screenshot gallery](docs/screenshots.md)
 - [Command-line hosting](docs/server-guide.md)

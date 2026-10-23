@@ -25,6 +25,9 @@ std::string state(){
  return s;
 }
 int main(int argc,char**argv){
+#ifdef MOONSTONE_EXTERNAL_SYNTH
+ extern bool moonstoneLoadSynthTables();if(!moonstoneLoadSynthTables())return 6;
+#endif
  if(argc!=3)return 2;std::ifstream f(argv[1],std::ios::binary);std::vector<uint8_t>mem((std::istreambuf_iterator<char>(f)),{});if(mem.size()!=0x90000)return 3;
  ms::paula::reset(device,{48000,100,0},{mem.data(),0,(uint32_t)mem.size()});ms::synthInit(synth,hw,0x1000);
  const uint32_t banks[5]={0x10000,0x20000,0x40000,0x60000,0x80000};ms::synthRelocate(synth,banks);

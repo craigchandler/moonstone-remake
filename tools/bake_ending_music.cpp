@@ -14,10 +14,10 @@ void w16(void*, uint16_t r, uint16_t v) { ms::paula::write16(device,r,v); }
 void w32(void*, uint16_t r, uint32_t v) { ms::paula::write32(device,r,v); }
 void le(FILE* f, uint32_t v, unsigned n) { while(n--) { fputc(v&255,f);v>>=8; } }
 int main(int argc,char** argv) {
-    if(argc!=4)return 2; // packed input, WAV, number of 50 Hz ticks
+    if(argc!=4 && argc!=5)return 2; // packed input, WAV, 50 Hz ticks, optional checked input size
     std::ifstream in(argv[1],std::ios::binary);
     std::vector<uint8_t> packed((std::istreambuf_iterator<char>(in)),{});
-    if(packed.size()!=60994)return 3;
+    if(packed.size()!=(argc==5?std::stoul(argv[4]):60994))return 3;
     std::vector<uint8_t> mem(0x40000,0);
     const uint32_t bytes=ms::rncDecode(packed.data(),mem.data()+0x1000);
     if(bytes<1084 || bytes>0x30000)return 4;

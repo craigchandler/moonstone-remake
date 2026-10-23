@@ -80,7 +80,7 @@ func live(encounter: String,mode: String,facing: int) -> Dictionary:
     return {"attacks":attacks,"events":events,"state":a.simulation.snapshot()}
 
 func run_checks() -> Dictionary:
-    var fixture: Dictionary=preload("res://content/generated/monster_timing_reference.gd").DATA.duplicate(true)
+    var fixture: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://debug/fixtures/monster_timing.json"))
     var scenes: Dictionary={}
     for move in fixture.moves:
         var spec: Dictionary=fixture.moves[move]

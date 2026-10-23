@@ -1,0 +1,205 @@
+name: Game and server release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: game-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Validate release tag, source boundary and importer tests
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python3 tools/release.py --tag "$RELEASE_TAG" --validate-only
+          python3 tools/check_public_tree.py --ref HEAD
+          python3 -m pip install -r requirements-import.txt
+          python3 -m unittest discover -s tools/tests
+
+  game:
+    needs: source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: Linux
+            arch: x86_64
+          - platform: Windows
+            arch: windows-x86_64
+          - platform: PortMaster
+            arch: aarch64
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install build compilers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-mingw-w64-x86-64 binutils
+      - name: Install checksum-pinned engine and importer sources
+        run: |
+          python3 tools/install_server_toolchain.py
+          python3 tools/install_release_toolchain.py
+      - name: Build platform importer and asset-free game ZIP
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_PLATFORM: ${{ matrix.platform }}
+          IMPORTER_ARCH: ${{ matrix.arch }}
+        run: |
+          python3 tools/build_portmaster_importer.py \
+            --upstream work/release-toolchain/upstream \
+            --runtime-cache work/release-toolchain/runtimes \
+            --output work/release-importer --arch "$IMPORTER_ARCH" --fetch-runtimes
+          python3 tools/release.py --tag "$RELEASE_TAG" --platform "$RELEASE_PLATFORM" \
+            --importer work/release-importer --output outputs/release-build
+      - name: Native Linux package acceptance
+        if: matrix.platform == 'Linux'
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python3 tools/verify_release.py --platform Linux \
+            --archive "outputs/release-build/Moonstone-${RELEASE_TAG#v}-Linux.zip" \
+            --output outputs/release-build/Linux-acceptance.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: game-${{ matrix.platform }}
+          path: |
+            outputs/release-build/*.zip
+            outputs/release-build/*-build.json
+            outputs/release-build/*-acceptance.json
+          if-no-files-found: error
+          retention-days: 7
+
+  windows:
+    needs: game
+    runs-on: windows-2025
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: game-Windows
+          path: outputs/release-build
+      - name: Native Windows package acceptance
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: pwsh
+        run: |
+          $version = $env:RELEASE_TAG.Substring(1)
+          python tools/verify_release.py --platform Windows --archive "outputs/release-build/Moonstone-$version-Windows.zip" --output outputs/release-build/Windows-acceptance.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-acceptance
+          path: outputs/release-build/Windows-acceptance.json
+          if-no-files-found: error
+          retention-days: 7
+
+  server:
+    needs: source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install engine and accept lightweight server ZIPs
+        run: |
+          python3 tools/install_server_toolchain.py
+          server_version=$(python3 -c 'import json; print(json.load(open("game/server/version.json"))["version"])')
+          python3 tools/server_release.py --tag "server-v$server_version"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: server-packages
+          path: |
+            outputs/server-release/Moonstone-Duel-Server-*.zip
+            outputs/server-release/duel-server-build-manifest.json
+            outputs/server-release/duel-server-verification.json
+          if-no-files-found: error
+          retention-days: 7
+
+  collect:
+    needs: [game, windows, server]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: work/release-artifacts
+      - name: Check exact assets, versions and acceptance checksums
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python3 tools/release.py --tag "$RELEASE_TAG" --collect work/release-artifacts --output outputs/release
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: checked-release
+          path: outputs/release/*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: collect
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: checked-release
+          path: release
+      - name: Publish the checked tag release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          cd release
+          sha256sum --check SHA256SUMS
+          mapfile -t assets < <(awk '{print $2}' SHA256SUMS)
+          extra=()
+          if [[ "$RELEASE_TAG" == *-* ]]; then extra+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" --verify-tag "${extra[@]}" \
+            --title "Moonstone ${RELEASE_TAG#v}" --notes-file release-notes.md \
+            "${assets[@]}" SHA256SUMS

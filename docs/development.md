@@ -2,7 +2,14 @@
 
 ## Requirements
 
-The current build runs on Linux and exports Linux/Windows x86_64 players.
+The public [release workflow](releases.md#building-and-releasing-from-source)
+builds Linux/Windows x86_64 and PortMaster ARM64 packages from public source
+without original assets. Their setup/import tools generate a separate portable
+`content/` directory on the player's machine. The `v*` pipeline also produces
+lightweight asset-free Linux/Windows servers.
+
+The older private development/export workflow below runs on Linux and embeds
+locally provisioned assets in Linux/Windows players.
 
 - Godot **4.6.1** and matching Linux/Windows export templates.
 - Python **3.11+**, Bash and Git for source checks/build/package tools.
@@ -76,7 +83,20 @@ see the import guide for its additional tools and licences.
 
 ## Evidence
 
-The latest local validation (2026-10-21) passed **86 Godot suites and 37 Python
+External-content release validation (2026-10-23) includes 95 Python tests,
+workflow lint, a build from an audited source copy without original assets,
+native Linux packaged setup/conversion/transfer checks, and Windows equivalents
+under Wine. Full disk conversions passed 26,364 pixel comparisons on both,
+followed by exported game startup checks. Content generated on either desktop
+loaded on the other. The PortMaster x86 runtime loaded the same content and
+verified a copied pack before unpacking Python. Windows cancellation preserved
+the active content. These checks do not establish native Windows or ARM execution
+of the new release packages; CI includes a separate native Windows acceptance
+job. The hosted tag workflow has not yet run. The previously verified RG40XX H
+2:08 import remains a separate hardware baseline.
+
+
+The gameplay baseline validation (2026-10-21) passed **86 Godot suites and 37 Python
 tool tests**. Exported Linux checks cover input/debug guards, save/backup
 continuation, local-party flow, standalone startup and retained combat traces.
 
@@ -88,7 +108,7 @@ delay and packet loss into both client connections. Separately, four asset-free
 campaign clients verified the exported server and saved-room process restart.
 The complete asset-free server release build passed from an audited source copy.
 
-Windows packages are exported, but Windows execution, separate-machine campaign
+Native Windows execution, separate-machine campaign
 LAN, Internet hosting, physical controllers, manual full-campaign playthroughs,
 running-original comparisons and the hosted GitHub release workflow remain
 unverified. Source checks, exported headless execution, scripted graphical
@@ -177,6 +197,14 @@ fights and complete player recovery in both facings. Its source suite also
 checks numeric expectations from independent execution of the owned original
 knight decision routine. The original binary, disassembler and research stay
 local; runtime uses only native policies and numeric definitions.
+
+## PortMaster
+
+For local RG40XX H / muOS packages, see the [PortMaster guide](portmaster.md).
+The external-assets variant separates code from an accepted desktop export and
+bundles a standalone original-data importer. Desktop import, external-content
+runtime checks and handheld execution remain separate evidence. The older private
+package with embedded assets is retained as a baseline.
 
 ## Standalone server
 

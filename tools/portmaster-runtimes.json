@@ -1,0 +1,26 @@
+{
+  "catalogue": "https://github.com/PortsMaster/PortMaster-New/releases/download/2026-10-22_0006/ports.json",
+  "files": [
+    {
+      "name": "godot_4.6.3.squashfs",
+      "arch": "aarch64",
+      "url": "https://github.com/PortsMaster/PortMaster-New/releases/download/2026-05-24_0536/godot_4.6.3.squashfs",
+      "md5": "92ce0dd917cec6ec3c14735feac7d362",
+      "sha256": "e54567f35db1dcd34175820607db6b6717988454affd70bd22f77540982a9854"
+    },
+    {
+      "name": "godot_4.6.3.x86_64.squashfs",
+      "arch": "x86_64",
+      "url": "https://github.com/PortsMaster/PortMaster-New/releases/download/2026-05-24_0536/godot_4.6.3.x86_64.squashfs",
+      "md5": "b13ddc8c98d400ba73039de68ec8e5e3",
+      "sha256": "4bc210e4bb5db5971a276223f55d9df1f6431715a4bf585bca51c29802e38f49"
+    },
+    {
+      "name": "weston_pkg_0.2.squashfs",
+      "arch": "aarch64",
+      "url": "https://github.com/PortsMaster/PortMaster-New/releases/download/2025-07-24_0745/weston_pkg_0.2.squashfs",
+      "md5": "0a761c28877625861d9c9c4326664428",
+      "sha256": "0bccaeebc11296bb1fe4278c9677cb82965c5a04bcd63745fa09d78228bc1a93"
+    }
+  ]
+}

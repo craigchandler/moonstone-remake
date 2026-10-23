@@ -9,6 +9,7 @@ import hashlib
 import json
 import struct
 import subprocess
+from import_support import require_reference, audio_helper
 from pathlib import Path
 from PIL import Image, ImageOps
 from import_knight_animations import ROOT, parse_hunk_file, gd
@@ -54,7 +55,7 @@ def step(col,target):
     return sum((a+(a<b)-(a>b))<<s for s in (0,4,8) for a,b in [((col>>s)&15,(target>>s)&15)])
 
 def main():
-    assert subprocess.check_output(['git','-C',str(UP),'rev-parse','HEAD'],text=True).strip()=='f0d699a2b92d42d5380429ea9f2d94f7534324ef'
+    require_reference(UP, 'f0d699a2b92d42d5380429ea9f2d94f7534324ef')
     OUT.mkdir(parents=True,exist_ok=True);WORK.mkdir(parents=True,exist_ok=True)
     source={};recovered=ROOT/'game/assets/classic/recovered/A'
     def verify(name):
@@ -170,8 +171,7 @@ def main():
             palettes[key]=f'palette-{key}.png'
     music=ROOT/'reference/extracted/A/vmusic.cmp';source['vmusic.cmp']=hashlib.sha1(music.read_bytes()).hexdigest()
     binary=WORK/'bake-music'
-    subprocess.run(['g++','-O2','-std=c++17','-I'+str(UP/'include'),str(ROOT/'tools/bake_ending_music.cpp'),
-                    *[str(UP/f'src/engine/{n}.cpp') for n in ['rnc','modplay','paula']],'-o',str(binary)],check=True)
+    binary=audio_helper(ROOT,UP,WORK,'bake-module',[ROOT/'tools/bake_ending_music.cpp',*[UP/f'src/engine/{n}.cpp' for n in ['rnc','modplay','paula']]])
     subprocess.run([str(binary),str(music),str(OUT/'music.wav'),str(total-music_tick+50)],check=True)
     trace={'version':1,'program_sha1':PROGRAM_SHA1,'source_sha1':source,'roots':ROOTS,'passes':{k:len(v) for k,v in paths.items()},
            'total_ticks':total,'music_tick':music_tick,'ramp_tick':ramp_tick,'fade_tick':fade_tick,'moon_tick':moon_tick,

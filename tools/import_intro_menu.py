@@ -7,6 +7,7 @@ no original script decoder, program, synth/module player or disk dependency.
 from pathlib import Path
 from PIL import Image, ImageOps
 import hashlib,json,struct,subprocess,wave
+from import_support import require_reference, audio_helper
 from import_knight_animations import ROOT,parse_hunk_file,gd
 
 UP=ROOT/'work/upstream/moonstone-ace';OUT=ROOT/'game/assets/classic/intro_menu';WORK=ROOT/'work/intro-menu'
@@ -48,7 +49,7 @@ class Job:
   return dict(pose,mirror=self.mirror)
 
 def main():
- assert subprocess.check_output(['git','-C',str(UP),'rev-parse','HEAD'],text=True).strip()=='f0d699a2b92d42d5380429ea9f2d94f7534324ef'
+ require_reference(UP, 'f0d699a2b92d42d5380429ea9f2d94f7534324ef')
  OUT.mkdir(parents=True,exist_ok=True);WORK.mkdir(parents=True,exist_ok=True)
  sources={};recovered=ROOT/'game/assets/classic/recovered'
  def verify(name):
@@ -211,21 +212,19 @@ def main():
  fontatlas.save(OUT/'font.png')
  # Reuse the offline-only decoder with a guarded input size/tag for music.cmp.
  music=ROOT/'reference/extracted/A/music.cmp';sources['A/music.cmp']=hashlib.sha1(music.read_bytes()).hexdigest()
- source=(ROOT/'tools/bake_ending_music.cpp').read_text().replace('packed.size()!=60994','packed.size()!='+str(music.stat().st_size))
- (WORK/'bake-opening.cpp').write_text(source);exe=WORK/'bake-opening'
- subprocess.run(['g++','-O2','-std=c++17','-I'+str(UP/'include'),str(WORK/'bake-opening.cpp'),*[str(UP/f'src/engine/{n}.cpp') for n in ['rnc','modplay','paula']],'-o',str(exe)],check=True)
- subprocess.run([str(exe),str(music),str(OUT/'music.wav'),str(tick-music_tick+50)],check=True)
+ exe=audio_helper(ROOT,UP,WORK,'bake-module',[ROOT/'tools/bake_ending_music.cpp',*[UP/f'src/engine/{n}.cpp' for n in ['rnc','modplay','paula']]])
+ subprocess.run([str(exe),str(music),str(OUT/'music.wav'),str(tick-music_tick+50),str(music.stat().st_size)],check=True)
  # Campaign/menu score: four resident-bank voices, looped at a repeated
  # musical control state. Exact analog mix and PCM seam still need listening.
  import import_audio as audio
  audio.g.origin.read_binary=lambda name:audio.m.BINARY;audio.sounds._cache.clear()
- blob,inst,waves=audio.g.build();(WORK/'synth_data.cpp').write_text(audio.g.render())
+ blob,inst,waves=audio.g.build()
  memory=bytearray(0x90000);memory[0x1000:0x1000+len(waves)]=waves
  for address,name in [(0x10000,'B/kn.a'),(0x40000,'B/re.a')]:
   data=(ROOT/'reference/extracted'/name).read_bytes();sources[name]=hashlib.sha1(data).hexdigest();data=data[32:];memory[address:address+len(data)]=data
  assert all(set(audio.sounds.banks_of(n))<={'C9','wave'} for n in range(110,114))
- (WORK/'menu-samples.bin').write_bytes(memory);exe=WORK/'bake-menu'
- subprocess.run(['g++','-O2','-std=c++17','-I'+str(UP/'include'),str(ROOT/'tools/bake_menu_music.cpp'),str(UP/'src/engine/synth.cpp'),str(UP/'src/engine/paula.cpp'),str(WORK/'synth_data.cpp'),'-o',str(exe)],check=True)
+ (WORK/'menu-samples.bin').write_bytes(memory)
+ exe=audio_helper(ROOT,UP,WORK,'bake-menu',[ROOT/'tools/bake_menu_music.cpp',UP/'src/engine/synth.cpp',UP/'src/engine/paula.cpp'],audio.g)
  menu_audio=json.loads(subprocess.check_output([str(exe),str(WORK/'menu-samples.bin'),str(OUT/'menu_music.wav')],text=True))
  trace=dict(version=1,program_sha1=SHA,source_sha1=sources,background_map=dict(bytes=960,tiles=480,size=[320,1200],sheets=['bg1a.PIV','bg1c.PIV','bg1b.PIV'],scroll=scroll),menu_audio=menu_audio,roots=ROOTS,paths={n:dict(passes=len(p['poses']),next=p['next'],bytes=p['bytes']) for n,p in paths.items()},frames=len(frames),ticks=tick,music_tick=music_tick,runs=runs,sections=sections,credits=cards,adaptations=['Loader credit cards150ticks; remake card200ticks; logo/title100ticks. Native16tick fades. These are provisional presentation choices, not measured original loading waits.','Original480tile camera scene reconstructed; source05A5 step curve scrolls0..1000 at4ticks/pass. Historical disk-loading waits omitted.','Source scene order and finite poses/holds preserved. Native composite restoration/job scheduling and palette flashes require running-original comparison.','Blue knight cinematic palette, original bitmap lettering. No original runtime code shipped.'])
  (ROOT/'docs/intro-menu-paths.json').write_text(json.dumps(trace,indent=2)+'\n')

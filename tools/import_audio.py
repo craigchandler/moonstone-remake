@@ -9,6 +9,7 @@ import hashlib
 import json
 import struct
 import subprocess
+from import_support import require_reference, audio_helper
 import wave
 from pathlib import Path
 import import_creature_pack as m
@@ -50,6 +51,9 @@ def timelines():
     result={}; unresolved=[]
     reloc={o:r.target_hunk for r in m.HUNKS[4].reloc32 for o in r.offsets}
     for prov in sorted((ROOT/'game/assets/classic').glob('*/provenance.json')):
+        # Layer packing may run concurrently. Its verification report has no
+        # audio roots and must not be read while that independent stage writes it.
+        if prov.parent.name=='layered':continue
         data=json.loads(prov.read_text());family=prov.parent.name
         if not data.get('roots'):continue
         result[family]={}
@@ -101,16 +105,12 @@ def timelines():
     return result,unresolved
 
 def main():
-    if subprocess.check_output(['git','rev-parse','HEAD'],cwd=UP,text=True).strip()!=PIN:
-        raise ValueError('Audio import requires the reviewed pinned reference helper')
+    require_reference(UP, PIN)
     OUT.mkdir(parents=True,exist_ok=True);WORK.mkdir(parents=True,exist_ok=True)
     g.origin.read_binary=lambda name:m.BINARY
     sounds._cache.clear()
     blob,inst,waves=g.build()
-    tables=WORK/'synth_data.cpp';tables.write_text(g.render())
-    exe=WORK/'bake-audio'
-    subprocess.run(['c++','-std=c++17','-O2','-I'+str(UP/'include'),str(ROOT/'tools/bake_audio.cpp'),
-                    str(UP/'src/engine/synth.cpp'),str(UP/'src/engine/paula.cpp'),str(tables),'-o',str(exe)],check=True)
+    exe=audio_helper(ROOT,UP,WORK,'bake-audio',[ROOT/'tools/bake_audio.cpp',UP/'src/engine/synth.cpp',UP/'src/engine/paula.cpp'],g)
     timeline,unresolved=timelines();streams={};provenance=[]
     sources={}
     def load(name):
@@ -134,7 +134,7 @@ def main():
         subprocess.run([str(exe),str(mem),str(wav),'20',str(2 if len(seqs)>1 else 1),*map(str,seqs)],check=True)
         with wave.open(str(wav)) as f:
             seconds=f.getnframes()/f.getframerate();channels=f.getnchannels()
-        streams[key]=str(wav.relative_to(ROOT/'game'))
+        streams[key]=wav.relative_to(ROOT/'game').as_posix()
         provenance.append(dict(key=key,sequences=seqs,context=kind,seconds=seconds,channels=channels,
                                sha256=hashlib.sha256(wav.read_bytes()).hexdigest()))
         return key

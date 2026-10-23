@@ -9,7 +9,9 @@ from pathlib import Path
 import hashlib
 import json
 import struct
+import os
 from PIL import Image
+from import_support import compact_pose_atlases, record_compact_layout
 from import_knight_animations import ROOT, MOG_SHA1, parse_hunk_file, gd, read_contact_points
 import sys
 sys.path.insert(0,str(ROOT/'work/upstream/moonstone-ace/tools'))
@@ -147,12 +149,18 @@ SCENES={0:[0x776,0x443,0x731,0x520,0x300,0x09a,0xc00],4:[0x332,0xccb,0xb81,0x851
         0x14:[0xc00,0x976,0x700,0x500,0x754,0xc30,0xa00]}
 
 
-def image_for(family, frame, profile, clean):
+def image_for(family, frame, profile, clean, source_cache=None):
     path=ROOT/'game/assets/classic/recovered'/family
-    meta=json.loads((path/'sidecar.json').read_text())
-    if hashlib.sha1((ROOT/'reference/extracted'/meta['source']).read_bytes()).hexdigest()!=meta['source_sha1']:
-        raise ValueError(('Changed original family',family))
-    im=Image.open(path/'frames'/f'{frame:03d}.png');pal=im.getpalette()
+    if source_cache is None:source_cache={}
+    if family not in source_cache:
+        meta=json.loads((path/'sidecar.json').read_text())
+        if hashlib.sha1((ROOT/'reference/extracted'/meta['source']).read_bytes()).hexdigest()!=meta['source_sha1']:
+            raise ValueError(('Changed original family',family))
+        source_cache[family]=meta
+    key=(family,frame)
+    if key not in source_cache:
+        with Image.open(path/'frames'/f'{frame:03d}.png') as image:source_cache[key]=image.copy()
+    im=source_cache[key].copy();pal=im.getpalette()
     if profile.get('palette_mode')=='troll':
         for i,c in enumerate([0x55a,0x347,0x123,0x001,0xf00,0x800],9):pal[i*3:i*3+3]=[((c>>s)&15)*17 for s in (8,4,0)]
         im.putpalette(pal)
@@ -210,34 +218,56 @@ def bake(kind, profile):
         if n not in clips:clips[n]=clips['walk'].copy()
     clips['hurt_b']=clips.get('hurt_b',clips['hurt_a'].copy())
     # All atlas bounds derive from actual layer sizes, including large bosses.
-    bounds=[];cache={}
+    bounds=[];cache={};source_cache={}
+    def cel(family, frame, clean=False, mirror=False):
+        # A resolved death path can draw the same cel thousands of times. Cache
+        # within this profile only: scene/region palettes must never leak into
+        # another creature, and the next bake must recheck its source files.
+        key=(family,frame,clean,mirror)
+        if key not in cache:
+            cache[key]=(cel(family,frame,clean).transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+                        if mirror else image_for(family,frame,profile,clean,source_cache))
+        return cache[key]
     for pose in poses:
         for l in pose['layers']:
             family=profile['families'][l['slot']]
             if family is None:raise ValueError((kind,'Unloaded slot',l))
-            key=(family,l['frame'])
-            if key not in cache:cache[key]=image_for(*key,profile,False)
-            im=cache[key];x=-l['x']-im.width if pose['mirror'] else l['x']
+            im=cel(family,l['frame']);x=-l['x']-im.width if pose['mirror'] else l['x']
             bounds.append((x,l['y'],x+im.width,l['y']+im.height))
     left=min(b[0] for b in bounds)-4;top=min(b[1] for b in bounds)-4
     w=max(b[2] for b in bounds)-left+4;hh=max(b[3] for b in bounds)-top+4;columns=8
-    for clean in [False,True]:
-        atlas=Image.new('RGBA',(w*columns,hh*((len(poses)+columns-1)//columns)))
-        for i,p in enumerate(poses):
-            if clean:
-                for name,clean_poses in profile.get('pose_overrides_clean',{}).items():
-                    frames=clips[name]['frames']
-                    if i in frames:
-                        p=clean_poses[min(len(clean_poses)-1,frames.index(i)*len(clean_poses)//len(frames))]
-                        break
-            for l in p['layers']:
-                if clean and l['flags']&0x80:continue
-                if clean and kind=='dragon' and i in clips['execution_bite']['frames'] and l['slot']==4:continue
-                im=image_for(profile['families'][l['slot']],l['frame'],profile,clean)
-                x=l['x']
-                if p['mirror']:x=-x-im.width;im=im.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-                atlas.alpha_composite(im,(i%columns*w+x-left,i//columns*hh+l['y']-top))
-        atlas.save(out/('clean.png' if clean else 'gore.png'))
+    def draw_key(i, clean):
+        p=poses[i]
+        if clean:
+            for name,clean_poses in profile.get('pose_overrides_clean',{}).items():
+                frames=clips[name]['frames']
+                if i in frames:
+                    p=clean_poses[min(len(clean_poses)-1,frames.index(i)*len(clean_poses)//len(frames))]
+                    break
+        layers=tuple((profile['families'][l['slot']],l['frame'],l['x'],l['y']) for l in p['layers']
+                     if not (clean and (l['flags']&0x80 or (kind=='dragon' and i in clips['execution_bite']['frames'] and l['slot']==4))))
+        return clean,p['mirror'],layers
+    def draw(atlas, key, ox=0, oy=0):
+        clean,mirror,layers=key
+        for family,frame,x,y in layers:
+            im=cel(family,frame,clean,mirror)
+            if mirror:x=-x-im.width
+            atlas.alpha_composite(im,(ox+x-left,oy+y-top))
+    if os.environ.get('MOONSTONE_COMPACT_LAYERS')=='1':
+        keys=[(draw_key(i,False),draw_key(i,True)) for i in range(len(poses))]
+        def render(key):
+            images=[Image.new('RGBA',(w,hh)) for _ in key]
+            for image,mode in zip(images,key):draw(image,mode)
+            return images
+        atlases,regions=compact_pose_atlases(keys,render,(left,top))
+        record_compact_layout(ROOT,kind,[(i%columns*w,i//columns*hh,w,hh,left,top) for i in range(len(poses))],regions)
+        for atlas,name in zip(atlases,['gore.png','clean.png']):atlas.save(out/name)
+    else:
+        regions=[(i%columns*w,i//columns*hh,w,hh,left,top) for i in range(len(poses))]
+        for clean in [False,True]:
+            atlas=Image.new('RGBA',(w*columns,hh*((len(poses)+columns-1)//columns)))
+            for i in range(len(poses)):draw(atlas,draw_key(i,clean),i%columns*w,i//columns*hh)
+            atlas.save(out/('clean.png' if clean else 'gore.png'))
     text='''[gd_resource type="Resource" script_class="MoonstoneAnimationSet" load_steps=4 format=3]
 [ext_resource type="Script" path="res://scripts/content/animation_set.gd" id="1"]
 '''+f'[ext_resource type="Texture2D" path="res://assets/classic/{kind}/gore.png" id="2"]\n'+f'[ext_resource type="Texture2D" path="res://assets/classic/{kind}/clean.png" id="3"]\n'+'''[resource]
@@ -246,7 +276,7 @@ default_variant = "purple"
 atlases = {"purple": ExtResource("2"), "blue": ExtResource("2"), "purple_clean": ExtResource("3"), "blue_clean": ExtResource("3")}
 poses = [
 '''
-    text+=',\n'.join('{"region": Rect2(%d,%d,%d,%d), "offset": Vector2(%d,%d)}'%(i%columns*w,i//columns*hh,w,hh,left,top) for i in range(len(poses)))
+    text+=',\n'.join('{"region": Rect2(%d,%d,%d,%d), "offset": Vector2(%d,%d)}'%region for region in regions)
     (out/'animations.tres').write_text(text+'\n]\nclips = '+gd(clips)+'\n')
     contacts={}
     hit_text=(ROOT/'reference/extracted/B/collide.hit').read_text().splitlines()

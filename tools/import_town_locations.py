@@ -3,6 +3,7 @@
 from pathlib import Path
 import json,struct,copy,hashlib,sys,subprocess,wave
 from PIL import Image
+from import_support import audio_helper
 import import_creature_pack as m
 r=m.ROOT;out=r/'game/assets/classic/town_locations';out.mkdir(exist_ok=True);w=r/'work/town-locations';w.mkdir(exist_ok=True)
 sources={};frames={};pictures={};data={}
@@ -73,8 +74,8 @@ data['dice_rows']=rows;data['prices']=[20,32,52,40,52,36,52,52,40,24,12,20]
 data['wizard_roots']={'tower':36842,'gift_a':36664,'gift_b':36812};data['dice_roll_ticks']=sum(p['ticks'] for p in data['dice_roll'])
 # Bake only new native streams, preserving the previous138 audio resources.
 import import_audio as a
-a.g.origin.read_binary=lambda name:m.BINARY;a.sounds._cache.clear();_,inst,waves=a.g.build();tables=w/'town_synth_data.cpp';tables.write_text(a.g.render());exe=w/'bake-town-audio'
-subprocess.run(['c++','-std=c++17','-O2','-I'+str(a.UP/'include'),str(r/'tools/bake_audio.cpp'),str(a.UP/'src/engine/synth.cpp'),str(a.UP/'src/engine/paula.cpp'),str(tables),'-o',str(exe)],check=True)
+a.g.origin.read_binary=lambda name:m.BINARY;a.sounds._cache.clear();_,inst,waves=a.g.build()
+exe=audio_helper(r,a.UP,w,'bake-audio',[r/'tools/bake_audio.cpp',a.UP/'src/engine/synth.cpp',a.UP/'src/engine/paula.cpp'],a.g)
 memory=bytearray(0x90000)
 for addr,name in [(0x10000,'B/kn.a'),(0x20000,'C/wz.a'),(0x40000,'B/re.a'),(0x60000,'C/wz.a'),(0x80000,'B/Ra.a')]:
  b=(r/'reference/extracted'/name).read_bytes();sources[name]=hashlib.sha1(b).hexdigest();memory[addr:addr+len(b)-32]=b[32:]

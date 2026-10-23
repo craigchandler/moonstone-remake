@@ -86,8 +86,8 @@ func _draw() -> void:
     pixel_text(device.left(56).to_upper(),Vector2(320,321),true,Color("aaaeb8"))
     if not controls.capture_action.is_empty():
         pixel_text(("PRESS CONTROL FOR "+Profile.TITLES[controls.capture_action]).left(56).to_upper(),Vector2(320,343),true,Color("ddc68c"))
-        pixel_text("RELEASE FIRST / START, ESC OR CLICK HERE CANCELS",Vector2(320,365),true)
+        pixel_text("RELEASE FIRST / "+controls.pause_name().to_upper()+", ESC OR CLICK HERE CANCELS",Vector2(320,365),true)
     else:
-        var info: String=controls.notice if not controls.notice.is_empty() else "Stick / D-pad move; Start always pauses or goes back."
+        var info: String=controls.notice if not controls.notice.is_empty() else "Stick / D-pad move; "+controls.pause_name()+" always pauses or goes back."
         pixel_text(info.left(57).to_upper(),Vector2(320,343),true,Color("aaaeb8"))
         pixel_text((controls.binding_name("accept")+" CHOOSE / "+controls.binding_name("cancel")+" BACK / "+controls.binding_name("previous_page")+" "+controls.binding_name("next_page")+" PAGES").left(58).to_upper(),Vector2(320,365),true)

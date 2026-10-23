@@ -44,7 +44,9 @@ Do not place recovered assets in Git LFS, repository attachments or CI artifacts
 ## Dependencies and builds
 
 Optional import dependencies have separate licences, including noncommercial
-terms. They are fetched separately rather than vendored or relicensed as MIT.
+terms. The source repository fetches them separately rather than vendoring or relicensing
+them as MIT. Local standalone-importer packages retain their separate licences
+and helper sources; they must not include original disks or recovered media.
 See [THIRD_PARTY.md](../THIRD_PARTY.md).
 
 Local build tools generate engine/third-party notices using the matching Godot
@@ -61,3 +63,13 @@ package these definitions with shared native code and Godot notices; it must not
 include artwork, audio, original archives or other ignored generated resources.
 This exception grants no rights to original media and does not relicense
 original-derived data. See [gameplay packs](gameplay-packs.md).
+
+## Release boundary
+
+The `v*` release workflow publishes code-only Linux/Windows/PortMaster packages
+and asset-free standalone servers. Game ZIPs include separately licensed
+conversion tools and pinned runtimes; they contain no original disks or recovered
+artwork/audio. CI checks use synthetic test media. Players supply their own
+supported disks or copy a locally generated compatible `content/` directory,
+which remains outside the executable/code pack and outside Git. See
+[release setup and content transfer](releases.md).

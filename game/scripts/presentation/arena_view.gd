@@ -284,7 +284,8 @@ func _draw() -> void:
     var progress: String = "Health: %d/%d   Daggers: %d   Enemies: %d" % [player.health, player.maximum, player.daggers, enemies]
     var objective: String = "Clear the lair" if encounter != &"duel" else "Defeat the rival" if mode == &"competitive" else "Defeat the enemies"
     objective = str(rule_set.encounters.get(String(encounter), {}).get("objective", objective))
-    draw_string(font, Vector2(12, 28), progress + (("   · " + objective if outcome == "ongoing" else "   · " + outcome.capitalize() + (" · Enter: loot" if managed_by_world and outcome == "victory" else (" · Enter: map" if managed_by_world else (" · R to restart" if debug_mode else "")))) if perch.is_empty() else ""), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(0.57, 0.66, 0.71))
+    var confirm: String=input.binding_name("accept") if input.using_controller else "Enter"
+    draw_string(font, Vector2(12, 28), progress + (("   · " + objective if outcome == "ongoing" else "   · " + outcome.capitalize() + (" · "+confirm+": loot" if managed_by_world and outcome == "victory" else (" · "+confirm+": map" if managed_by_world else (" · R to restart" if debug_mode else "")))) if perch.is_empty() else ""), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(0.57, 0.66, 0.71))
     if managed_by_world and outcome != "ongoing":
         draw_rect(Rect2(158, 68, 324, 51), Color(0.035, 0.047, 0.067, 0.92))
         draw_string(font, Vector2(180, 90), "LAIR CLEARED" if outcome == "victory" else "THE LAIR REMAINS", HORIZONTAL_ALIGNMENT_LEFT, -1, 19, Color(0.9, 0.83, 0.59))
@@ -311,12 +312,18 @@ func practice_finished() -> bool:
         if actor.health <= 0 and actor.down_remaining > 0: return false
     return true
 
+func confirm_ready() -> bool:
+    return duel_ready or ((practice_mode or managed_by_world) and practice_finished())
+
 func result_hint(outcome: String) -> String:
-    return ("Enter: collect loot" if outcome=="victory" else "Enter: return to map")+("    R: retry this fight" if debug_mode else "")
+    var controls: Node=get_node_or_null("/root/MoonstoneInput")
+    var confirm: String=controls.binding_name("accept") if controls!=null and controls.using_controller else "Enter"
+    return confirm+(": collect loot" if outcome=="victory" else ": return to map")+("    R: retry this fight" if debug_mode else "")
 
 func navigation_hint() -> String:
     var controls: Node=get_node_or_null("/root/MoonstoneInput")
     if controls!=null and controls.using_controller:
-        return ("DEBUG / NOT SAVED  " if debug_mode else "")+"Start pause / controller setup  "+controls.binding_name("retreat")+" retreat  G gore: "
+        if managed_by_world and session!=null and session.simulation.outcome()!="ongoing":return result_hint(session.simulation.outcome())+"  "+controls.pause_name()+" controls  G gore: "
+        return ("DEBUG / NOT SAVED  " if debug_mode else "")+controls.pause_name()+" pause / controller setup  "+controls.binding_name("retreat")+" retreat  G gore: "
     if not debug_mode:return "Enter: result / loot  Esc retreat  G gore: " if managed_by_world else "Esc exit  G gore: "
     return "DEBUG / NOT SAVED  R retry  F3 map  Esc retreat  G gore: " if managed_by_world else "DEBUG  F1 duel  F2 spear  F4 axe  F5 troll  F6 Balok  F3 map  Tab co-op  R restart  G gore: "

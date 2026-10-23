@@ -13,6 +13,7 @@ import hashlib
 import json
 from pathlib import Path
 import struct
+import import_accel
 
 U32 = C.c_uint32
 I32 = C.c_int32
@@ -43,6 +44,7 @@ def sector_checksum(data: bytes) -> int:
     return ((value >> 1) ^ value) & 0x55555555
 
 def sectors_from_track(raw: bytes, track_number: int) -> list[bytes]:
+    if import_accel.library():return import_accel.track_sectors(raw,track_number)
     bits = "".join(f"{byte:08b}" for byte in raw)
     bits += bits[:9000]  # a sector may wrap across the index position
     sync = f"{0x44894489:032b}"
@@ -113,11 +115,13 @@ def decode_ipf(path: Path, library: Path, files_only: bool = False) -> tuple[byt
             raw = C.string_at(track.buffer, track.length)
             try:
                 output.extend(b"".join(sectors_from_track(raw, number)))
-            except ValueError:
+            except ValueError as error:
                 # These retail images use a non-AmigaDOS protection track at 1.
                 # File-only extraction may ignore it if no directory/file block
                 # references it. Any other missing or corrupt track stays fatal.
-                if not files_only or number != 1 or f"{0x44894489:032b}" in "".join(f"{b:08b}" for b in raw):
+                had_sync=getattr(error,'had_sync',None)
+                if had_sync is None:had_sync=f"{0x44894489:032b}" in "".join(f"{b:08b}" for b in raw)
+                if not files_only or number != 1 or had_sync:
                     raise
                 output.extend(bytes(11 * BLOCK))
                 omitted.append(number)

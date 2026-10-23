@@ -28,6 +28,8 @@ docs/*
 !docs/art-packs.md
 !docs/asset-policy.md
 !docs/development.md
+!docs/portmaster.md
+!docs/releases.md
 !docs/importing.md
 !docs/player-guide.md
 !docs/roadmap.md
@@ -68,10 +70,28 @@ tools/*
 !tools/godot_notices.gd
 !tools/import_assets.sh
 !tools/import_*.py
+!tools/import_accel.cpp
 !tools/bake_*.cpp
 !tools/launch_moonstone.sh
 !tools/launch_moonstone.cmd
 !tools/package_builds.py
+!tools/package_portmaster.py
+!tools/package_portmaster_external.py
+!tools/launch_portmaster.sh
+!tools/run_portmaster.sh
+!tools/portmaster-runtimes.json
+!tools/portmaster.gptk
+!tools/portmaster_art.gd
+!tools/portmaster_*.py
+!tools/portmaster_*.gd
+!tools/portmaster-*.json
+!tools/build_portmaster_importer.py
+!tools/release.py
+!tools/release_source.py
+!tools/release_launcher.py
+!tools/release-toolchain.json
+!tools/install_release_toolchain.py
+!tools/verify_release.py
 !tools/verify_build.py
 !tools/tests/
 

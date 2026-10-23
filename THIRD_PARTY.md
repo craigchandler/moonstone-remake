@@ -24,7 +24,7 @@ does not relicense the original game data or grant rights to its media.
 [Godot Engine](https://github.com/godotengine/godot) is MIT licensed and includes
 third-party components under their respective licences. The local packaging
 step obtains the matching editor’s engine/third-party notices and includes them
-with personal builds. Godot source or binaries are not vendored here.
+with private builds and public code-only release ZIPs. Godot source or binaries are not vendored here.
 
 ## Offline references and import dependencies
 
@@ -39,10 +39,23 @@ with personal builds. Godot source or binaries are not vendored here.
 
 Exact revisions and the development engine identity are recorded in
 [docs/upstream-sources.json](docs/upstream-sources.json). Dependencies remain in
-local ignored checkouts/environments. Optional import/synthesis tools can use
+local ignored checkouts/environments. The Linux, Windows and PortMaster release importers package
+the required helpers, Python/image libraries, notices and helper sources under
+their separate terms; they supply no original disk data or recovered media. Optional import/synthesis tools can use
 separately licensed code; the Godot gameplay core does not embed it or emulate
 Amiga hardware. The MIT source licence does not remove those dependencies’
 restrictions or grant redistribution rights to generated game content.
 
 Do not copy upstream source or media into the public tree without retaining
 its notices, documenting provenance and confirming a compatible scope.
+
+## Packaged importer runtimes
+
+The release importers include [Python standalone distributions](https://github.com/astral-sh/python-build-standalone),
+Python/third-party notices, Pillow and NumPy licences, and the corresponding native
+helper sources in `importer/helper-sources.tar.gz` (inside `importer.tar` for
+PortMaster). The pinned archives/wheels and SHA256 values are recorded in
+`tools/portmaster-importer-runtimes.json`. Build-only Zig and upstream source
+archives are pinned in `tools/release-toolchain.json`; compiler executables are
+not player dependencies. These dependency licences are distinct from rights to
+the original game's content. Server ZIPs do not include the importer/runtime.

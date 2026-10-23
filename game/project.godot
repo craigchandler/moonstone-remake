@@ -7,6 +7,7 @@ run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [autoload]
+MoonstoneContent="*res://scripts/presentation/content_mount.gd"
 MoonstoneInput="*res://scripts/presentation/controller_input.gd"
 MoonstoneAudio="*res://scripts/presentation/game_audio.gd"
 

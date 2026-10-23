@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Offline selection art and exact baked class-colour variants. Native assets only."""
 from pathlib import Path
-import hashlib,json,struct,re
+import hashlib,json,struct,re,os
 import numpy as np
 from PIL import Image
+from import_support import ImportProgress, rgba_array, compact_source_atlas
 from import_knight_animations import ROOT,parse_hunk_file,MOG_SHA1,gd
 import import_hit_recovery as recovery
 import import_death_frames as deaths
@@ -73,7 +74,11 @@ def class_mask(file,clean):
  rects=[list(map(int,m)) for m in re.findall(r'"region": Rect2\(\s*(-?\d+),\s*(-?\d+),\s*(\d+),\s*(\d+)\), "offset": Vector2\(\s*(-?\d+),\s*(-?\d+)\)',text)]
  assert len(rects)==len(meta['poses']),(kind,len(rects),len(meta['poses']))
  canvas=Image.new('L',Image.open(file).size)
+ seen=set()
  for index,p in enumerate(meta['poses']):
+  rectangle=tuple(rects[index][:4])
+  if rectangle in seen:continue
+  seen.add(rectangle)
   if clean:
    for clip,poses in profiles.get(kind,{}).get('pose_overrides_clean',{}).items():
     frames=meta['clips'][clip]['frames']
@@ -96,7 +101,7 @@ def class_mask(file,clean):
     relative=Path(family);parent=ROOT/'game/assets/classic/recovered'/relative.parent
     matches=[p for p in parent.iterdir() if p.is_dir() and p.name.casefold()==relative.name.casefold()]
     assert len(matches)==1,(family,matches)
-    canonical=str(matches[0].relative_to(ROOT/'game/assets/classic/recovered'))
+    canonical=matches[0].relative_to(ROOT/'game/assets/classic/recovered').as_posix()
     recovered(canonical);verified_families[family]=canonical
    family=verified_families[family]
    key=(family,layer['frame'],clean,kind in ['dragon','complete_dragon','death_dragon','dragon_victim','complete_burn'])
@@ -110,39 +115,84 @@ def class_mask(file,clean):
    if p.get('mirror',False):x=-x-indices.width;indices=indices.transpose(Image.Transpose.FLIP_LEFT_RIGHT);mask=mask.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
    canvas.paste(indices,(rx+x-left,ry+layer['y']-top),mask)
  return np.array(canvas)
+if os.environ.get('MOONSTONE_COMPACT_LAYERS')=='1':
+ # The older base converters still produce large fixed-cell sheets. Crop their
+ # transparent padding before recovering register masks, retaining frame anchors.
+ for name in ['knight','trogg_spear','trogg_axe','giant_troll','balok','hit_effects']:
+  compact_source_atlas(ROOT,name)
 paths=set()
 for resource in (ROOT/'game/assets/classic').glob('*/animations.tres'):
+ # Contact blood has no fighter colour registers or per-knight variants.
+ if resource.parent.name=='hit_effects':continue
  for path in re.findall(r'path="(res://assets/[^\"]+\.png)"',resource.read_text()):
   if '/knight/purple' not in path:paths.add(path)
 for folder in ['stonehenge','town_locations']:
- paths.update('res://'+str(p.relative_to(ROOT/'game')) for p in (ROOT/'game/assets/classic'/folder).glob('*.png') if p.name!='frog.png')
+ paths.update('res://'+p.relative_to(ROOT/'game').as_posix() for p in (ROOT/'game/assets/classic'/folder).glob('*.png') if p.name!='frog.png')
 paths.add('res://assets/classic/world/tavern-blue.png')
-variants={};audit=[]
-for index,path in enumerate(sorted(paths)):
+compact=os.environ.get('MOONSTONE_COMPACT_LAYERS')=='1'
+compact_masks={}
+mask_folder=ROOT/'work/combat-colour-masks'
+if compact:mask_folder.mkdir(parents=True,exist_ok=True)
+def colour_variants(index,path):
+ # Keep large images and temporaries local to one sheet: the previous sheet's
+ # buffers must be released before loading the next one on a small handheld.
  # WI1.P and wizard cels0..14 use a fixed palette (including Math's blue
  # robes), not the knight ramp. Only the WI2 knight track uses class colours.
- if path.endswith('/town_locations/gift.png'):continue
- if '/town_locations/wizard_' in path and int(Path(path).stem.split('_')[1])<15:continue
- file=ROOT/'game'/path.removeprefix('res://');im=Image.open(file).convert('RGBA');a=np.array(im)
+ if path.endswith('/town_locations/gift.png'):return
+ if '/town_locations/wizard_' in path and int(Path(path).stem.split('_')[1])<15:return
+ file=ROOT/'game'/path.removeprefix('res://')
  screen=('/stonehenge/' in path or '/town_locations/' in path or 'tavern-blue' in path)
+ if compact and not screen:
+  # The layered renderer colours small pieces at draw time. Keep the original
+  # register mask for direct factoring, instead of encoding five full atlases
+  # only to decode and discard them in the next conversion step.
+  indices=class_mask(file,'clean' in file.stem)
+  lookup=np.zeros(256,dtype=np.uint8);lookup[6:9]=[1,2,3]
+  mask=lookup[indices]
+  target=mask_folder/f'{index}.png'
+  Image.fromarray(mask).save(target)
+  compact_masks[path]={'mask':target.relative_to(ROOT).as_posix(),
+                       'mask_sha256':hashlib.sha256(target.read_bytes()).hexdigest(),
+                       'source_sha256':hashlib.sha256(file.read_bytes()).hexdigest()}
+  return
+ a=rgba_array(file)
  source=ramps[0] if screen else combat[0]
- masks=[np.all(a[:,:,:3]==rgb(c),axis=2)&(a[:,:,3]>0) for c in source]
- original_rgb_matches=sum(int(mask.sum()) for mask in masks)
+ # Compare channels directly: reducing an HxWx3 temporary dominates conversion
+ # on small ARM CPUs, while these masks select exactly the same source pixels.
+ # Sprites occupy little of these large atlases. Store only matching offsets,
+ # rather than retaining three to five full-sheet boolean masks per variant.
+ positions=[np.flatnonzero((a[:,:,0]==r)&(a[:,:,1]==g)&(a[:,:,2]==b)&(a[:,:,3]>0)) for r,g,b in map(rgb,source)]
+ original_rgb_matches=sum(len(offsets) for offsets in positions)
  if not screen:
   indices=class_mask(file,'clean' in file.stem)
-  masks=[(indices==6+i)&(a[:,:,3]>0) for i in range(3)]
- pixels=sum(int(mask.sum()) for mask in masks)
- if not pixels:continue
+  positions=[np.flatnonzero((indices==6+i)&(a[:,:,3]>0)) for i in range(3)]
+  del indices
+ pixels=sum(len(offsets) for offsets in positions)
+ if not pixels:return
  choices=[]
  for kind in range(4 if screen else 5):
   b=a.copy()
-  for mask,c in zip(masks,ramps[kind] if screen else combat[kind]):b[mask,:3]=rgb(c)
+  flat=b.reshape(-1,4)
+  for offsets,c in zip(positions,ramps[kind] if screen else combat[kind]):flat[offsets,:3]=rgb(c)
   assert np.array_equal(a[:,:,3],b[:,:,3])
   if np.array_equal(a,b):choices.append(path)
   else:
    filename=f'variant-{index}-{kind}.png';Image.fromarray(b).save(out/filename)
    choices.append('res://assets/classic/knight_selection/'+filename)
- variants[path]=choices;audit.append(dict(path=path,pixels=pixels,source_sha256=hashlib.sha256(file.read_bytes()).hexdigest(),size=list(im.size),screen=screen,indexed_class_mask=not screen,original_rgb_matches=original_rgb_matches,blue_class_correction=choices[0]!=path))
+  del flat,b
+ row=dict(path=path,pixels=pixels,source_sha256=hashlib.sha256(file.read_bytes()).hexdigest(),size=[a.shape[1],a.shape[0]],screen=screen,indexed_class_mask=not screen,original_rgb_matches=original_rgb_matches,blue_class_correction=choices[0]!=path)
+ return choices,row
+
+variants={};audit=[]
+progress=ImportProgress()
+for index,path in enumerate(sorted(paths)):
+ progress.update(index+1,len(paths),'Colour sheet')
+ result=colour_variants(index,path)
+ if result is not None:
+  choices,row=result;variants[path]=choices;audit.append(row)
+if compact:
+ (mask_folder/'manifest.json').write_text(json.dumps({'version':1,'paths':compact_masks},indent=2)+'\n')
+ print('Direct layers:',len(compact_masks),'indexed combat masks; no baked combat colour variants',flush=True)
 text=f'[gd_resource type="Resource" load_steps={len(refs)+2} format=3]\n[ext_resource type="Script" path="res://scripts/content/knight_art.gd" id="script"]\n'
 for path,id in refs.items():text+=f'[ext_resource type="Texture2D" path="{path}" id="{id}"]\n'
 text+='[resource]\nscript = ExtResource("script")\n'

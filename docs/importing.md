@@ -1,6 +1,10 @@
 # One-time original-data import
 
-The importer is an offline development tool. Its output is native PNG/audio and
+Linux, Windows and PortMaster [release ZIPs](releases.md) include self-contained
+automatic and command-line setup. Use that guide for player commands, disk
+locations and copying content between platforms. This page describes the offline
+source-development workflow.
+Its output is native PNG/audio and
 Godot content; the exported game contains no disk-image loader, original
 executable, original-script VM or Amiga emulator.
 

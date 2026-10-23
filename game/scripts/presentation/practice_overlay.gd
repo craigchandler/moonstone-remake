@@ -27,7 +27,7 @@ func _draw() -> void:
     var controls: Node = get_node("/root/MoonstoneInput")
     if controls.using_controller:
         pixel_text("STICK MOVE   %s SWING   %s CHOP   %s LUNGE" % [controls.binding_name("swing"),controls.binding_name("heavy"),controls.binding_name("lunge")],Vector2(320,366),true)
-        pixel_text("%s OPPONENTS   START PAUSE / CONTROLS" % controls.binding_name("retreat").to_upper(),Vector2(320,384),true,gold)
+        pixel_text("%s OPPONENTS   %s PAUSE / CONTROLS" % [controls.binding_name("retreat").to_upper(),controls.pause_name().to_upper()],Vector2(320,384),true,gold)
     else:
         pixel_text("ARROWS MOVE   Z SWING   X CHOP   C LUNGE",Vector2(320,366),true)
         pixel_text("R RETRY   ESC OPPONENTS   F1 HELP",Vector2(320,384),true,gold)
@@ -37,4 +37,4 @@ func _draw() -> void:
         pixel_text(result_label(),Vector2(320,76),true,gold)
         pixel_text(((controls.binding_name("accept").to_upper()+" RETRY") if controls.using_controller else "ENTER RETRY") if arena.practice_finished() else "R RETRY",Vector2(320,102),true)
         pixel_text((controls.binding_name("retreat").to_upper() if controls.using_controller else "ESC")+" CHOOSE OPPONENT",Vector2(320,124),true)
-    draw_help("ARROWS: MOVE / EVADE\nZ SWING / X OVERHEAD / C LUNGE\nV REVERSE / A UPWARD / D DAGGER\nSPACE: GUARD / GUARD + DOWN: ESCAPE HOLD\nR: RETRY WITH FRESH HEALTH AND DAGGERS\nESC: CHOOSE ANOTHER OPPONENT\nG: GORE / F8: SOUND / F9-F10: VOLUME\nF1: RESUME PRACTICE", "STICK / D-PAD: MOVE / EVADE\nSTART: PAUSE / CONTROLLER SETUP\n"+controls.binding_name("swing")+": SWING / "+controls.binding_name("heavy")+": OVERHEAD\n"+controls.binding_name("lunge")+": LUNGE / "+controls.binding_name("reverse")+": REVERSE\n"+controls.binding_name("upward")+": UPWARD / "+controls.binding_name("dagger")+": DAGGER\n"+controls.binding_name("block")+": GUARD / GUARD + DOWN: ESCAPE\n"+controls.binding_name("retreat")+": CHOOSE ANOTHER OPPONENT\nF1: RESUME PRACTICE")
+    draw_help("ARROWS: MOVE / EVADE\nZ SWING / X OVERHEAD / C LUNGE\nV REVERSE / A UPWARD / D DAGGER\nSPACE: GUARD / GUARD + DOWN: ESCAPE HOLD\nR: RETRY WITH FRESH HEALTH AND DAGGERS\nESC: CHOOSE ANOTHER OPPONENT\nG: GORE / F8: SOUND / F9-F10: VOLUME\nF1: RESUME PRACTICE", "STICK / D-PAD: MOVE / EVADE\n"+controls.pause_name()+": PAUSE / CONTROLLER SETUP\n"+controls.binding_name("swing")+": SWING / "+controls.binding_name("heavy")+": OVERHEAD\n"+controls.binding_name("lunge")+": LUNGE / "+controls.binding_name("reverse")+": REVERSE\n"+controls.binding_name("upward")+": UPWARD / "+controls.binding_name("dagger")+": DAGGER\n"+controls.binding_name("block")+": GUARD / GUARD + DOWN: ESCAPE\n"+controls.binding_name("retreat")+": CHOOSE ANOTHER OPPONENT\nF1: RESUME PRACTICE")

@@ -5,6 +5,7 @@ const Images=preload("res://scripts/presentation/graphics/logical_image.gd")
 signal changed
 signal cursor_moved
 const Profile=preload("res://scripts/session/controller_profile.gd")
+const Labels=preload("res://scripts/presentation/controller_labels.gd")
 const Runtime=preload("res://scripts/session/runtime_mode.gd")
 const SeatInputs=preload("res://scripts/presentation/local_seat_inputs.gd")
 var seats: RefCounted=SeatInputs.new()
@@ -73,7 +74,9 @@ func set_deadzone(value: float) -> void:
 func reset_defaults() -> void:
     profile=Profile.defaults();block_held();save_preferences();changed.emit()
 
-func binding_name(action: String) -> String:return Profile.label(profile.bindings[action])
+func binding_name(action: String) -> String:return Labels.label(profile.bindings[action],device_name())
+
+func pause_name() -> String:return Labels.label(Profile.button(JOY_BUTTON_START),device_name())
 
 func active_surface() -> Node:
     var surfaces: Array=get_tree().get_nodes_in_group(GROUP)
@@ -234,7 +237,7 @@ func _input(event: InputEvent) -> void:
                 using_controller=true
                 if event is InputEventJoypadButton and event.pressed and event.button_index==JOY_BUTTON_START:open_pause()
                 elif seats.down(event.device,profile.bindings.retreat) and not seat_before.retreat:send_key(KEY_ESCAPE)
-                elif kind(arena)=="arena_view" and arena.duel_ready and seats.down(event.device,profile.bindings.accept) and not seat_before.accept:send_key(KEY_ENTER)
+                elif kind(arena)=="arena_view" and arena.confirm_ready() and seats.down(event.device,profile.bindings.accept) and not seat_before.accept:send_key(KEY_ENTER)
             return
         if active_device!=expected:
             buttons.clear();axes.clear();blocked.clear();active_device=expected
@@ -272,7 +275,7 @@ func _input(event: InputEvent) -> void:
         else:send_key(KEY_ESCAPE)
         return
     if context=="arena_view":
-        if ((local!=null and surface.duel_ready) or (surface.practice_mode and surface.practice_finished())) and down("accept") and not before.accept:send_key(KEY_ENTER)
+        if surface.confirm_ready() and down("accept") and not before.accept:send_key(KEY_ENTER)
         elif down("retreat") and not before.retreat:send_key(KEY_ESCAPE)
     else:
         for action in Profile.MENUS:
