@@ -54,7 +54,7 @@ def validate_archive(path):
             }:
                 raise ValueError('Player content entered PortMaster archive: ' + name)
         expected = {'Moonstone.sh', 'moonstone/moonstone.pck', 'moonstone/importer.pck',
-                    'moonstone/moonstone-run',
+                    'moonstone/moonstone-setup',
                     'moonstone/importer.tar', 'moonstone/importer.sha256',
                     'moonstone/README.md', 'moonstone/port.json',
                     'moonstone/gameinfo.xml', 'moonstone/screenshot.png',

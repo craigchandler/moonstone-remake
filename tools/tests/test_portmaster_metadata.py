@@ -16,7 +16,7 @@ class PortMasterPackageTests(unittest.TestCase):
     def members(self):
         members = {'moonstone/' + name: data for name, data in metadata_files(ROOT).items()}
         members['Moonstone.sh'] = b'#!/bin/bash\nexit 0\n'
-        for name in ['moonstone.pck', 'importer.pck', 'importer.tar', 'importer.sha256', 'moonstone-run']:
+        for name in ['moonstone.pck', 'importer.pck', 'importer.tar', 'importer.sha256', 'moonstone-setup']:
             members['moonstone/' + name] = b'synthetic package fixture'
         members['moonstone/muos-thumbnail.png'] = test_public_tree.PublicTreeTests.screenshot(320, 200)
         return members

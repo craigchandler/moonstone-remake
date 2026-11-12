@@ -60,7 +60,7 @@ def package(platform, importer, templates, output, tag, *, root=ROOT):
         with tarfile.open(stage/'importer.tar','w',format=tarfile.USTAR_FORMAT,dereference=True) as archive:
             for name,path in rows:archive.add(path,arcname=name,recursive=False,filter=owner)
         (stage/'importer.sha256').write_text(digest(stage/'importer.tar')+'  importer.tar\n')
-        shutil.copy2(root/'tools/run_portmaster.sh',stage/'moonstone-run')
+        shutil.copy2(root/'tools/prepare_portmaster.sh',stage/'moonstone-setup')
     else:
         for name,path in rows:
             target=stage/'importer'/name;target.parent.mkdir(parents=True,exist_ok=True)
@@ -125,7 +125,7 @@ def package(platform, importer, templates, output, tag, *, root=ROOT):
             if not path.is_file():continue
             relative=path.relative_to(stage).as_posix()
             name=('moonstone/' if platform=='PortMaster' else '')+relative
-            mode=0o755 if path.suffix=='.sh' or path.name=='moonstone-run' or (platform=='Linux' and os.access(path,os.X_OK)) else 0o644
+            mode=0o755 if path.suffix=='.sh' or path.name=='moonstone-setup' or (platform=='Linux' and os.access(path,os.X_OK)) else 0o644
             add_file(archive,name,path.read_bytes(),mode)
     with ZipFile(archive_path) as archive:
         if archive.testzip():raise ValueError('Release ZIP integrity failure')
@@ -200,11 +200,22 @@ def collect(source, destination, tag, root=ROOT):
     (destination/'SHA256SUMS').write_text(''.join(digest(p)+'  '+p.name+'\n' for p in sorted(destination.iterdir()) if p.name not in {'SHA256SUMS','release-notes.md'}))
     (destination/'release-notes.md').write_text(f'''Moonstone {version}
 
+Edited artwork and translations can now be checked and accepted from the setup
+screen on desktop and PortMaster. Desktop users can also run --install-pack FILE.
+Accepted packs receive a new checksum and content generation; validation and
+portable transfers remain enabled, and saves and other generations are kept.
+PortMaster now uses the standard runtime and cleanup flow with the game launch
+visible in Moonstone.sh.
+
+Known controller report: A/B may be reversed on RP5/ROCKNIX. In-game bindings can
+be changed under Options > Controller; device-specific mapping is still under
+investigation.
+
 Linux x86_64, Windows x86_64 and PortMaster ARM64 game packages use external
 content generated locally from your own supported original IPF disks. No original
 runtime artwork, music, sounds or disk images are included. PortMaster includes
-documentation screenshots for its menu/catalogue. First launch opens setup;
-command-line import is also available. A generated content folder can be copied
+documentation screenshots for its menu/catalogue. Missing content opens setup;
+command-line import is also available on desktop. Generated content can be copied
 between all three platforms. Read README.txt (moonstone/README.md for PortMaster)
 in your ZIP for exact paths/commands. PortMaster uses Moonstone.sh + moonstone/;
 muOS users place the launcher in roms/PORTS and the folder in ports on their games

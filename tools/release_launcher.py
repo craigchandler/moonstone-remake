@@ -19,14 +19,15 @@ def main(argv=None):
     modes.add_argument('--verify-content', action='store_true', help='Check the installed pack and print its path.')
     modes.add_argument('--export-content', type=Path, metavar='DIRECTORY', help='Copy a checked portable content folder to a new destination.')
     modes.add_argument('--install-content', type=Path, metavar='DIRECTORY', help='Validate and install a copied content folder; preserve saves.')
+    modes.add_argument('--install-pack', type=Path, metavar='FILE', help='Validate and activate an edited assets.pck; preserve other content and saves.')
     modes.add_argument('--prepare-content', action='store_true', help=argparse.SUPPRESS)
     parser.add_argument('--force', action='store_true', help='Rebuild content; keep the old generation until the replacement passes.')
     args, game_args = parser.parse_known_args(argv)
     if args.force and not (args.import_content or args.prepare_content):parser.error('--force requires --import-content')
-    if any((args.import_content, args.verify_content, args.export_content, args.install_content, args.prepare_content)) and game_args:
+    if any((args.import_content, args.verify_content, args.export_content, args.install_content, args.install_pack, args.prepare_content)) and game_args:
         parser.error('Unexpected arguments for the content command: ' + ' '.join(game_args))
     from portmaster_import import import_content, installed_content, atomic_json
-    from import_transfer import export_content, install_content
+    from import_transfer import export_content, install_content, install_pack
     suffix = '.exe' if os.name == 'nt' else ''
     engine = GAME / ('moonstone' + suffix)
     setup_engine = GAME / ('moonstone-importer' + suffix)
@@ -45,6 +46,13 @@ def main(argv=None):
         export_content(GAME, args.export_content);print('Portable content copied to ' + str(args.export_content.resolve()));return 0
     if args.install_content:
         install_content(GAME, args.install_content);print('Content installed. Original disks are not needed to play.');return 0
+    if args.install_pack:
+        (GAME/'import-cancel').unlink(missing_ok=True)
+        try:pack=install_pack(GAME,args.install_pack,game_probe)
+        except Exception as error:
+            atomic_json(GAME/'import-status.json', {'state':'failed','message':str(error),'percent':0})
+            raise
+        print('Edited content ready: ' + str(pack));return 0
     if args.import_content or args.prepare_content:
         if not args.prepare_content:(GAME/'import-cancel').unlink(missing_ok=True)
         try:

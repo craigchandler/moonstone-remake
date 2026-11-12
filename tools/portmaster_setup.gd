@@ -9,6 +9,7 @@ var footer: Label
 var started_ms: int=0
 var state: String="missing"
 var cancelling: bool=false
+var pack_to_install: String=""
 
 func _ready() -> void:
     if "--verify-content" in OS.get_cmdline_user_args():
@@ -28,7 +29,7 @@ func _ready() -> void:
     background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     add_child(background)
     var title:=Label.new()
-    title.text="MOONSTONE — ORIGINAL GAME DATA"
+    title.text="MOONSTONE — GAME CONTENT"
     title.position=Vector2(32,40);title.add_theme_font_size_override("font_size",23)
     add_child(title)
     message=Label.new()
@@ -42,10 +43,15 @@ func _ready() -> void:
     footer=Label.new();footer.text="A: retry     B: exit"
     footer.position=Vector2(32,410);footer.add_theme_font_size_override("font_size",18)
     add_child(footer)
+    pack_to_install=existing_content()
+    if not pack_to_install.is_empty():
+        state="edited"
+        message.text="Your game content needs checking.\n\nIf you edited it for a translation or custom artwork, press A or Enter to check and use it.\n\nThe game will only accept it if validation succeeds."
+        footer.text="A: check and use     B: exit"
     if "--setup-probe" in OS.get_cmdline_user_args():
-        print("SETUP_STATE="+JSON.stringify({"missing_assets_ui":true,"original_assets_loaded":false}))
+        print("SETUP_STATE="+JSON.stringify({"missing_assets_ui":pack_to_install.is_empty(),"edited_content_ui":not pack_to_install.is_empty(),"original_assets_loaded":false}))
         get_tree().quit();return
-    start_import()
+    if pack_to_install.is_empty():start_import()
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--setup-capture="):
             capture_setup.call_deferred(argument.trim_prefix("--setup-capture="))
@@ -67,6 +73,16 @@ func verify_content() -> void:
     print("CONTENT_PACK_PATH="+pack_path)
     get_tree().quit(0)
 
+func existing_content() -> String:
+    var path: String=game_dir.path_join("content/current.json")
+    if not FileAccess.file_exists(path):return ""
+    var pointer: Variant=JSON.parse_string(FileAccess.get_file_as_string(path))
+    if not pointer is Dictionary or not pointer.get("directory") is String:return ""
+    var pattern:=RegEx.new();pattern.compile("^classic-v1-[a-f0-9]{16}$")
+    if pattern.search(pointer.directory)==null:return ""
+    var pack: String=game_dir.path_join("content").path_join(pointer.directory).path_join("assets.pck")
+    return pack if FileAccess.file_exists(pack) else ""
+
 func capture_setup(path: String) -> void:
     # Covered test windows can stop emitting frame_post_draw.
     RenderingServer.force_draw(false)
@@ -76,7 +92,7 @@ func capture_setup(path: String) -> void:
 func start_import() -> void:
     if worker>0:return
     var missing: PackedStringArray=[]
-    for disk in ["A","B","C"]:
+    for disk in (["A","B","C"] if pack_to_install.is_empty() else []):
         if not FileAccess.file_exists(game_dir.path_join("disks/Moonstone_Disk"+disk+".ipf")):missing.append(disk)
     if not missing.is_empty():
         state="missing"
@@ -86,19 +102,20 @@ func start_import() -> void:
     started_ms=Time.get_ticks_msec()
     footer.text="B: cancel"
     message.text="Preparing your original game data.\n\nKeep the device powered on. This happens once; later launches use the saved content."
+    if not pack_to_install.is_empty():message.text="Checking your edited game content.\n\nKeep the device powered on. Your saves and other content versions will be kept."
     var old_status: String=game_dir.path_join("import-status.json")
     if FileAccess.file_exists(old_status):DirAccess.remove_absolute(old_status)
     var cancellation: String=game_dir.path_join("import-cancel")
     if FileAccess.file_exists(cancellation):DirAccess.remove_absolute(cancellation)
     cancelling=false
+    var pack_args: PackedStringArray=[]
+    if not pack_to_install.is_empty():pack_args=["--install-pack",pack_to_install]
     var python: String=OS.get_environment("MOONSTONE_LAUNCHER_PYTHON")
     if python.is_empty():
-        var runner: String=game_dir.path_join("moonstone-run")
-        if not FileAccess.file_exists(runner):runner=game_dir.path_join("moonstone-run.sh")
-        worker=OS.create_process("/bin/bash",[runner,
-            "--prepare-content",OS.get_executable_path()])
+        worker=OS.create_process("/bin/bash",[game_dir.path_join("moonstone-setup"),
+            "--prepare-content",OS.get_executable_path()]+Array(pack_args))
     else:
-        worker=OS.create_process(python,["-B",game_dir.path_join("moonstone-launcher.py"),"--prepare-content"])
+        worker=OS.create_process(python,["-B",game_dir.path_join("moonstone-launcher.py")]+(["--prepare-content"] if pack_args.is_empty() else Array(pack_args)))
     if worker<=0:
         state="failed";message.text="Could not start the importer. Reinstall the Moonstone package."
         footer.text="A: retry     B: exit"

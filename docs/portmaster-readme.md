@@ -31,6 +31,12 @@ Alternatively, copy the `content/current.json` and its named
 into `moonstone/content/`. Copy the generation folder first and `current.json`
 last. Keep generated content private.
 
+For translations or edited artwork, close the game and back up `content/` first.
+If you edit/repack the active `assets.pck`, next launch offers **A: check and use**
+or **B: exit**. A successful check activates a new checksummed copy; saves and
+other content versions are kept. Damaged or incompatible packs are rejected.
+No importer-cache changes are needed. Keep a backup before editing in place.
+
 For updates, close the game, back up `moonstone/conf/`, then merge the package
 into the installation. Preserve `conf/`, `content/` and `disks/`.
 Saves/settings are in `conf/godot/app_userdata/Moonstone Remake/`.
@@ -76,7 +82,8 @@ python3 tools/build_portmaster_importer.py \
   --upstream work/release-toolchain/upstream \
   --runtime-cache work/release-toolchain/runtimes \
   --output work/release-importer-arm --arch aarch64 --fetch-runtimes
-python3 tools/release.py --tag v0.1.0 --platform PortMaster \
+release_version=$(python3 -c 'import json; print(json.load(open("game/version.json"))["version"])')
+python3 tools/release.py --tag "v$release_version" --platform PortMaster \
   --importer work/release-importer-arm --output outputs/release-build
 ```
 

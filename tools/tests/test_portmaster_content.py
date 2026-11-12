@@ -229,7 +229,7 @@ if setup:
     if Path('cancel').exists():sys.exit(2)
     if Path('abort-before-import').exists():sys.exit(134)
     if Path('cancel-bootstrap').exists():
-        worker=subprocess.Popen(['bash','run.sh','--prepare-content',str(Path(__file__).resolve())])
+        worker=subprocess.Popen(['bash','moonstone-setup','--prepare-content',str(Path(__file__).resolve())])
         try:
             deadline=time.monotonic()+5
             while not Path('tar-pid').exists() and time.monotonic()<deadline:time.sleep(0.02)
@@ -242,12 +242,12 @@ if setup:
             sys.exit(worker.returncode)
         finally:
             if worker.poll() is None:worker.kill();worker.wait()
-    result=subprocess.run(['bash','run.sh','--prepare-content',str(Path(__file__).resolve())])
+    result=subprocess.run(['bash','moonstone-setup','--prepare-content',str(Path(__file__).resolve())])
     if Path('corrupt-after-import').exists():Path('content with spaces/assets.pck').unlink()
     sys.exit(result.returncode or int(Path('setup-exit').read_text()))
 """);engine.chmod(0o755)
-            script=(Path(__file__).resolve().parents[1]/'run_portmaster.sh').read_text().replace('/tmp/moonstone-godot/godot463.aarch64',str(engine))
-            (root/'run.sh').write_text(script)
+            script=(Path(__file__).resolve().parents[1]/'prepare_portmaster.sh').read_text().replace('/tmp/godot/godot463.aarch64',str(engine))
+            (root/'moonstone-setup').write_text(script)
             env=os.environ.copy()
             if preload:env['LD_PRELOAD']='/missing/moonstone-test-graphics-preload.so'
             if plain_tar_only or bootstrap_cancel:
@@ -256,7 +256,8 @@ if setup:
                 if bootstrap_cancel:shim.write_text('#!/bin/bash\nprintf "%s\\n" "$$" > "$PWD/tar-pid"\nexec sleep 60\n')
                 shim.chmod(0o755);env['PATH']=str(commands)+os.pathsep+env['PATH']
                 self.assertEqual((root/'importer.tar').read_bytes()[257:263],b'ustar\0')
-            result=subprocess.run(['bash',root/'run.sh'],cwd=root,env=env,capture_output=True,text=True,timeout=10)
+            result=subprocess.run(['bash','-c','. ./moonstone-setup && "$1" --main-pack moonstone.pck',
+                                   'test',str(engine)],cwd=root,env=env,capture_output=True,text=True,timeout=10)
             records=json.loads((root/'engine.json').read_text()) if (root/'engine.json').exists() else []
             status=json.loads((root/'import-status.json').read_text()) if (root/'import-status.json').exists() else None
             return result.returncode,records,result.stdout+result.stderr,status

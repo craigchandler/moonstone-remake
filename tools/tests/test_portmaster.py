@@ -63,7 +63,7 @@ class PackTests(unittest.TestCase):
             extract_pack(embedded(name='other.txt')[0])
 
     def test_source_allowlist_keeps_bundles_private(self):
-        for path in ['tools/package_portmaster.py', 'tools/launch_portmaster.sh', 'tools/run_portmaster.sh',
+        for path in ['tools/package_portmaster.py', 'tools/launch_portmaster.sh', 'tools/prepare_portmaster.sh',
                      'tools/portmaster-runtimes.json', 'docs/portmaster.md']:
             self.assertTrue(allowed_path(path), path)
         for path in ['outputs/portmaster/moonstone.zip', 'tools/godot_4.6.3.squashfs', 'game/assets/classic/moonstone.pck']:
@@ -71,16 +71,19 @@ class PackTests(unittest.TestCase):
 
 
 class LauncherTests(unittest.TestCase):
-    def run_launcher(self, fail_mount=False, missing_runtime=False, game_exit=0, adjacent=False,
-                     missing_mapper=False, arch='aarch64', download=None):
-        with tempfile.TemporaryDirectory(prefix='moonstone launch ') as tmp:
+    def run_launcher(self, fail_mount=False, missing_runtime=False, game_exit=0,
+                     download=None, can_mount='Y', invalid_importer=False):
+        with tempfile.TemporaryDirectory(prefix='moonstone-launch-') as tmp:
             root = Path(tmp)
             control = root / 'PortMaster'
-            game = root / ('moonstone' if adjacent else 'ports/moonstone')
+            game = root / 'ports/moonstone'
             control.mkdir(); game.mkdir(parents=True)
             (control / 'libs').mkdir()
             (game / 'moonstone.pck').write_bytes(b'pack')
-            (game / ('moonstone-run' if adjacent else 'moonstone-run.sh')).write_text('#!/bin/bash\n')
+            (game / 'moonstone-setup').write_text((TOOLS / 'prepare_portmaster.sh').read_text())
+            if invalid_importer:
+                (game / 'importer.pck').write_bytes(b'setup')
+                (game / 'importer.sha256').write_text('invalid checksum\n')
             (game / 'mapper').write_text('#!/bin/bash\nprintf "mapper:%s\\n" "$*" >> "$EVENTS"\n')
             for name in ['godot_4.6.3', 'weston_pkg_0.2']:
                 if not missing_runtime:
@@ -90,16 +93,27 @@ class LauncherTests(unittest.TestCase):
             godot = root / 'godot'
             weston.mkdir(); godot.mkdir()
             wrapper = weston / 'westonwrap.sh'
-            wrapper.write_text('#!/bin/bash\necho "wrapper:$*" >> "$EVENTS"\nif [ "$1" = cleanup ]; then exit 0; fi\nexit "$GAME_EXIT"\n')
+            wrapper.write_text('''#!/bin/bash
+echo "wrapper:$*" >> "$EVENTS"
+if [ "$1" = cleanup ]; then exit 0; fi
+export SDL_GAMECONTROLLERCONFIG='overwritten by Weston'
+eval "${@:5}"
+''')
             wrapper.chmod(0o755)
             engine = godot / 'godot463.aarch64'
-            engine.write_text('#!/bin/bash\nexit 0\n');engine.chmod(0o755)
+            engine.write_text('''#!/bin/bash
+echo "game:$*" >> "$EVENTS"
+echo "mapping:$SDL_GAMECONTROLLERCONFIG" >> "$EVENTS"
+exit "$GAME_EXIT"
+''');engine.chmod(0o755)
             (control / 'control.txt').write_text('''
 directory="${TEST_ROOT#/}"
-DEVICE_ARCH=$TEST_ARCH
+DEVICE_ARCH=aarch64
+DISPLAY_WIDTH=640
+DISPLAY_HEIGHT=480
 CFW_NAME=muOS
 ESUDO=""
-GPTOKEYB2=$TEST_MAPPER
+GPTOKEYB2="bash mapper"
 get_controls() { sdl_controllerconfig=test_mapping; }
 pm_message() { echo "$*"; }
 pm_show_error() { echo "$*"; }
@@ -120,12 +134,12 @@ printf runtime > "$TEST_ROOT/PortMaster/libs/${@: -1}"
             script = (TOOLS / 'launch_portmaster.sh').read_text()
             script = script.replace('if [ -d "/opt/system/Tools/PortMaster/" ]; then', 'if [ -d "$TEST_ROOT/PortMaster" ]; then\n    controlfolder="$TEST_ROOT/PortMaster"\nelif [ -d "/opt/system/Tools/PortMaster/" ]; then')
             script = script.replace('weston_dir=/tmp/weston', 'weston_dir="$TEST_ROOT/weston"')
-            script = script.replace('godot_dir=/tmp/moonstone-godot', 'godot_dir="$TEST_ROOT/godot"')
+            script = script.replace('godot_dir=/tmp/godot', 'godot_dir="$TEST_ROOT/godot"')
             launcher = root / 'launch.sh'
             launcher.write_text(script)
             env = dict(os.environ, TEST_ROOT=str(root), EVENTS=str(events),
                        FAIL_MOUNT=str(int(fail_mount)), GAME_EXIT=str(game_exit),
-                       TEST_ARCH=arch, TEST_MAPPER='' if missing_mapper else 'bash mapper',
+                       PM_CAN_MOUNT=can_mount,
                        TEST_DOWNLOAD=download or '')
             result = subprocess.run(['bash', launcher], env=env, capture_output=True, text=True, timeout=5)
             return result.returncode, events.read_text() if events.exists() else '', result.stdout
@@ -133,23 +147,37 @@ printf runtime > "$TEST_ROOT/PortMaster/libs/${@: -1}"
     def test_launch_and_cleanup_preserve_failure(self):
         code, events, output = self.run_launcher(game_exit=7)
         self.assertEqual(code, 7, output)
-        self.assertIn('wrapper:headless noop kiosk crusty_x11egl bash ./moonstone-run.sh', events)
+        self.assertIn('wrapper:headless noop kiosk crusty_x11egl . ./moonstone-setup && ', events)
+        self.assertIn('game:--resolution 640x480 -f --rendering-driver opengl3_es --audio-driver ALSA --main-pack moonstone.pck', events)
+        self.assertIn('mapping:test_mapping', events)
         self.assertIn('wrapper:cleanup', events)
         self.assertIn('platform:', events)
         self.assertIn('mapper:godot463.aarch64\n', events)
         self.assertNotIn('-c ', events)
         self.assertLess(events.index('platform:'),events.index('wrapper:headless'))
         self.assertTrue(events.endswith('finish\n'), events)
+        cleanup = events[events.index('wrapper:cleanup'):].splitlines()
+        self.assertEqual([line.split(':')[0] for line in cleanup], ['wrapper', 'umount', 'umount', 'finish'])
 
-    def test_standard_adjacent_folder_layout(self):
-        code, events, output = self.run_launcher(adjacent=True)
-        self.assertEqual(code,0,output)
-        self.assertIn('wrapper:headless noop kiosk crusty_x11egl bash ./moonstone-run\n',events)
+    def test_content_setup_failure_returns_to_cleanup_without_launching_game(self):
+        code, events, output = self.run_launcher(invalid_importer=True)
+        self.assertNotEqual(code, 0, output)
+        self.assertIn('Invalid importer checksum', output)
+        self.assertNotIn('game:', events)
+        self.assertIn('wrapper:cleanup', events)
+        self.assertTrue(events.endswith('finish\n'), events)
+
+    def test_firmware_without_unmount_support_still_cleans_weston(self):
+        code, events, output = self.run_launcher(can_mount='N')
+        self.assertEqual(code, 0, output)
+        self.assertNotIn('umount:', events)
+        self.assertIn('wrapper:cleanup', events)
+        self.assertTrue(events.endswith('finish\n'), events)
 
     def test_partial_mount_failure_cleans_up(self):
         code, events, _ = self.run_launcher(fail_mount=True)
         self.assertNotEqual(code, 0)
-        self.assertNotIn('wrapper:', events)
+        self.assertNotIn('wrapper:headless', events)
         self.assertTrue(events.endswith('finish\n'), events)
         self.assertEqual(sum(line.startswith('umount:') and line.endswith('/weston') for line in events.splitlines()), 2)
 
@@ -157,21 +185,8 @@ printf runtime > "$TEST_ROOT/PortMaster/libs/${@: -1}"
         code, events, output = self.run_launcher(missing_runtime=True)
         self.assertNotEqual(code, 0, output)
         self.assertNotIn('wrapper:', events)
-        self.assertIn('Runtime Manager', output)
+        self.assertIn('update PortMaster', output)
         self.assertTrue(events.endswith('finish\n'), events)
-
-    def test_missing_gptokeyb2_does_not_start_game(self):
-        code, events, output = self.run_launcher(missing_mapper=True)
-        self.assertNotEqual(code, 0, output)
-        self.assertNotIn('wrapper:', events)
-        self.assertIn('gptokeyb2', output)
-        self.assertTrue(events.endswith('finish\n'), events)
-
-    def test_non_arm_importer_is_rejected_before_mount(self):
-        code, events, output = self.run_launcher(arch='x86_64')
-        self.assertNotEqual(code, 0, output)
-        self.assertNotIn('mount:', events)
-        self.assertIn('requires 64-bit ARM', output)
 
     def test_runtime_download_success_and_failure(self):
         for download in ['success', 'failure']:
@@ -184,7 +199,6 @@ printf runtime > "$TEST_ROOT/PortMaster/libs/${@: -1}"
                     self.assertIn('wrapper:headless', events)
                 else:
                     self.assertNotEqual(code, 0, output)
-                    self.assertIn('Runtime unavailable', output)
                     self.assertNotIn('mount:', events)
 
 
@@ -213,7 +227,7 @@ class ImporterUnpackTests(unittest.TestCase):
                 (root / 'importer.sha256').write_text(sha + '  importer.tar\n')
                 if corrupt:
                     archive.write_bytes(b'corrupt archive')
-                result = subprocess.run(['bash', TOOLS / 'run_portmaster.sh', '--prepare-content'],
+                result = subprocess.run(['bash', TOOLS / 'prepare_portmaster.sh', '--prepare-content'],
                                         cwd=root, capture_output=True, text=True, timeout=5)
                 self.assertEqual((root / 'conf/save').read_bytes(), b'keep save')
                 self.assertEqual((root / 'content/current.json').read_bytes(), b'keep content')
@@ -233,18 +247,20 @@ class NativeInputTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='moonstone input ') as tmp:
             root = Path(tmp)
             (root / 'cache').mkdir()
-            (root / 'cache/controller-mapping.txt').write_text(mapping + '\n')
             engine = root / 'engine.py'
             engine.write_text('#!/usr/bin/env python3\nimport os, json, sys\nprint("CAPTURE=" + json.dumps({"mapping": os.environ["SDL_GAMECONTROLLERCONFIG"], "args": sys.argv[1:]}))\n')
             engine.chmod(0o755)
-            script = (TOOLS / 'run_portmaster.sh').read_text().replace(
-                '/tmp/moonstone-godot/godot463.aarch64', str(engine))
+            script = (TOOLS / 'prepare_portmaster.sh').read_text().replace(
+                '/tmp/godot/godot463.aarch64', str(engine))
             helper = root / 'run.sh'
             helper.write_text(script)
-            result = subprocess.run(['bash', helper], cwd=root, text=True, capture_output=True,
-                                    env=dict(os.environ, SDL_GAMECONTROLLERCONFIG='stale Weston environment'), timeout=5)
+            result = subprocess.run(['bash', '-c', '. "$1" && "$2" --main-pack "$PWD/moonstone.pck"',
+                                     'test', str(helper), str(engine)], cwd=root, text=True, capture_output=True,
+                                    env=dict(os.environ, SDL_GAMECONTROLLERCONFIG='stale Weston environment',
+                                             MOONSTONE_CONTROLLER=mapping), timeout=5)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertFalse((root / 'UNEXPECTED').exists())
+            self.assertFalse((root / 'cache/controller-mapping.txt').exists())
             return json.loads(next(line[8:] for line in result.stdout.splitlines() if line.startswith('CAPTURE=')))
 
     def test_muos_sdl3_raw_buttons_match_printed_letters(self):

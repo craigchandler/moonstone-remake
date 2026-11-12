@@ -267,6 +267,7 @@ def main():
     parser.add_argument('--importer',type=Path)
     parser.add_argument('--godot',type=Path)
     parser.add_argument('--verify',action='store_true')
+    parser.add_argument('--install-pack',type=Path)
     parser.add_argument('--force',action='store_true')
     parser.add_argument('--keep-work',action='store_true')
     args=parser.parse_args()
@@ -274,8 +275,12 @@ def main():
         pack=installed_content(args.game_dir)
         if pack:print(pack);return 0
         return 1
-    if args.importer is None or args.godot is None:parser.error('--importer and --godot are required for conversion')
-    try:import_content(args.game_dir,args.importer,args.godot,args.force,args.keep_work)
+    if args.godot is None or (args.importer is None and args.install_pack is None):parser.error('--importer and --godot are required for conversion')
+    try:
+        if args.install_pack is not None:
+            from import_transfer import install_pack
+            install_pack(args.game_dir,args.install_pack,args.godot)
+        else:import_content(args.game_dir,args.importer,args.godot,args.force,args.keep_work)
     except Exception as error:
         atomic_json(args.game_dir/'import-status.json',{'state':'failed','message':str(error),'percent':0})
         print(str(error),file=sys.stderr);return 1

@@ -164,7 +164,7 @@ def main():
                            ('docs/player-guide.md', 'PLAYER-GUIDE.txt'), ('docs/portmaster.md', 'READ-ME.txt')]:
         shutil.copy2(ROOT / source, stage / target)
     (stage / 'NOTICES.txt').write_text(NOTICES)
-    shutil.copy2(ROOT / 'tools/run_portmaster.sh', stage / 'moonstone-run.sh')
+    shutil.copy2(ROOT / 'tools/prepare_portmaster.sh', stage / 'moonstone-setup')
     # External project overrides affect presentation only, never simulation ticks.
     (stage / 'override.cfg').write_text('[display]\nwindow/stretch/aspect="keep"\n')
     report = {'result': 'PASS: packaging and desktop runtime probes', 'binary_sha256': digest(binary),

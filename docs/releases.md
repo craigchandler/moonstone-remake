@@ -87,19 +87,40 @@ Moonstone.cmd --import-content --force
 In PowerShell prefix the launcher with `.\`, for example
 `.\Moonstone.cmd --import-content`.
 
-PortMaster (a terminal/SSH session on muOS, adjusting the SD path if necessary):
+PortMaster starts setup automatically from the normal **Moonstone** menu entry.
+For command-line conversion or rebuilding, use the desktop commands above and
+copy the generated content to the handheld. `import.log` and `import-status.json`
+beside the handheld game's PCK contain conversion diagnostics and progress.
+A failed or cancelled import preserves existing content and saves. Keep the
+device powered during writes.
+
+## Edited artwork and translations
+
+Close the game and back up `content/` before editing a pack. Keep the original
+copy if you want to restore it later: editing `assets.pck` in place has already
+replaced those original bytes.
+
+On PortMaster or desktop, if the active pack has changed, next launch offers
+**A / Enter: check and use** or **B / Escape: exit**. Edited content is checked
+without reconverting the original disks. Validation checks the pack structure,
+permitted media resources and game startup. On success it creates a new checksummed generation
+and activates it; other generations and saves are kept. A failed or cancelled
+check leaves the active pointer unchanged. A successful startup check does not
+replace playing through the translated or edited screens.
+
+On desktop you can install a separate edited copy directly:
 
 ```sh
-bash "/mnt/mmc/roms/PORTS/Moonstone.sh" --import-content
-bash "/mnt/mmc/roms/PORTS/Moonstone.sh" --verify-content
-bash "/mnt/mmc/roms/PORTS/Moonstone.sh" --import-content --force
+./Moonstone.sh --install-pack "/path/to/edited/assets.pck"
 ```
 
-PortMaster CLI import uses the installed PortMaster runtime and control files;
-it is not a generic ARM Linux launcher. Original disks go in the directories
-listed above. `import.log` and `import-status.json` beside the game's PCK contain
-conversion diagnostics and progress. A failed/cancelled rebuild preserves the
-previous content pointer and saves. Keep the device powered during writes.
+On Windows use `Moonstone.cmd --install-pack "C:\path\to\edited\assets.pck"`.
+After validation, use the normal content export/copy instructions below to move
+it between platforms. No importer-cache patches or manual checksum edits are
+needed. Checksums remain enforced on subsequent launches and transfers.
+
+This supports edited media packs. Gameplay scripts, a mod picker and a public
+mod API remain separate future work.
 
 ## Copy content between platforms
 

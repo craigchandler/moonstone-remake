@@ -1,6 +1,5 @@
 #!/bin/bash
-# Executed by Westonpack after its graphics environment is ready.
-# Keep quoted paths here, outside Westonpack's internally evaluated command.
+# Sourced before the game starts; also called by the setup UI as an import worker.
 if [ "${1:-}" = --prepare-content ]; then
     # Crusty's graphics preload prints to stdout in every dynamic executable.
     # Import tools and their headless children must run without that preload.
@@ -9,11 +8,8 @@ fi
 export XDG_DATA_HOME="$PWD/conf"
 export XDG_CONFIG_HOME="$PWD/conf"
 export XDG_CACHE_HOME="$PWD/cache"
-godot_engine="/tmp/moonstone-godot/godot463.aarch64"
-if [ -f "$PWD/cache/controller-mapping.txt" ]; then
-    IFS= read -r SDL_GAMECONTROLLERCONFIG < "$PWD/cache/controller-mapping.txt"
-    export SDL_GAMECONTROLLERCONFIG
-fi
+godot_engine="/tmp/godot/godot463.aarch64"
+export SDL_GAMECONTROLLERCONFIG="$MOONSTONE_CONTROLLER"
 case "${SDL_GAMECONTROLLERCONFIG:-}" in
     19000000010000000100000000010000,Deeplay-keys,*)
         # muOS SDL2 counts three extra keys before the gamepad buttons. SDL3
@@ -88,7 +84,7 @@ if [ -f "$PWD/importer.pck" ]; then
             importer_temporary=
         fi
         chmod +x "$importer_python" "$MOONSTONE_IMPORTER_DIR/bin/bake-audio" "$MOONSTONE_IMPORTER_DIR/bin/bake-menu" "$MOONSTONE_IMPORTER_DIR/bin/bake-module" || exit 1
-        preparation_status running 'Starting original-disk conversion.' 0
+        preparation_status running 'Starting content preparation.' 0
         exec "$importer_python" -B "$importer_driver" --game-dir "$PWD" \
             --importer "$MOONSTONE_IMPORTER_DIR" --godot "${2:-$godot_engine}" "${@:3}"
         exit 1
@@ -111,11 +107,6 @@ if [ -f "$PWD/importer.pck" ]; then
         content_pack=$(unset LD_PRELOAD; "$importer_python" -B "$importer_driver" --game-dir "$PWD" --verify) || return 1
         [[ -n "$content_pack" && "$content_pack" != *$'\n'* ]] && [ -f "$content_pack" ]
     }
-    if [ "${1:-}" = --verify-content ]; then
-        verified_content || exit 1
-        printf '%s\n' "$content_pack"
-        exit 0
-    fi
     if ! verified_content; then
         setup_result=0
         "$godot_engine" \
@@ -138,7 +129,3 @@ if [ -f "$PWD/importer.pck" ]; then
     fi
     export MOONSTONE_CONTENT_PACK="$content_pack"
 fi
-exec "$godot_engine" \
-    --resolution "${DISPLAY_WIDTH:-640}x${DISPLAY_HEIGHT:-480}" --fullscreen \
-    --rendering-method gl_compatibility --rendering-driver opengl3_es \
-    --audio-driver ALSA --main-pack "$PWD/moonstone.pck"

@@ -82,7 +82,7 @@ tools/*
 !tools/package_portmaster.py
 !tools/package_portmaster_external.py
 !tools/launch_portmaster.sh
-!tools/run_portmaster.sh
+!tools/prepare_portmaster.sh
 !tools/portmaster-runtimes.json
 !tools/portmaster_art.gd
 !tools/portmaster_*.py
